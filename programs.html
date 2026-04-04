@@ -1,0 +1,1995 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solenetec | New Energy Programs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-primary': '#2563eb',
+                        'brand-secondary': '#93c5fd',
+                        'icon-blue': '#2563eb',
+                        'icon-green': '#10b981',
+                        'icon-orange': '#f97316',
+                        'icon-purple': '#a855f7',
+                        'icon-yellow': '#facc15',
+                        'icon-teal': '#2dd4bf',
+                        'icon-red': '#ef4444',
+                        'icon-gray': '#6b7280',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #e0e7ee; color: #1f2937; }
+
+        .card-bg { background-color: #fcfcfc; color: #1f2937; }
+        .card-border-blue { border: 1px solid #93c5fd; }
+
+        .icon-box { display: inline-flex; align-items: center; justify-content: center; border-radius: 9999px; font-size: 1.5rem; line-height: 1; padding: 0.5rem; }
+        .emoji-icon { font-size: 1.3rem; line-height: 1; }
+
+        .nav-link { color: #d1d5db; font-size: 1.125rem; font-weight: 500; display: flex; align-items: center; }
+        .nav-link:hover { background-color: #4b5563; color: #ffffff; }
+        .nav-link.active { background-color: #2563eb; color: #ffffff; font-weight: 700; }
+        .tab-active { background-color: #2563eb; color: #ffffff; border-radius: 0.5rem; font-weight: 700; }
+
+        .mega-menu { transition: opacity 0.3s ease, transform 0.3s ease; opacity: 0; pointer-events: none; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5); width: 95vw; max-width: 600px; left: 50%; transform: translate(-50%, -10px); overflow: hidden; z-index: 100; position: absolute; top: 100%; }
+        .mega-menu.dropdown-visible { opacity: 1; pointer-events: auto; transform: translate(-50%, 0); }
+        .mega-menu.dropdown-hidden { opacity: 0; pointer-events: none; }
+        .dropdown-content-bg { background-color: #ffffff; color: #1f2937; border: 1px solid #e5e7eb; }
+        .nav-dropdown-item { border-radius: 0.5rem; color: #4b5563; }
+        .nav-dropdown-item:hover { background-color: #eff6ff; color: #2563eb; }
+
+        .btn-pill { background-color: #2563eb; color: #ffffff; padding: 0.5rem 1.5rem; border-radius: 9999px; font-weight: 600; transition: background-color 0.2s; text-decoration: none; display: inline-block; }
+        .btn-pill:hover { background-color: #1d4ed8; color: white; }
+
+        .modal { transition: opacity 0.3s ease-out; visibility: hidden; opacity: 0; pointer-events: none; }
+        .modal.show { visibility: visible; opacity: 1; pointer-events: auto; }
+
+        .modal-overlay { pointer-events: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; }
+        .modal-overlay.active { opacity: 1; visibility: visible; pointer-events: auto; }
+        .modal-content { background: white; border-radius: 1rem; padding: 2rem; max-width: 600px; width: 90%; position: relative; max-height: 90vh; overflow-y: auto; }
+        .modal-close { position: absolute; top: 1rem; right: 1rem; font-size: 1.5rem; background: none; border: none; cursor: pointer; color: #6b7280; }
+        .modal-close:hover { color: #1f2937; }
+
+        /* Program card accent */
+        .program-card { transition: transform 0.2s, box-shadow 0.2s; }
+        .program-card:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(37,99,235,0.12); }
+
+        /* Tab buttons for comparison */
+        .compare-tab { transition: all 0.2s; cursor: pointer; }
+        .compare-tab.active { background-color: #2563eb; color: white; }
+
+        /* Timeline */
+        .timeline-line { position: relative; }
+        .timeline-line::before { content: ''; position: absolute; left: 1.25rem; top: 2.5rem; bottom: 0; width: 2px; background: #bfdbfe; }
+
+        /* Callout highlight */
+        .highlight-box { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border-left: 4px solid #2563eb; }
+
+        /* VPP animation */
+        @keyframes pulse-ring { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.6); opacity: 0; } }
+        .vpp-pulse::after { content: ''; position: absolute; inset: 0; border-radius: 9999px; background: #3b82f6; animation: pulse-ring 2s ease-out infinite; }
+
+        /* Badge */
+        .badge-new { background: linear-gradient(90deg, #2563eb, #06b6d4); color: white; font-size: 0.65rem; font-weight: 800; letter-spacing: 0.1em; padding: 2px 8px; border-radius: 9999px; text-transform: uppercase; }
+
+        #programs-dropdown-menu { left: 50%; }
+    /* ── Solen Chat Widget Styles ── */
+        .chat-widget-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(37,99,235,0.45);
+            z-index: 9999;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: none;
+        }
+        .chat-widget-btn:hover { transform: scale(1.08); box-shadow: 0 6px 20px rgba(37,99,235,0.55); }
+        .solen-badge {
+            position: absolute;
+            top: -4px; right: -4px;
+            background: #10b981;
+            width: 16px; height: 16px;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+        .chat-window {
+            position: fixed;
+            bottom: 100px;
+            right: 24px;
+            width: 370px;
+            height: 560px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+            display: flex;
+            flex-direction: column;
+            z-index: 9998;
+            transform: translateY(620px) scale(0.95);
+            opacity: 0;
+            transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), opacity 0.25s ease;
+            overflow: hidden;
+        }
+        @media (max-width: 420px) {
+            .chat-window { width: calc(100vw - 16px); right: 8px; bottom: 90px; height: 72vh; }
+        }
+        .chat-window.open { transform: translateY(0) scale(1); opacity: 1; }
+        .chat-header {
+            background: linear-gradient(135deg, #1e40af, #2563eb);
+            color: white;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+        .solen-avatar {
+            width: 38px; height: 38px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; flex-shrink: 0;
+        }
+        .solen-info { flex: 1; }
+        .solen-name { font-weight: 700; font-size: 15px; line-height: 1.2; }
+        .solen-status { font-size: 11px; opacity: 0.85; }
+        .chat-close-btn { background: none; border: none; color: white; cursor: pointer; padding: 4px; opacity: 0.8; font-size: 18px; }
+        .chat-close-btn:hover { opacity: 1; }
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 14px;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .message {
+            padding: 10px 13px;
+            border-radius: 14px;
+            max-width: 85%;
+            font-size: 14px;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+        .message.bot {
+            background: white;
+            color: #1f2937;
+            margin-right: auto;
+            border: 1px solid #e5e7eb;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        }
+        .message.user {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+        .message a { color: #2563eb; text-decoration: underline; }
+        .message.user a { color: #bfdbfe; }
+        .solen-book-btn {
+            display: inline-block;
+            margin-top: 8px;
+            background: #2563eb;
+            color: white !important;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 13px;
+            text-decoration: none !important;
+            cursor: pointer;
+            border: none;
+        }
+        .solen-book-btn:hover { background: #1d4ed8; }
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 10px 13px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            border-bottom-left-radius: 4px;
+            width: fit-content;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        }
+        .typing-dot {
+            width: 7px; height: 7px;
+            background: #9ca3af;
+            border-radius: 50%;
+            animation: solenTyping 1.4s infinite;
+        }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes solenTyping {
+            0%, 60%, 100% {
+                opacity: 0.3;
+            }
+
+            30% {
+                opacity: 1;
+            }
+        }
+
+        .quick-replies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 4px;
+        }
+        .quick-reply-btn {
+            padding: 6px 12px;
+            background: #eff6ff;
+            color: #2563eb;
+            border: 1px solid #bfdbfe;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background 0.15s;
+            white-space: nowrap;
+        }
+        .quick-reply-btn:hover { background: #dbeafe; }
+        .chat-input-area {
+            padding: 12px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            gap: 8px;
+            background: white;
+            flex-shrink: 0;
+        }
+        .chat-input {
+            flex: 1;
+            padding: 9px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 22px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.15s;
+        }
+        .chat-input:focus { border-color: #2563eb; }
+        .chat-send-btn {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            transition: transform 0.15s;
+        }
+        .chat-send-btn:hover { transform: scale(1.05); }
+        .chat-powered {
+            text-align: center;
+            font-size: 10px;
+            color: #9ca3af;
+            padding: 4px 0 8px;
+            background: white;
+            flex-shrink: 0;
+        }
+
+        
+        /* Language Toggle */
+        .lang-btn {
+            color: #9ca3af;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            border-radius: 6px;
+            padding: 3px 7px;
+            transition: all 0.15s;
+        }
+        .lang-btn:hover { color: #ffffff; background: rgba(255,255,255,0.15); }
+        .lang-btn.active-lang { color: #ffffff; background: rgba(255,255,255,0.2); font-weight: 700; }
+
+        </style>
+</head>
+
+<body class="text-gray-800">
+
+    <!-- ═══════════════════════════════════════ NAV ═══════════════════════════════════════ -->
+    <header class="bg-gray-800 shadow-xl fixed top-0 w-full z-50">
+        <nav class="w-full px-4 sm:px-6 lg:px-8">
+            <div class="relative flex items-center h-20">
+                <div class="flex items-center flex-shrink-0">
+                    <a href="index.html" class="flex items-center space-x-3">
+                        <img src="logo.svg" alt="Solenetec Logo" class="h-12 w-12">
+                        <span class="text-3xl text-blue-400 hover:text-blue-300 font-extrabold">Solenetec</span>
+                    </a>
+                </div>
+
+                <div class="hidden md:flex items-center justify-evenly flex-1 px-4">
+                    <a href="index.html" class="nav-link px-3 py-2 rounded-lg transition duration-150" data-i18n="nav.why"><span data-i18n="nav.why">Why Electrify?</span></a>
+
+                    <!-- Technologies Dropdown -->
+                    <div class="relative group" id="tech-dropdown-group">
+                        <a href="technologies.html" id="tech-dropdown-trigger" class="nav-link px-3 py-2 rounded-lg transition duration-150">
+                            <span data-i18n="nav.technologies">Technologies</span> <span class="ml-1 text-sm">&#9662;</span>
+                        </a>
+                        <div id="tech-dropdown-menu" class="mega-menu pt-4 dropdown-hidden">
+                            <div class="dropdown-content-bg rounded-xl shadow-2xl p-8 border border-gray-200 grid grid-cols-2 gap-6" style="max-width:600px;width:600px;">
+                                <a href="technologies.html#hp-water-heaters-section" class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item"><div class="icon-box w-10 h-10 bg-icon-blue text-white text-xl flex-shrink-0"><i class="fa-solid fa-shower"></i></div><div><span class="font-bold text-gray-900">HP Water Heaters</span><p class="text-sm text-gray-500">The most efficient way to heat domestic water.</p></div></a>
+                                <a href="technologies.html#hp-hvac-section" class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item"><div class="icon-box w-10 h-10 bg-icon-green text-white text-xl flex-shrink-0"><i class="fa-solid fa-fan"></i></div><div><span class="font-bold text-gray-900">Heat Pumps HVAC</span><p class="text-sm text-gray-500">All-in-one climate control.</p></div></a>
+                                <a href="technologies.html#solar-battery-section" class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item"><div class="icon-box w-10 h-10 bg-icon-yellow text-gray-900 text-xl flex-shrink-0"><i class="fa-solid fa-solar-panel"></i></div><div><span class="font-bold text-gray-900">Solar & Battery Storage</span><p class="text-sm text-gray-500">Energy independence for your home.</p></div></a>
+                                <a href="technologies.html#induction-cooking-section" class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item"><div class="icon-box w-10 h-10 bg-icon-orange text-white text-xl flex-shrink-0"><i class="fa-solid fa-kitchen-set"></i></div><div><span class="font-bold text-gray-900">Induction Cooking</span><p class="text-sm text-gray-500">Faster, safer, cleaner cooking.</p></div></a>
+                                <a href="technologies.html#solar-inverters-section" class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item"><div class="icon-box w-10 h-10 bg-icon-purple text-white text-xl flex-shrink-0"><i class="fa-solid fa-microchip"></i></div><div><span class="font-bold text-gray-900">Inverters</span><p class="text-sm text-gray-500">Converting DC to usable AC power.</p></div></a>
+                                <a href="technologies.html#ev-charging-section" class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item"><div class="icon-box w-10 h-10 bg-icon-teal text-white text-xl flex-shrink-0"><i class="fa-solid fa-charging-station"></i></div><div><span class="font-bold text-gray-900">EV Charging</span><p class="text-sm text-gray-500">High-speed home charging.</p></div></a>
+                                <a href="technologies.html#v2h-v2l-section" class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item"><div class="icon-box w-10 h-10 bg-icon-red text-white text-xl flex-shrink-0"><i class="fa-solid fa-house-chimney-crack"></i></div><div><span class="font-bold text-gray-900">Vehicle-to-Home (V2H/V2L)</span><p class="text-sm text-gray-500">Use your EV as home backup power.</p></div></a>
+                                <a href="technologies.html#smart-panels-section" class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item"><div class="icon-box w-10 h-10 bg-icon-gray text-white text-xl flex-shrink-0"><i class="fa-solid fa-plug-circle-bolt"></i></div><div><span class="font-bold text-gray-900">Smart Electrical Panels</span><p class="text-sm text-gray-500">Real-time monitoring &amp; load control.</p></div></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rebates/ROI Dropdown -->
+                    <div class="relative group" id="rebate-dropdown-group">
+                        <a id="rebate-dropdown-trigger" href="rebates.html" class="nav-link px-3 py-2 rounded-lg transition duration-150 flex items-center"><span data-i18n="nav.rebates">Rebates/ROI</span> &#9662;</a>
+                        <div id="rebate-dropdown-menu" class="mega-menu pt-4 dropdown-hidden">
+                            <div class="dropdown-content-bg rounded-xl shadow-2xl p-6 border border-gray-200 space-y-2" style="max-width:420px;width:420px;">
+                                <h3 class="font-bold text-xl text-brand-primary mb-4 border-b pb-2 border-gray-200">Rebates &amp; ROI</h3>
+                                <a href="rebates.html#bill-calculator-section" class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item"><div class="icon-box w-10 h-10 bg-icon-blue text-white text-xl flex-shrink-0"><i class="fa-solid fa-bolt text-base"></i></div><div><span class="font-bold text-gray-900">Electricity Usage Calculator</span><p class="text-sm text-gray-500">Upload Green Button data or enter your bill.</p></div></a>
+                                <a href="rebates.html#roi-calculator-section" class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item"><div class="icon-box w-10 h-10 bg-icon-green text-white text-xl flex-shrink-0"><i class="fa-solid fa-chart-line text-base"></i></div><div><span class="font-bold text-gray-900">Solar &amp; Battery ROI Calculator</span><p class="text-sm text-gray-500">25-year savings projection.</p></div></a>
+                                <a href="rebates.html#rebate-calculator-section" class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item"><div class="icon-box w-10 h-10 bg-icon-orange text-white text-xl flex-shrink-0"><i class="fa-solid fa-hand-holding-dollar text-base"></i></div><div><span class="font-bold text-gray-900">Personalized Rebate &amp; Savings Estimator</span><p class="text-sm text-gray-500">State, local, and federal incentives.</p></div></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- New Programs (active) -->
+                    <div class="relative group" id="programs-dropdown-group">
+                        <a id="programs-dropdown-trigger" href="programs.html" class="nav-link active font-bold px-3 py-2 rounded-lg transition duration-150 flex items-center">
+                            New Programs &#9662;
+                        </a>
+                        <div id="programs-dropdown-menu" class="mega-menu pt-4 dropdown-hidden">
+                            <div class="dropdown-content-bg rounded-xl shadow-2xl p-6 border border-gray-200 space-y-2" style="max-width:420px;width:420px;">
+                                <h3 class="font-bold text-xl text-brand-primary mb-4 border-b pb-2 border-gray-200">Post-IRA Programs</h3>
+                                <a href="#advisor-section" class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item"><div class="icon-box w-10 h-10 bg-icon-blue text-white text-xl flex-shrink-0"><i class="fa-solid fa-sparkles text-base"></i></div><div><span class="font-bold text-gray-900">Find My Best Program</span><p class="text-sm text-gray-500">AI advisor matches you in 60 seconds.</p></div></a>
+                                <a href="#propel-section" class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item"><div class="icon-box w-10 h-10 bg-icon-blue text-white text-xl flex-shrink-0"><i class="fa-solid fa-rocket text-base"></i></div><div><span class="font-bold text-gray-900">Propel — Prepaid PPA</span><p class="text-sm text-gray-500">40% ITC via domestic content bonus.</p></div></a>
+                                <a href="#eaas-section" class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item"><div class="icon-box w-10 h-10 bg-icon-teal text-white text-xl flex-shrink-0"><i class="fa-solid fa-bolt text-base"></i></div><div><span class="font-bold text-gray-900">Energy-as-a-Service (EaaS)</span><p class="text-sm text-gray-500">Zero upfront — pay only for energy delivered.</p></div></a>
+                                <a href="#vpp-section" class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item"><div class="icon-box w-10 h-10 bg-icon-green text-white text-xl flex-shrink-0"><i class="fa-solid fa-network-wired text-base"></i></div><div><span class="font-bold text-gray-900">Virtual Power Plants (VPP)</span><p class="text-sm text-gray-500">Earn $0.10/kWh discharging to the grid.</p></div></a>
+                                <a href="#sunrun-section" class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item"><div class="icon-box w-10 h-10 bg-icon-orange text-white text-xl flex-shrink-0"><i class="fa-solid fa-arrow-rotate-right text-base"></i></div><div><span class="font-bold text-gray-900">Sunrun Flex™</span><p class="text-sm text-gray-500">Adaptive subscription — rollover credits & VPP built in.</p></div></a>
+                                <a href="#compare-section" class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item"><div class="icon-box w-10 h-10 bg-icon-orange text-white text-xl flex-shrink-0"><i class="fa-solid fa-scale-balanced text-base"></i></div><div><span class="font-bold text-gray-900">Compare All Models</span><p class="text-sm text-gray-500">Find the right fit for your situation.</p></div></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Process Dropdown -->
+                    <div class="relative group" id="process-dropdown-group">
+                        <a href="process.html" id="process-dropdown-trigger" class="nav-link px-3 py-2 rounded-lg transition duration-150 flex items-center"><span data-i18n="nav.process">Our Process</span> <span class="ml-1 text-sm">&#9662;</span></a>
+                        <div id="process-dropdown-menu" class="mega-menu pt-4 dropdown-hidden">
+                            <div class="dropdown-content-bg rounded-xl shadow-2xl p-6 border border-gray-200 space-y-2" style="max-width:400px;width:400px;">
+                                <h3 class="font-bold text-xl text-brand-primary mb-4 border-b pb-2 border-gray-200">Our 4-Step Methodology</h3>
+                                <a href="process.html#process" class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item"><div class="icon-box w-10 h-10 bg-icon-blue text-white text-xl flex-shrink-0"><span class="emoji-icon">&#x2318;</span></div><div><span class="font-bold text-gray-900">Discovery &amp; Audit</span><p class="text-sm text-gray-500">Comprehensive assessment of your home.</p></div></a>
+                                <a href="process.html#process" class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item"><div class="icon-box w-10 h-10 bg-icon-blue text-white text-xl flex-shrink-0"><span class="emoji-icon">&#x1F4B0;</span></div><div><span class="font-bold text-gray-900">Incentive Maximize</span><p class="text-sm text-gray-500">Secure all available rebates and credits.</p></div></a>
+                                <a href="process.html#process" class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item"><div class="icon-box w-10 h-10 bg-icon-blue text-white text-xl flex-shrink-0"><span class="emoji-icon">&#x2699;</span></div><div><span class="font-bold text-gray-900">Certified Installation</span><p class="text-sm text-gray-500">Expert, licensed installation.</p></div></a>
+                                <a href="process.html#process" class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item"><div class="icon-box w-10 h-10 bg-icon-blue text-white text-xl flex-shrink-0"><span class="emoji-icon">&#x1F4DD;</span></div><div><span class="font-bold text-gray-900">Final Handover &amp; Filing</span><p class="text-sm text-gray-500">System commissioning and all paperwork.</p></div></a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <a href="#" onclick="openScheduleModal(event)" class="btn-pill hidden md:inline-block flex-shrink-0 ml-4" data-i18n="nav.getstarted">Get Started</a>
+
+                <div id="lang-toggle" class="hidden md:flex items-center gap-1 ml-2">
+                    <button onclick="setLang('en')" id="lang-en" class="lang-btn active-lang px-2 py-1 rounded text-sm font-semibold transition">🇺🇸 EN</button>
+                    <span class="text-gray-400 text-xs">|</span>
+                    <button onclick="setLang('es')" id="lang-es" class="lang-btn px-2 py-1 rounded text-sm font-semibold transition">🇲🇽 ES</button>
+                </div>
+                <div id="lang-toggle-mobile" class="md:hidden flex items-center gap-1 mr-2">
+                    <button onclick="setLang('en')" id="lang-en-m" class="lang-btn active-lang px-2 py-1 rounded text-xs font-semibold transition">🇺🇸</button>
+                    <button onclick="setLang('es')" id="lang-es-m" class="lang-btn px-2 py-1 rounded text-xs font-semibold transition">🇲🇽</button>
+                </div>
+
+                <div class="md:hidden ml-auto">
+                    <button id="mobile-menu-button" class="text-gray-300 hover:text-white focus:outline-none">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg absolute top-0 left-0 w-full z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-end">
+                <button id="close-mobile-menu-button" class="text-gray-600 hover:text-blue-600 focus:outline-none"><i class="fa-solid fa-times text-xl"></i></button>
+            </div>
+            <nav class="flex flex-col space-y-4 mt-4">
+                <a href="index.html" class="nav-link text-gray-800 hover:text-blue-600 text-lg">Home</a>
+                <a href="technologies.html" class="nav-link text-gray-800 hover:text-blue-600 text-lg"><span data-i18n="nav.technologies">Technologies</span></a>
+                <a href="rebates.html" class="nav-link text-gray-800 hover:text-blue-600 text-lg"><span data-i18n="nav.rebates">Rebates/ROI</span></a>
+                <a href="programs.html" class="nav-link text-blue-600 font-bold text-lg"><span data-i18n="nav.programs">New Programs</span></a>
+                <a href="process.html" class="nav-link text-gray-800 hover:text-blue-600 text-lg"><span data-i18n="nav.process">Our Process</span></a>
+                <a href="schedule.html" class="nav-link text-gray-800 hover:text-blue-600 text-lg">Schedule</a>
+                <a href="#" onclick="openScheduleModal(event)" class="nav-link text-blue-600 font-bold hover:text-blue-800 text-lg" data-i18n="nav.getstarted">Get Started</a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════ HERO ═══════════════════════════════ -->
+    <section class="relative bg-gradient-to-r from-blue-600 to-blue-800 text-white overflow-hidden" style="min-height: 340px; padding-top: 80px;">
+            <div class="absolute inset-0 z-0">
+                <img src="solar-battery-hero.png"
+                    alt="Modern home with solar panels and battery storage units" class="w-full h-full object-cover opacity-30">
+            </div>
+            <div class="container mx-auto px-4 relative z-10 text-center py-12 md:py-20">
+                <h1 class="text-2xl sm:text-4xl md:text-6xl font-extrabold leading-tight mb-4 drop-shadow-lg" data-i18n-hero="h1">New Programs for a<br class="hidden md:block"> Post-IRA Solar Market</h1>
+                <p class="text-lg md:text-xl mb-8 max-w-3xl mx-auto drop-shadow-md" data-i18n-hero="p">The 30% tax credit expired — but new programs unlock 40% credits, zero-upfront subscriptions, and batteries that pay you back.</p>
+                <a href="#advisor-section"
+                    class="inline-block bg-white text-blue-700 font-bold py-3 px-8 rounded-full text-lg hover:bg-gray-100 transition duration-300 transform hover:scale-105 shadow-lg" data-i18n-hero="cta">Find My Best Program</a>
+            </div>
+        </section>
+
+    <!-- ═══════════════════════════ CONTEXT BANNER ═══════════════════════════ -->
+    <section class="bg-amber-50 border-y border-amber-200 py-5">
+        <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row gap-4 items-center">
+            <div class="flex-shrink-0 w-12 h-12 bg-amber-100 border border-amber-300 rounded-full flex items-center justify-center">
+                <i class="fa-solid fa-triangle-exclamation text-amber-600 text-lg"></i>
+            </div>
+            <div>
+                <p class="text-sm font-semibold text-amber-800">What Happened to the Federal Tax Credit?</p>
+                <p class="text-sm text-amber-700 mt-0.5">The Section 25D residential solar tax credit expired at the end of 2025. <strong>Direct ownership</strong> no longer includes the 30% federal credit. However, third-party ownership structures (Prepaid PPAs) still capture the credit at the corporate level — and can unlock up to <strong>40%</strong> via the IRA's domestic content bonus. Solenetec helps you navigate which model works best for your situation.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════ MAIN CONTENT ═══════════════════════════ -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+
+        <!-- ══════════════════════════════════════════════════════════ -->
+        <!-- AI PROGRAM ADVISOR WIDGET                                  -->
+        <!-- ══════════════════════════════════════════════════════════ -->
+        <section id="advisor-section" class="mb-14 scroll-mt-24">
+            <!-- Intro bar -->
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center gap-2 bg-blue-100 border border-blue-200 text-blue-700 text-xs font-bold px-4 py-1.5 rounded-full mb-4 uppercase tracking-widest">
+                    <i class="fa-solid fa-sparkles"></i> AI-Powered · Instant Analysis
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-800 mb-2">Find Your Best Program in 60 Seconds</h2>
+                <p class="text-gray-500 max-w-xl mx-auto text-sm">Answer 6 quick questions and our advisor will analyze your situation across all four programs — and explain exactly why one fits better than the others.</p>
+            </div>
+
+            <div class="card-bg card-border-blue rounded-2xl shadow-xl overflow-hidden">
+                <!-- Advisor header bar -->
+                <div class="bg-gray-800 px-6 py-4 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="relative w-9 h-9 flex-shrink-0">
+                            <div class="w-9 h-9 bg-blue-500 rounded-full flex items-center justify-center">
+                                <i class="fa-solid fa-bolt text-white text-sm"></i>
+                            </div>
+                            <span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-400 rounded-full border-2 border-gray-800"></span>
+                        </div>
+                        <div>
+                            <p class="text-white font-bold text-sm leading-tight">Solenetec Advisor</p>
+                            <p class="text-gray-400 text-xs">Powered by Claude AI</p>
+                        </div>
+                    </div>
+                    <button id="advisor-reset-btn" onclick="advisorReset()" class="hidden text-xs text-gray-400 hover:text-white transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-rotate-left"></i> Start Over
+                    </button>
+                </div>
+
+                <!-- Progress bar -->
+                <div class="h-1 bg-gray-200">
+                    <div id="advisor-progress" class="h-1 bg-blue-500 transition-all duration-500" style="width:0%"></div>
+                </div>
+
+                <!-- Quiz body -->
+                <div id="advisor-quiz" class="p-6 sm:p-8">
+                    <!-- Step indicator -->
+                    <div class="flex items-center justify-between mb-6">
+                        <p id="advisor-step-label" class="text-xs font-bold text-blue-600 uppercase tracking-widest">Question 1 of 6</p>
+                        <div id="advisor-dots" class="flex gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-blue-500 transition-all"></span>
+                            <span class="w-2 h-2 rounded-full bg-gray-200 transition-all"></span>
+                            <span class="w-2 h-2 rounded-full bg-gray-200 transition-all"></span>
+                            <span class="w-2 h-2 rounded-full bg-gray-200 transition-all"></span>
+                            <span class="w-2 h-2 rounded-full bg-gray-200 transition-all"></span>
+                            <span class="w-2 h-2 rounded-full bg-gray-200 transition-all"></span>
+                        </div>
+                    </div>
+
+                    <!-- Question text -->
+                    <h3 id="advisor-question" class="text-lg sm:text-xl font-bold text-gray-800 mb-2 leading-snug"></h3>
+                    <p id="advisor-subtext" class="text-sm text-gray-500 mb-6"></p>
+
+                    <!-- Answer options -->
+                    <div id="advisor-options" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+
+                    <!-- Back button -->
+                    <div class="mt-5 flex items-center gap-3">
+                        <button id="advisor-back-btn" onclick="advisorBack()" class="hidden text-sm text-gray-400 hover:text-gray-700 flex items-center gap-1.5 transition">
+                            <i class="fa-solid fa-arrow-left text-xs"></i> Back
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Loading state -->
+                <div id="advisor-loading" class="hidden p-8 sm:p-12 text-center">
+                    <div class="w-16 h-16 mx-auto mb-5 relative">
+                        <div class="absolute inset-0 border-4 border-blue-100 rounded-full"></div>
+                        <div class="absolute inset-0 border-4 border-blue-500 rounded-full border-t-transparent animate-spin"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i class="fa-solid fa-bolt text-blue-500 text-lg"></i>
+                        </div>
+                    </div>
+                    <p class="font-bold text-gray-800 text-lg mb-1">Analyzing your situation…</p>
+                    <p class="text-gray-500 text-sm" id="advisor-loading-msg">Comparing programs across 8 financial and lifestyle factors</p>
+                </div>
+
+                <!-- Results state -->
+                <div id="advisor-results" class="hidden p-6 sm:p-8">
+                    <!-- Results injected by JS -->
+                </div>
+            </div>
+        </section>
+
+        <script>
+        // ══════════════════════════════════════════════
+        // ADVISOR QUIZ ENGINE
+        // ══════════════════════════════════════════════
+        const ADVISOR_QUESTIONS = [
+            {
+                id: 'tax',
+                q: 'What is your current federal tax situation?',
+                sub: 'This is the single biggest factor in which program saves you the most money.',
+                options: [
+                    { label: 'I owe significant federal taxes each year', value: 'high', icon: 'fa-file-invoice-dollar' },
+                    { label: 'I owe modest federal taxes', value: 'moderate', icon: 'fa-receipt' },
+                    { label: 'I\'m retired or on a fixed income — little to no tax liability', value: 'low', icon: 'fa-house-user' },
+                    { label: 'I\'m not sure', value: 'unknown', icon: 'fa-circle-question' }
+                ]
+            },
+            {
+                id: 'upfront',
+                q: 'How do you feel about upfront costs?',
+                sub: 'Some programs require a loan or upfront payment; others are zero-down subscriptions.',
+                options: [
+                    { label: 'I can finance or pay upfront for maximum long-term savings', value: 'flexible', icon: 'fa-piggy-bank' },
+                    { label: 'I prefer zero out-of-pocket — I\'d rather pay monthly', value: 'zero_down', icon: 'fa-dollar-sign' },
+                    { label: 'I\'m open to a loan if the numbers make sense', value: 'loan_ok', icon: 'fa-handshake' },
+                    { label: 'I want to minimize any financial commitment right now', value: 'minimal', icon: 'fa-shield' }
+                ]
+            },
+            {
+                id: 'stay',
+                q: 'How long do you plan to stay in your current home?',
+                sub: 'This affects which programs offer the best exit options and long-term payoff.',
+                options: [
+                    { label: 'Long-term — 7+ years', value: 'long', icon: 'fa-tree' },
+                    { label: 'Medium-term — 4 to 7 years', value: 'medium', icon: 'fa-calendar' },
+                    { label: 'Short-term — under 4 years', value: 'short', icon: 'fa-suitcase' },
+                    { label: 'I\'m not sure yet', value: 'unknown', icon: 'fa-circle-question' }
+                ]
+            },
+            {
+                id: 'ev',
+                q: 'Do you own an EV, or plan to buy one in the next 2 years?',
+                sub: 'EV adoption significantly changes which program size and structure works best.',
+                options: [
+                    { label: 'Yes, I already own an EV', value: 'has_ev', icon: 'fa-car-side' },
+                    { label: 'Planning to buy one soon', value: 'planning_ev', icon: 'fa-clock' },
+                    { label: 'Not likely in the near future', value: 'no_ev', icon: 'fa-xmark' },
+                    { label: 'Maybe — I\'m on the fence', value: 'maybe_ev', icon: 'fa-scale-balanced' }
+                ]
+            },
+            {
+                id: 'utility',
+                q: 'Who is your electric utility provider?',
+                sub: 'Certain grid programs (like VPP rebates) are only available through specific utilities.',
+                options: [
+                    { label: 'SDG&E / San Diego Community Power', value: 'sdge', icon: 'fa-map-pin' },
+                    { label: 'SCE (Southern California Edison)', value: 'sce', icon: 'fa-map-pin' },
+                    { label: 'PG&E (Pacific Gas & Electric)', value: 'pge', icon: 'fa-map-pin' },
+                    { label: 'Other / not sure', value: 'other', icon: 'fa-circle-question' }
+                ]
+            },
+            {
+                id: 'priority',
+                q: 'What matters most to you about going solar?',
+                sub: 'Your primary goal shapes which program delivers the best fit overall.',
+                options: [
+                    { label: 'Maximum savings & long-term ROI', value: 'roi', icon: 'fa-chart-line' },
+                    { label: 'Zero hassle — I don\'t want to think about maintenance', value: 'hassle_free', icon: 'fa-couch' },
+                    { label: 'Backup power & energy independence', value: 'resilience', icon: 'fa-bolt' },
+                    { label: 'Flexibility as my energy needs grow', value: 'flexibility', icon: 'fa-arrows-up-down-left-right' }
+                ]
+            }
+        ];
+
+        let advisorStep = 0;
+        let advisorAnswers = {};
+        let advisorHistory = [];
+
+        function advisorInit() {
+            advisorStep = 0;
+            advisorAnswers = {};
+            advisorHistory = [];
+            document.getElementById('advisor-quiz').classList.remove('hidden');
+            document.getElementById('advisor-loading').classList.add('hidden');
+            document.getElementById('advisor-results').classList.add('hidden');
+            document.getElementById('advisor-reset-btn').classList.add('hidden');
+            document.getElementById('advisor-back-btn').classList.add('hidden');
+            advisorRenderQuestion();
+        }
+
+        function advisorReset() {
+            advisorInit();
+        }
+
+        function advisorRenderQuestion() {
+            const q = ADVISOR_QUESTIONS[advisorStep];
+            const total = ADVISOR_QUESTIONS.length;
+            const pct = (advisorStep / total) * 100;
+
+            document.getElementById('advisor-progress').style.width = pct + '%';
+            document.getElementById('advisor-step-label').textContent = `Question ${advisorStep + 1} of ${total}`;
+            document.getElementById('advisor-question').textContent = q.q;
+            document.getElementById('advisor-subtext').textContent = q.sub;
+
+            // Dots
+            const dots = document.getElementById('advisor-dots').children;
+            for (let i = 0; i < dots.length; i++) {
+                dots[i].className = i < advisorStep
+                    ? 'w-2 h-2 rounded-full bg-blue-300 transition-all'
+                    : i === advisorStep
+                    ? 'w-2 h-2 rounded-full bg-blue-500 transition-all'
+                    : 'w-2 h-2 rounded-full bg-gray-200 transition-all';
+            }
+
+            // Options
+            const container = document.getElementById('advisor-options');
+            container.innerHTML = '';
+            q.options.forEach(opt => {
+                const selected = advisorAnswers[q.id] === opt.value;
+                const btn = document.createElement('button');
+                btn.className = `advisor-opt text-left flex items-start gap-3 p-4 rounded-xl border-2 transition-all duration-150 ${selected ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-white hover:border-blue-300 hover:bg-blue-50/50'}`;
+                btn.innerHTML = `
+                    <div class="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5 ${selected ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-500'}">
+                        <i class="fa-solid ${opt.icon} text-sm"></i>
+                    </div>
+                    <span class="text-sm font-medium text-gray-700 leading-snug pt-1.5">${opt.label}</span>
+                `;
+                btn.onclick = () => advisorSelect(q.id, opt.value);
+                container.appendChild(btn);
+            });
+
+            // Back button
+            const backBtn = document.getElementById('advisor-back-btn');
+            if (advisorStep > 0) {
+                backBtn.classList.remove('hidden');
+            } else {
+                backBtn.classList.add('hidden');
+            }
+        }
+
+        function advisorSelect(qId, value) {
+            advisorAnswers[qId] = value;
+            advisorHistory.push(advisorStep);
+
+            if (advisorStep < ADVISOR_QUESTIONS.length - 1) {
+                advisorStep++;
+                advisorRenderQuestion();
+            } else {
+                advisorSubmit();
+            }
+        }
+
+        function advisorBack() {
+            if (advisorHistory.length > 0) {
+                advisorStep = advisorHistory.pop();
+                advisorRenderQuestion();
+            }
+        }
+
+        async function advisorSubmit() {
+            document.getElementById('advisor-quiz').classList.add('hidden');
+            document.getElementById('advisor-loading').classList.remove('hidden');
+            document.getElementById('advisor-reset-btn').classList.remove('hidden');
+
+            const loadingMsgs = [
+                'Comparing programs across 8 financial and lifestyle factors…',
+                'Weighing IRA domestic content provisions…',
+                'Checking VPP eligibility by utility…',
+                'Calculating long-term ROI for each scenario…',
+                'Finalizing your personalized recommendation…'
+            ];
+            let msgIdx = 0;
+            const msgEl = document.getElementById('advisor-loading-msg');
+            const msgInterval = setInterval(() => {
+                msgIdx = (msgIdx + 1) % loadingMsgs.length;
+                msgEl.textContent = loadingMsgs[msgIdx];
+            }, 1800);
+
+            const systemPrompt = `You are Solenetec's expert solar program advisor. You help homeowners understand which solar financing and participation program best fits their situation. Be direct, specific, and confident. You have deep knowledge of these four programs:
+
+1. **Direct Ownership** - Buy the system outright or via loan. Post-2025, there is NO federal 30% tax credit for direct residential ownership. Best for high-income owners who want maximum long-term ROI and asset equity.
+
+2. **Propel Prepaid PPA** (SolSource + TriBeam) - Third-party ownership structure. A prepaid Power Purchase Agreement funded via a TriBeam loan. Unlocks 40% Investment Tax Credit (30% standard + 10% IRA domestic content bonus from Enphase hardware). No annual price escalators. Enphase Care handles all O&M. Year 6 purchase option available. Best for fixed-income, retired, or tax-limited homeowners.
+
+3. **Sunrun Flex™** - Subscription solar + storage. Sized above current baseline to accommodate future EV/energy growth. Rollover credits when you use less than baseline. Locked Flex Rate for overages. Premium battery storage included. Auto-enrolled in grid services (VPP) where available. 24/7 monitoring, free maintenance, performance guarantee. Best for EV owners, growing households, or anyone who values flexibility.
+
+4. **Energy-as-a-Service (EaaS)** - Pure OpEx subscription. Zero upfront. Provider owns all hardware and bears all operational risk. You pay only for energy delivered or a fixed service fee. Limited residential availability. Best for zero-hassle customers.
+
+5. **VPP (Virtual Power Plant) Enrollment** - NOT a standalone program, but an add-on for battery owners. San Diego Community Power pays $350-$500/kWh upfront rebate + $0.10/kWh performance incentive for discharging 50% of battery between 4-9pm weekdays. 5-year claw-back if you exit early. Only available to SDCP residential customers.
+
+Your response must be valid JSON with this exact structure:
+{
+  "top_pick": "Program Name",
+  "top_pick_color": "blue|teal|green|orange|purple",
+  "headline": "Short punchy headline (max 12 words) explaining why this is their best fit",
+  "summary": "2-3 sentence plain-English explanation of why this program fits their specific situation, referencing their actual answers",
+  "scores": [
+    {"program": "Propel Prepaid PPA", "score": 85, "reason": "One sentence why"},
+    {"program": "Sunrun Flex™", "score": 72, "reason": "One sentence why"},
+    {"program": "Direct Ownership", "score": 45, "reason": "One sentence why"},
+    {"program": "Energy-as-a-Service", "score": 38, "reason": "One sentence why"},
+    {"program": "VPP Add-on", "score": 60, "reason": "One sentence why"}
+  ],
+  "key_insight": "One specific, memorable insight about their situation that they probably haven't considered",
+  "watch_out": "One specific risk or caveat they should know about their top pick",
+  "next_step": "One clear action they should take next"
+}`;
+
+            const userMsg = `Here are my answers:
+- Tax situation: ${advisorAnswers.tax}
+- Upfront cost preference: ${advisorAnswers.upfront}  
+- How long I plan to stay: ${advisorAnswers.stay}
+- EV status: ${advisorAnswers.ev}
+- Electric utility: ${advisorAnswers.utility}
+- Primary goal: ${advisorAnswers.priority}
+
+Please analyze which solar program fits me best and return a JSON response.`;
+
+            try {
+                const response = await fetch('YOUR_CLOUDFLARE_WORKER_URL', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        model: 'claude-sonnet-4-20250514',
+                        max_tokens: 1000,
+                        messages: [{ role: 'user', content: userMsg }],
+                        system: systemPrompt
+                    })
+                });
+
+                clearInterval(msgInterval);
+                const data = await response.json();
+                const raw = data.content.map(b => b.text || '').join('');
+                const clean = raw.replace(/```json|```/g, '').trim();
+                const result = JSON.parse(clean);
+                advisorShowResults(result);
+
+            } catch (err) {
+                clearInterval(msgInterval);
+                advisorShowError();
+            }
+        }
+
+        function advisorShowResults(r) {
+            document.getElementById('advisor-loading').classList.add('hidden');
+            const el = document.getElementById('advisor-results');
+            el.classList.remove('hidden');
+            document.getElementById('advisor-progress').style.width = '100%';
+
+            const colorMap = {
+                blue: { bg: 'bg-blue-600', light: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-700', bar: 'bg-blue-500' },
+                teal: { bg: 'bg-teal-600', light: 'bg-teal-50', border: 'border-teal-200', text: 'text-teal-700', bar: 'bg-teal-500' },
+                green: { bg: 'bg-green-600', light: 'bg-green-50', border: 'border-green-200', text: 'text-green-700', bar: 'bg-green-500' },
+                orange: { bg: 'bg-orange-500', light: 'bg-orange-50', border: 'border-orange-200', text: 'text-orange-600', bar: 'bg-orange-500' },
+                purple: { bg: 'bg-purple-600', light: 'bg-purple-50', border: 'border-purple-200', text: 'text-purple-700', bar: 'bg-purple-500' },
+            };
+            const c = colorMap[r.top_pick_color] || colorMap.blue;
+
+            // Program section anchors
+            const anchorMap = {
+                'Propel Prepaid PPA': '#propel-section',
+                'Sunrun Flex™': '#sunrun-section',
+                'Direct Ownership': '#compare-section',
+                'Energy-as-a-Service': '#eaas-section',
+                'VPP Add-on': '#vpp-section',
+            };
+            const anchor = anchorMap[r.top_pick] || '#compare-section';
+
+            el.innerHTML = `
+                <!-- Top pick banner -->
+                <div class="${c.bg} rounded-xl p-5 sm:p-6 mb-6 text-white">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-trophy text-white text-xl"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-white/70 text-xs font-bold uppercase tracking-widest mb-1">Your Best Fit</p>
+                            <h3 class="text-xl sm:text-2xl font-extrabold leading-tight mb-1">${r.top_pick}</h3>
+                            <p class="text-white/90 text-sm font-medium">${r.headline}</p>
+                        </div>
+                    </div>
+                    <p class="mt-4 text-white/90 text-sm leading-relaxed">${r.summary}</p>
+                </div>
+
+                <!-- Program scores -->
+                <div class="mb-6">
+                    <h4 class="font-bold text-gray-700 text-sm uppercase tracking-wide mb-3">How All Programs Score For You</h4>
+                    <div class="space-y-3">
+                        ${r.scores.sort((a,b) => b.score - a.score).map((s, i) => {
+                            const isTop = i === 0;
+                            const barColor = isTop ? c.bar : 'bg-gray-300';
+                            const textColor = isTop ? c.text : 'text-gray-600';
+                            return `
+                            <div class="flex items-center gap-3 ${isTop ? c.light + ' ' + c.border + ' border rounded-xl p-3' : 'px-1'}">
+                                <div class="w-36 sm:w-44 flex-shrink-0">
+                                    <p class="text-xs font-bold ${textColor} truncate">${s.program}</p>
+                                </div>
+                                <div class="flex-1 bg-gray-100 rounded-full h-2">
+                                    <div class="${barColor} h-2 rounded-full transition-all duration-700" style="width:${s.score}%"></div>
+                                </div>
+                                <span class="text-xs font-bold ${textColor} w-8 text-right flex-shrink-0">${s.score}</span>
+                            </div>
+                            <p class="text-xs text-gray-500 pl-1 -mt-1 mb-1 ml-[152px] sm:ml-[176px] hidden sm:block">${s.reason}</p>`;
+                        }).join('')}
+                    </div>
+                </div>
+
+                <!-- Insight + Watch out -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                    <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 flex gap-3 items-start">
+                        <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-lightbulb text-white text-sm"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-blue-700 uppercase tracking-wide mb-1">Key Insight</p>
+                            <p class="text-sm text-blue-900 leading-relaxed">${r.key_insight}</p>
+                        </div>
+                    </div>
+                    <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 flex gap-3 items-start">
+                        <div class="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-triangle-exclamation text-white text-sm"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-amber-700 uppercase tracking-wide mb-1">Watch Out</p>
+                            <p class="text-sm text-amber-900 leading-relaxed">${r.watch_out}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CTA -->
+                <div class="${c.light} ${c.border} border rounded-xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="flex items-start gap-3">
+                        <i class="fa-solid fa-arrow-right-long ${c.text} text-lg mt-0.5 flex-shrink-0"></i>
+                        <p class="text-sm font-medium text-gray-800"><strong>Next step:</strong> ${r.next_step}</p>
+                    </div>
+                    <div class="flex gap-3 flex-shrink-0 flex-wrap justify-center">
+                        <a href="${anchor}" class="${c.bg} text-white text-sm font-bold px-5 py-2.5 rounded-full hover:opacity-90 transition">
+                            Read Full Details
+                        </a>
+                        <a href="#" onclick="openScheduleModal(event)" class="bg-gray-800 text-white text-sm font-bold px-5 py-2.5 rounded-full hover:bg-gray-700 transition">
+                            Talk to an Advisor
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function advisorShowError() {
+            document.getElementById('advisor-loading').classList.add('hidden');
+            const el = document.getElementById('advisor-results');
+            el.classList.remove('hidden');
+            el.innerHTML = `
+                <div class="text-center py-8">
+                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fa-solid fa-triangle-exclamation text-red-500 text-lg"></i>
+                    </div>
+                    <p class="font-bold text-gray-800 mb-2">Something went wrong</p>
+                    <p class="text-gray-500 text-sm mb-5">We couldn't generate your analysis. Please try again or speak with an advisor directly.</p>
+                    <div class="flex justify-center gap-3">
+                        <button onclick="advisorReset()" class="bg-blue-600 text-white font-bold px-5 py-2.5 rounded-full text-sm hover:bg-blue-700 transition">Try Again</button>
+                        <a href="#" onclick="openScheduleModal(event)" class="bg-gray-200 text-gray-700 font-bold px-5 py-2.5 rounded-full text-sm hover:bg-gray-300 transition">Talk to Advisor</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Auto-init on load
+        document.addEventListener('DOMContentLoaded', advisorInit);
+        </script>
+
+
+
+        <!-- ── SECTION INTRO: Three Programs ── -->
+        <div class="text-center mb-10">
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-800 mb-3">The Four Programs — Explained in Detail</h2>
+            <p class="text-gray-500 max-w-2xl mx-auto text-sm sm:text-base">Even without the 30% personal tax credit, these programs make solar + battery more accessible and financially compelling than ever.</p>
+        </div>
+
+        <!-- ── PROGRAM CARDS OVERVIEW ── -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-5 mb-14">
+            <a href="#propel-section" class="program-card card-bg card-border-blue rounded-2xl p-6 shadow-md block">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <i class="fa-solid fa-rocket text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <span class="badge-new">New in 2026</span>
+                        <h3 class="font-bold text-gray-900 text-lg leading-tight">Propel Prepaid PPA</h3>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-600 leading-relaxed mb-4">A third-party ownership structure that leverages the IRA's domestic content provisions to deliver a <strong>40% Investment Tax Credit</strong> — 10 points higher than the standard residential credit ever was.</p>
+                <div class="flex items-center gap-2 text-blue-600 text-sm font-semibold">
+                    <i class="fa-solid fa-arrow-right"></i> Learn more
+                </div>
+            </a>
+
+            <a href="#eaas-section" class="program-card card-bg card-border-blue rounded-2xl p-6 shadow-md block">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-12 h-12 bg-teal-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <i class="fa-solid fa-bolt text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <span class="badge-new">Subscription</span>
+                        <h3 class="font-bold text-gray-900 text-lg leading-tight">Energy-as-a-Service</h3>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-600 leading-relaxed mb-4">Pay only for the energy you use. No capital outlay, no maintenance headaches. The provider owns and operates the system — you simply pay a predictable monthly service fee.</p>
+                <div class="flex items-center gap-2 text-teal-600 text-sm font-semibold">
+                    <i class="fa-solid fa-arrow-right"></i> Learn more
+                </div>
+            </a>
+
+            <a href="#vpp-section" class="program-card card-bg card-border-blue rounded-2xl p-6 shadow-md block">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-12 h-12 bg-green-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <i class="fa-solid fa-network-wired text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <span class="badge-new">Earn Money</span>
+                        <h3 class="font-bold text-gray-900 text-lg leading-tight">Virtual Power Plant</h3>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-600 leading-relaxed mb-4">Turn your battery into a revenue-generating asset. Earn upfront rebates up to <strong>$500/kWh</strong> plus <strong>$0.10/kWh</strong> performance incentives by participating in grid dispatch programs.</p>
+                <div class="flex items-center gap-2 text-green-600 text-sm font-semibold">
+                    <i class="fa-solid fa-arrow-right"></i> Learn more
+                </div>
+            </a>
+
+            <a href="#sunrun-section" class="program-card card-bg card-border-blue rounded-2xl p-6 shadow-md block">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <i class="fa-solid fa-arrow-rotate-right text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <span class="badge-new">Industry First</span>
+                        <h3 class="font-bold text-gray-900 text-lg leading-tight">Sunrun Flex™</h3>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-600 leading-relaxed mb-4">The first solar + storage subscription designed to adapt to your life. Rollover credits, flex pricing, and built-in grid services — the biggest financial innovation in solar since the PPA was invented in 2007.</p>
+                <div class="flex items-center gap-2 text-orange-500 text-sm font-semibold">
+                    <i class="fa-solid fa-arrow-right"></i> Learn more
+                </div>
+            </a>
+        </div>
+
+        <!-- ════════════════════════════════════════════════════════ -->
+        <!-- PROPEL SECTION                                          -->
+        <!-- ════════════════════════════════════════════════════════ -->
+        <section id="propel-section" class="mb-14 scroll-mt-24">
+            <div class="card-bg card-border-blue rounded-2xl shadow-xl overflow-hidden">
+                <!-- Header -->
+                <div class="bg-gray-800 p-6 sm:p-8">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                        <div class="w-14 h-14 bg-blue-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-rocket text-white text-2xl"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-3 flex-wrap">
+                                <h2 class="text-2xl sm:text-3xl font-extrabold text-blue-400">Propel — Prepaid PPA</h2>
+                                <span class="badge-new">40% Tax Credit</span>
+                            </div>
+                            <p class="text-gray-300 mt-1 text-sm sm:text-base">A SolSource &amp; TriBeam platform · Powered by Enphase hardware · Financed via Concert Finance</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-6 sm:p-8">
+                    <!-- What is it -->
+                    <div class="highlight-box rounded-xl p-5 mb-7">
+                        <h3 class="font-bold text-blue-800 mb-2 flex items-center gap-2"><i class="fa-solid fa-circle-info text-blue-500"></i> What is a Prepaid PPA?</h3>
+                        <p class="text-sm text-blue-900 leading-relaxed">A Power Purchase Agreement (PPA) is a contract where a third-party company owns your solar system and sells the electricity to you. In a <strong>prepaid</strong> PPA, you pay the full contract value upfront — eliminating the annual rate escalators that make traditional leases unattractive. Because the system is owned by a corporation, it qualifies for corporate-level federal tax credits that individual homeowners can no longer access after the 2025 expiration. According to <em>pv magazine</em> (March 2026), the Propel platform from SolSource &amp; TriBeam integrates a TPO structure directly with a point-of-sale loan system, so homeowners can fund the upfront payment through a TriBeam-originated loan — all as a single transaction.</p>
+                    </div>
+
+                    <!-- Key features grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-7">
+                        <div class="bg-blue-50 border border-blue-100 rounded-xl p-5">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fa-solid fa-percent text-white text-sm"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-800">40% Investment Tax Credit</h4>
+                            </div>
+                            <p class="text-sm text-gray-600 leading-relaxed">The standard corporate ITC is 30%, but Enphase hardware — as the exclusive microinverter and battery provider — meets the IRA's domestic manufacturing requirements, adding a <strong>10% domestic content bonus</strong> and lifting the total credit to 40%. This benefit is priced directly into your prepaid agreement. System design and proposals are handled through <strong>Solargraf</strong> for precision sizing.</p>
+                        </div>
+                        <div class="bg-green-50 border border-green-100 rounded-xl p-5">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-9 h-9 bg-green-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fa-solid fa-wrench text-white text-sm"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-800">Enphase Care — Zero O&amp;M Risk</h4>
+                            </div>
+                            <p class="text-sm text-gray-600 leading-relaxed">Operations and maintenance are handled entirely through Enphase Care. If something breaks, it's the provider's problem, not yours. This eliminates a major anxiety point that comes with direct ownership — especially for fixed-income homeowners.</p>
+                        </div>
+                        <div class="bg-amber-50 border border-amber-100 rounded-xl p-5">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-9 h-9 bg-amber-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fa-solid fa-calendar-check text-white text-sm"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-800">Year 6 Purchase Option</h4>
+                            </div>
+                            <p class="text-sm text-gray-600 leading-relaxed">Starting in year 6, you can purchase the system outright. By then, the primary depreciation and tax credit benefits have been fully realized by the TPO — and you can transition to full ownership, capturing 100% of the asset's value going forward.</p>
+                        </div>
+                        <div class="bg-purple-50 border border-purple-100 rounded-xl p-5">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-9 h-9 bg-purple-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fa-solid fa-ban text-white text-sm"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-800">No Price Escalators</h4>
+                            </div>
+                            <p class="text-sm text-gray-600 leading-relaxed">Traditional solar leases typically include 2.9%+ annual price increases that erode your savings over time and create problems when selling your home. Propel's prepaid structure locks your cost from day one — no surprises.</p>
+                        </div>
+                    </div>
+
+                    <!-- Who it's for -->
+                    <div class="bg-gray-50 border border-gray-200 rounded-xl p-5 mb-6">
+                        <h4 class="font-bold text-gray-800 mb-3 flex items-center gap-2"><i class="fa-solid fa-user-check text-blue-500"></i> Who is Propel Best For?</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm text-gray-700">
+                            <div class="flex gap-2 items-start"><i class="fa-solid fa-circle-check text-green-500 mt-0.5 flex-shrink-0"></i><span><strong>Fixed-income or retired homeowners</strong> who cannot use a personal tax credit and want zero maintenance responsibility.</span></div>
+                            <div class="flex gap-2 items-start"><i class="fa-solid fa-circle-check text-green-500 mt-0.5 flex-shrink-0"></i><span><strong>Homeowners with limited liquidity</strong> who can access a Concert Finance loan to cover the prepaid amount at competitive rates.</span></div>
+                            <div class="flex gap-2 items-start"><i class="fa-solid fa-circle-check text-green-500 mt-0.5 flex-shrink-0"></i><span><strong>Long-term residents</strong> planning to stay 6+ years and eventually transition to outright ownership via the purchase option.</span></div>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <a href="#" onclick="openScheduleModal(event)" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3 rounded-full transition shadow-lg">
+                            <i class="fa-solid fa-rocket"></i> Ask About Propel
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════════════ -->
+        <!-- EaaS SECTION                                            -->
+        <!-- ════════════════════════════════════════════════════════ -->
+        <section id="eaas-section" class="mb-14 scroll-mt-24">
+            <div class="card-bg card-border-blue rounded-2xl shadow-xl overflow-hidden">
+                <div class="bg-gray-800 p-6 sm:p-8">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                        <div class="w-14 h-14 bg-teal-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-bolt text-white text-2xl"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-3 flex-wrap">
+                                <h2 class="text-2xl sm:text-3xl font-extrabold text-blue-400">Energy-as-a-Service (EaaS)</h2>
+                                <span class="badge-new">Zero Upfront</span>
+                            </div>
+                            <p class="text-gray-300 mt-1 text-sm sm:text-base">From CapEx to OpEx — pay for energy delivered, not hardware owned</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-6 sm:p-8">
+                    <div class="highlight-box rounded-xl p-5 mb-7">
+                        <h3 class="font-bold text-blue-800 mb-2 flex items-center gap-2"><i class="fa-solid fa-circle-info text-blue-500"></i> The EaaS Model Explained</h3>
+                        <p class="text-sm text-blue-900 leading-relaxed">Energy-as-a-Service converts your energy infrastructure from a one-time capital purchase into a predictable monthly operating expense — the same shift that happened in software (SaaS) and cloud computing. The provider deploys, owns, and operates the hardware. You pay only for energy delivered or a fixed service fee. If the system underperforms, the provider's revenue is directly impacted — aligning their incentives perfectly with yours.</p>
+                    </div>
+
+                    <!-- CapEx vs OpEx visual -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-7">
+                        <div class="border-2 border-red-200 rounded-xl p-5 bg-red-50">
+                            <h4 class="font-bold text-red-700 mb-3 flex items-center gap-2"><i class="fa-solid fa-xmark-circle"></i> Traditional Model (CapEx)</h4>
+                            <ul class="space-y-2 text-sm text-gray-700">
+                                <li class="flex gap-2"><i class="fa-solid fa-circle-xmark text-red-400 mt-0.5 flex-shrink-0"></i> Large upfront cost ($25,000–$45,000+)</li>
+                                <li class="flex gap-2"><i class="fa-solid fa-circle-xmark text-red-400 mt-0.5 flex-shrink-0"></i> Homeowner bears all maintenance risk</li>
+                                <li class="flex gap-2"><i class="fa-solid fa-circle-xmark text-red-400 mt-0.5 flex-shrink-0"></i> No federal tax credit post-2025</li>
+                                <li class="flex gap-2"><i class="fa-solid fa-circle-xmark text-red-400 mt-0.5 flex-shrink-0"></i> Technology obsolescence risk over 25+ years</li>
+                                <li class="flex gap-2"><i class="fa-solid fa-circle-xmark text-red-400 mt-0.5 flex-shrink-0"></i> Warranty claims are your responsibility to navigate</li>
+                            </ul>
+                        </div>
+                        <div class="border-2 border-teal-200 rounded-xl p-5 bg-teal-50">
+                            <h4 class="font-bold text-teal-700 mb-3 flex items-center gap-2"><i class="fa-solid fa-check-circle"></i> EaaS Model (OpEx)</h4>
+                            <ul class="space-y-2 text-sm text-gray-700">
+                                <li class="flex gap-2"><i class="fa-solid fa-circle-check text-teal-500 mt-0.5 flex-shrink-0"></i> Zero upfront capital required</li>
+                                <li class="flex gap-2"><i class="fa-solid fa-circle-check text-teal-500 mt-0.5 flex-shrink-0"></i> Provider assumes all operational risk</li>
+                                <li class="flex gap-2"><i class="fa-solid fa-circle-check text-teal-500 mt-0.5 flex-shrink-0"></i> Tax credits captured at provider level — priced into service</li>
+                                <li class="flex gap-2"><i class="fa-solid fa-circle-check text-teal-500 mt-0.5 flex-shrink-0"></i> Access to latest hardware without obsolescence risk</li>
+                                <li class="flex gap-2"><i class="fa-solid fa-circle-check text-teal-500 mt-0.5 flex-shrink-0"></i> Professionally managed for maximum output</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Key considerations -->
+                    <div class="bg-gray-50 border border-gray-200 rounded-xl p-5 mb-6">
+                        <h4 class="font-bold text-gray-800 mb-3"><i class="fa-solid fa-scale-balanced text-blue-500 mr-2"></i>Things to Consider with EaaS</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-600">
+                            <div class="flex gap-2 items-start"><i class="fa-solid fa-triangle-exclamation text-amber-500 mt-0.5 flex-shrink-0"></i><span>Long-term IRR is lower than direct ownership once the system is fully paid off — the provider retains upside.</span></div>
+                            <div class="flex gap-2 items-start"><i class="fa-solid fa-triangle-exclamation text-amber-500 mt-0.5 flex-shrink-0"></i><span>Primarily used by commercial/institutional clients today — residential availability varies by provider and region.</span></div>
+                            <div class="flex gap-2 items-start"><i class="fa-solid fa-circle-check text-green-500 mt-0.5 flex-shrink-0"></i><span>Ideal if you want clean energy without the complexity of ownership — think of it like renting vs. buying.</span></div>
+                            <div class="flex gap-2 items-start"><i class="fa-solid fa-circle-check text-green-500 mt-0.5 flex-shrink-0"></i><span>Performance guarantees mean you always get what you're paying for — if generation drops, so does your bill.</span></div>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <a href="#" onclick="openScheduleModal(event)" class="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-bold px-8 py-3 rounded-full transition shadow-lg">
+                            <i class="fa-solid fa-bolt"></i> Ask About EaaS Options
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════════════ -->
+        <!-- VPP SECTION                                             -->
+        <!-- ════════════════════════════════════════════════════════ -->
+        <section id="vpp-section" class="mb-14 scroll-mt-24">
+            <div class="card-bg card-border-blue rounded-2xl shadow-xl overflow-hidden">
+                <div class="bg-gray-800 p-6 sm:p-8">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                        <div class="w-14 h-14 bg-green-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-network-wired text-white text-2xl"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-3 flex-wrap">
+                                <h2 class="text-2xl sm:text-3xl font-extrabold text-blue-400">Virtual Power Plants (VPP)</h2>
+                                <span class="badge-new">Earn $0.10/kWh</span>
+                            </div>
+                            <p class="text-gray-300 mt-1 text-sm sm:text-base">Your battery becomes a grid asset — and the grid pays you for it</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-6 sm:p-8">
+                    <div class="highlight-box rounded-xl p-5 mb-7">
+                        <h3 class="font-bold text-blue-800 mb-2 flex items-center gap-2"><i class="fa-solid fa-circle-info text-blue-500"></i> What is a Virtual Power Plant?</h3>
+                        <p class="text-sm text-blue-900 leading-relaxed">A VPP is a cloud-coordinated network of thousands of home batteries, solar systems, and smart chargers that collectively act as a single power plant. When the grid faces peak demand — typically 4–9 PM on weekdays — the network discharges stored energy simultaneously, stabilizing the grid without firing up expensive, polluting peaker plants. As a participant, your battery does the work automatically and you get paid for every kilowatt-hour dispatched.</p>
+                    </div>
+
+                    <!-- VPP diagram -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-7">
+                        <!-- How it works -->
+                        <div class="bg-gray-50 border border-gray-200 rounded-xl p-5">
+                            <h4 class="font-bold text-gray-800 mb-4"><i class="fa-solid fa-gears text-green-600 mr-2"></i>How it Works — Day in the Life</h4>
+                            <div class="timeline-line space-y-5 text-sm">
+                                <div class="flex gap-4">
+                                    <div class="w-10 h-10 bg-yellow-100 border-2 border-yellow-400 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold text-yellow-700 relative z-10">7AM</div>
+                                    <div class="pt-1"><p class="font-semibold text-gray-800">Solar starts charging your battery</p><p class="text-gray-500">System prioritizes self-consumption first, then charges battery to 100%.</p></div>
+                                </div>
+                                <div class="flex gap-4">
+                                    <div class="w-10 h-10 bg-blue-100 border-2 border-blue-400 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold text-blue-700 relative z-10">3PM</div>
+                                    <div class="pt-1"><p class="font-semibold text-gray-800">DERMS prepares for dispatch</p><p class="text-gray-500">The grid operator signals the VPP software that peak demand is incoming.</p></div>
+                                </div>
+                                <div class="flex gap-4">
+                                    <div class="w-10 h-10 bg-green-100 border-2 border-green-400 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold text-green-700 relative z-10">4PM</div>
+                                    <div class="pt-1"><p class="font-semibold text-gray-800">Dispatch window opens (4–9 PM)</p><p class="text-gray-500">Your battery automatically discharges 50% capacity. Home is powered first; surplus exports to the grid. You earn <strong>$0.10/kWh</strong> dispatched.</p></div>
+                                </div>
+                                <div class="flex gap-4">
+                                    <div class="w-10 h-10 bg-gray-100 border-2 border-gray-300 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold text-gray-600 relative z-10">9PM</div>
+                                    <div class="pt-1"><p class="font-semibold text-gray-800">Window closes, battery recharges overnight</p><p class="text-gray-500">Off-peak rates apply. Battery tops up for tomorrow's cycle.</p></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SDCP Incentive table -->
+                        <div>
+                            <div class="bg-green-50 border border-green-200 rounded-xl p-5 mb-4">
+                                <h4 class="font-bold text-gray-800 mb-4"><i class="fa-solid fa-map-pin text-green-600 mr-2"></i>San Diego Community Power (SDCP) — Live Rates</h4>
+                                <div class="overflow-x-auto">
+                                    <table class="w-full text-sm">
+                                        <thead>
+                                            <tr class="text-xs font-bold text-gray-500 uppercase tracking-wide border-b border-green-200">
+                                                <th class="text-left py-2 pr-3">Customer Type</th>
+                                                <th class="text-right py-2 pr-3">New Solar + Battery</th>
+                                                <th class="text-right py-2">Existing Solar + Battery</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-green-100">
+                                            <tr>
+                                                <td class="py-2 pr-3 font-medium text-gray-700">Market Rate</td>
+                                                <td class="py-2 pr-3 text-right font-bold text-green-700">$350/kWh</td>
+                                                <td class="py-2 text-right font-bold text-green-700">$250/kWh</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-2 pr-3 font-medium text-gray-700">CARE / FERA / Communities of Concern</td>
+                                                <td class="py-2 pr-3 text-right font-bold text-green-700">$500/kWh</td>
+                                                <td class="py-2 text-right font-bold text-green-700">$350/kWh</td>
+                                            </tr>
+                                            <tr class="bg-green-100/60">
+                                                <td class="py-2 pr-3 font-bold text-gray-800" colspan="2">Performance Incentive (all customers)</td>
+                                                <td class="py-2 text-right font-bold text-blue-700">$0.10/kWh dispatched</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-3">Requires discharge of 50% battery capacity during 4–9 PM weekday window. Customer must be an SDCP residential customer. Battery must charge from on-site solar only (no grid charging). Cannot be enrolled in ELRP or DSGS programs simultaneously. System must be installed at a single-family home at the address receiving SDCP service.</p>
+                            </div>
+
+                            <!-- Claw-back schedule -->
+                            <div class="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                                <h4 class="font-bold text-gray-800 mb-3"><i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i>5-Year Claw-back Schedule</h4>
+                                <p class="text-xs text-gray-600 mb-3">Leaving the program early requires repaying a portion of your upfront rebate:</p>
+                                <div class="flex gap-2">
+                                    <div class="flex-1 text-center bg-white border border-amber-200 rounded-lg py-2 px-1">
+                                        <div class="text-xs text-gray-500 font-semibold">Year 1</div>
+                                        <div class="text-lg font-extrabold text-red-600">100%</div>
+                                    </div>
+                                    <div class="flex-1 text-center bg-white border border-amber-200 rounded-lg py-2 px-1">
+                                        <div class="text-xs text-gray-500 font-semibold">Year 2</div>
+                                        <div class="text-lg font-extrabold text-orange-500">80%</div>
+                                    </div>
+                                    <div class="flex-1 text-center bg-white border border-amber-200 rounded-lg py-2 px-1">
+                                        <div class="text-xs text-gray-500 font-semibold">Year 3</div>
+                                        <div class="text-lg font-extrabold text-yellow-600">60%</div>
+                                    </div>
+                                    <div class="flex-1 text-center bg-white border border-amber-200 rounded-lg py-2 px-1">
+                                        <div class="text-xs text-gray-500 font-semibold">Year 4</div>
+                                        <div class="text-lg font-extrabold text-yellow-500">40%</div>
+                                    </div>
+                                    <div class="flex-1 text-center bg-white border border-amber-200 rounded-lg py-2 px-1">
+                                        <div class="text-xs text-gray-500 font-semibold">Year 5</div>
+                                        <div class="text-lg font-extrabold text-green-600">20%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Override / resilience -->
+                    <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-6 flex gap-4 items-start">
+                        <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-shield-halved text-white"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-blue-800 mb-1">Your Home Always Comes First — Manual Override Available</h4>
+                            <p class="text-sm text-blue-700 leading-relaxed">During a grid outage or declared emergency, the system automatically switches to Resilience Mode — stopping VPP dispatch and redirecting the battery to power your home's essential loads. You can also trigger a manual override at any time via the Enphase app, ensuring your energy security is never compromised by grid participation.</p>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <a href="#" onclick="openScheduleModal(event)" class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold px-8 py-3 rounded-full transition shadow-lg">
+                            <i class="fa-solid fa-network-wired"></i> See if You Qualify for VPP
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════════════ -->
+        <!-- SUNRUN FLEX SECTION                                     -->
+        <!-- ════════════════════════════════════════════════════════ -->
+        <section id="sunrun-section" class="mb-14 scroll-mt-24">
+            <div class="card-bg card-border-blue rounded-2xl shadow-xl overflow-hidden">
+                <div class="bg-gray-800 p-6 sm:p-8">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                        <div class="w-14 h-14 bg-orange-500 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-arrow-rotate-right text-white text-2xl"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-3 flex-wrap">
+                                <h2 class="text-2xl sm:text-3xl font-extrabold text-blue-400">Sunrun Flex™</h2>
+                                <span class="badge-new">Launched May 2025</span>
+                            </div>
+                            <p class="text-gray-300 mt-1 text-sm sm:text-base">The first solar + storage solution designed to adapt as your energy life changes</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-6 sm:p-8">
+                    <div class="highlight-box rounded-xl p-5 mb-7">
+                        <h3 class="font-bold text-blue-800 mb-2 flex items-center gap-2"><i class="fa-solid fa-circle-info text-blue-500"></i> The Biggest Innovation in Solar Financing Since 2007</h3>
+                        <p class="text-sm text-blue-900 leading-relaxed">Sunrun describes Flex as the first significant financial innovation in the solar industry in nearly two decades — since Sunrun itself introduced the residential Power Purchase Agreement in 2007. Traditional solar systems are sized to match a household's <em>current</em> energy use, which means they're often undersized the moment you buy an EV, add a family member, or upgrade an appliance. Flex is designed around that reality: it comes sized above your current baseline so it grows with you, while keeping your monthly payment predictable.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-7">
+                        <div class="bg-orange-50 border border-orange-100 rounded-xl p-5">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-9 h-9 bg-orange-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fa-solid fa-coins text-white text-sm"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-800">Rollover Credits — An Industry First</h4>
+                            </div>
+                            <p class="text-sm text-gray-600 leading-relaxed">When you use less energy than your baseline in a given month, you earn Sunrun Rollover Credits — the first offering of its kind in the solar industry. Those credits bank up and apply automatically when you exceed your baseline (think: a hot August or a road trip topped off at home). You always know your exact cost per kWh.</p>
+                        </div>
+                        <div class="bg-blue-50 border border-blue-100 rounded-xl p-5">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fa-solid fa-dollar-sign text-white text-sm"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-800">Predictable Monthly Minimum</h4>
+                            </div>
+                            <p class="text-sm text-gray-600 leading-relaxed">Customers pay a fixed monthly minimum. When monthly usage exceeds the pre-solar baseline, additional electricity is billed at a locked-in "Flex Rate" — so you always know the worst-case cost. No surprises, no retroactive true-ups.</p>
+                        </div>
+                        <div class="bg-green-50 border border-green-100 rounded-xl p-5">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-9 h-9 bg-green-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fa-solid fa-battery-full text-white text-sm"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-800">Premium Storage Included</h4>
+                            </div>
+                            <p class="text-sm text-gray-600 leading-relaxed">Every Flex subscription comes with premium battery storage providing full-home backup during outages. The battery also helps avoid peak utility rates by powering the home from stored solar in the evening — and Flex customers are automatically enrolled in Sunrun's grid services (VPP) programs where available.</p>
+                        </div>
+                        <div class="bg-purple-50 border border-purple-100 rounded-xl p-5">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-9 h-9 bg-purple-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fa-solid fa-shield-halved text-white text-sm"></i>
+                                </div>
+                                <h4 class="font-bold text-gray-800">Full Performance Guarantee</h4>
+                            </div>
+                            <p class="text-sm text-gray-600 leading-relaxed">Sunrun bundles 24/7 monitoring, free maintenance and repairs, a solar performance guarantee, and a battery health guarantee. The "Flex Guarantee" specifically ensures customers will never pay Sunrun more than the panels actually produce annually — removing the performance risk entirely from the consumer.</p>
+                        </div>
+                    </div>
+
+                    <!-- Why it matters context box -->
+                    <div class="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-6 flex gap-4 items-start">
+                        <div class="w-10 h-10 bg-amber-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-lightbulb text-white"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-amber-800 mb-1">Why This Matters for EV Owners and Growing Households</h4>
+                            <p class="text-sm text-amber-700 leading-relaxed">Research shows households that go solar typically increase their energy consumption by about 15% within the first year — and that jumps even further when an EV enters the garage. Traditional solar systems sized at installation day become undersized almost immediately. Flex is architecturally designed for this reality: sized above your current baseline so the system grows with you, not against you. Grid services enrollment also means your battery earns performance payments automatically.</p>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <a href="#" onclick="openScheduleModal(event)" class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-3 rounded-full transition shadow-lg">
+                            <i class="fa-solid fa-arrow-rotate-right"></i> Ask About Sunrun Flex
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════════════ -->
+        <!-- COMPARISON TABLE                                        -->
+        <!-- ════════════════════════════════════════════════════════ -->
+        <section id="compare-section" class="mb-14 scroll-mt-24">
+            <div class="card-bg card-border-blue rounded-2xl shadow-xl p-6 sm:p-8">
+                <div class="text-center mb-7">
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-800 mb-2">Compare All Ownership Models</h2>
+                    <p class="text-gray-500 text-sm max-w-xl mx-auto">Every situation is different. Here's how the four paths stack up across the factors that matter most.</p>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm min-w-[700px]">
+                        <thead>
+                            <tr class="bg-gray-800 text-white text-xs uppercase tracking-wide">
+                                <th class="text-left px-4 py-3 rounded-tl-lg">Criteria</th>
+                                <th class="text-center px-3 py-3">Direct Ownership</th>
+                                <th class="text-center px-3 py-3 bg-blue-700">Propel Prepaid PPA</th>
+                                <th class="text-center px-3 py-3">Energy-as-a-Service</th>
+                                <th class="text-center px-3 py-3 bg-orange-700">Sunrun Flex™</th>
+                                <th class="text-center px-3 py-3 rounded-tr-lg">VPP Add-on</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-gray-100">
+                                <td class="px-4 py-3 font-semibold text-gray-700">Federal Tax Credit</td>
+                                <td class="px-3 py-3 text-center"><span class="text-red-500 font-semibold">Expired (0%)</span></td>
+                                <td class="px-3 py-3 text-center bg-blue-50"><span class="text-blue-700 font-bold">40% via IRA/Domestic</span></td>
+                                <td class="px-3 py-3 text-center"><span class="text-gray-600">Captured by Provider</span></td>
+                                <td class="px-3 py-3 text-center bg-orange-50"><span class="text-gray-600">Captured by Sunrun</span></td>
+                                <td class="px-3 py-3 text-center"><span class="text-gray-400">N/A (add-on)</span></td>
+                            </tr>
+                            <tr class="border-b border-gray-100 bg-gray-50/50">
+                                <td class="px-4 py-3 font-semibold text-gray-700">Upfront Cost</td>
+                                <td class="px-3 py-3 text-center">High / via loan</td>
+                                <td class="px-3 py-3 text-center bg-blue-50">Covered by Concert Finance</td>
+                                <td class="px-3 py-3 text-center text-green-700 font-semibold">Zero</td>
+                                <td class="px-3 py-3 text-center bg-orange-50 text-green-700 font-semibold">Zero / Low monthly</td>
+                                <td class="px-3 py-3 text-center">Rebate paid to you</td>
+                            </tr>
+                            <tr class="border-b border-gray-100">
+                                <td class="px-4 py-3 font-semibold text-gray-700">Maintenance</td>
+                                <td class="px-3 py-3 text-center text-red-500">Homeowner</td>
+                                <td class="px-3 py-3 text-center bg-blue-50 text-green-700">Enphase Care / TPO</td>
+                                <td class="px-3 py-3 text-center text-green-700">Provider Managed</td>
+                                <td class="px-3 py-3 text-center bg-orange-50 text-green-700">Sunrun 24/7 + Guarantee</td>
+                                <td class="px-3 py-3 text-center">Manufacturer</td>
+                            </tr>
+                            <tr class="border-b border-gray-100 bg-gray-50/50">
+                                <td class="px-4 py-3 font-semibold text-gray-700">Price Stability</td>
+                                <td class="px-3 py-3 text-center">Fixed loan payment</td>
+                                <td class="px-3 py-3 text-center bg-blue-50 text-green-700 font-semibold">Fixed — no escalators</td>
+                                <td class="px-3 py-3 text-center">Performance-based</td>
+                                <td class="px-3 py-3 text-center bg-orange-50 text-green-700">Fixed min + locked Flex Rate</td>
+                                <td class="px-3 py-3 text-center">Grid rate dependent</td>
+                            </tr>
+                            <tr class="border-b border-gray-100">
+                                <td class="px-4 py-3 font-semibold text-gray-700">Designed For Growth?</td>
+                                <td class="px-3 py-3 text-center text-amber-600">Size at install only</td>
+                                <td class="px-3 py-3 text-center bg-blue-50 text-amber-600">Size at install only</td>
+                                <td class="px-3 py-3 text-center text-amber-600">Provider flexibility</td>
+                                <td class="px-3 py-3 text-center bg-orange-50 text-green-700 font-bold">✓ Sized above baseline for EV / life changes</td>
+                                <td class="px-3 py-3 text-center text-gray-400">—</td>
+                            </tr>
+                            <tr class="border-b border-gray-100 bg-gray-50/50">
+                                <td class="px-4 py-3 font-semibold text-gray-700">Grid Services / VPP</td>
+                                <td class="px-3 py-3 text-center text-gray-500">Optional / DIY</td>
+                                <td class="px-3 py-3 text-center bg-blue-50 text-gray-500">Optional</td>
+                                <td class="px-3 py-3 text-center text-gray-500">Optional</td>
+                                <td class="px-3 py-3 text-center bg-orange-50 text-green-700">Auto-enrolled where available</td>
+                                <td class="px-3 py-3 text-center text-green-700 font-bold">Core feature</td>
+                            </tr>
+                            <tr class="border-b border-gray-100">
+                                <td class="px-4 py-3 font-semibold text-gray-700">Long-term ROI</td>
+                                <td class="px-3 py-3 text-center text-green-700 font-bold">Highest (post-payoff)</td>
+                                <td class="px-3 py-3 text-center bg-blue-50">High (esp. w/ Year 6 buy)</td>
+                                <td class="px-3 py-3 text-center text-gray-500">Lower — provider retains upside</td>
+                                <td class="px-3 py-3 text-center bg-orange-50 text-gray-600">Moderate — plus rollover credits</td>
+                                <td class="px-3 py-3 text-center text-green-600">+ $0.10/kWh earnings</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3 font-semibold text-gray-700">Best For</td>
+                                <td class="px-3 py-3 text-center text-xs text-gray-600">High income, long-term owners seeking max equity</td>
+                                <td class="px-3 py-3 text-center bg-blue-50 text-xs text-blue-800 font-semibold">Fixed-income, tax-limited, or liquidity-conscious homeowners</td>
+                                <td class="px-3 py-3 text-center text-xs text-gray-600">Zero-hassle; commercial-leaning clients</td>
+                                <td class="px-3 py-3 text-center bg-orange-50 text-xs text-orange-800 font-semibold">EV owners, growing families, renters of energy who value flexibility</td>
+                                <td class="px-3 py-3 text-center text-xs text-gray-600">San Diego battery owners on SDCP</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════════════ -->
+        <!-- HARDWARE NOTE: THE 1.4KW GAP                           -->
+        <!-- ════════════════════════════════════════════════════════ -->
+        <section class="mb-14">
+            <div class="card-bg card-border-blue rounded-2xl shadow-xl p-6 sm:p-8">
+                <div class="flex flex-col sm:flex-row gap-5 items-start">
+                    <div class="w-14 h-14 bg-purple-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <i class="fa-solid fa-charging-station text-white text-2xl"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h2 class="text-xl sm:text-2xl font-extrabold text-gray-800 mb-3">The 1.4 kW Gap — Why Battery Storage is Now Essential</h2>
+                        <p class="text-gray-600 text-sm leading-relaxed mb-4">One of the most important technical nuances in modern solar + EV setups: the ISO 15118-2 standard mandates that AC chargers cannot deliver less than 6A (approximately 1.4 kW) to a vehicle. On cloudy days or in winter, your solar array may produce well below this threshold.</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                            <div class="bg-red-50 border border-red-200 rounded-xl p-4">
+                                <h4 class="font-bold text-red-700 text-sm mb-2"><i class="fa-solid fa-xmark mr-1"></i> Without Battery Storage</h4>
+                                <p class="text-xs text-gray-600 leading-relaxed">When solar drops below 1.4 kW, the EV charger cannot sustain a charge from solar alone and automatically pulls from the grid — even while the sun is shining. This eliminates most of the "green charging" benefit and the associated ROI.</p>
+                            </div>
+                            <div class="bg-green-50 border border-green-200 rounded-xl p-4">
+                                <h4 class="font-bold text-green-700 text-sm mb-2"><i class="fa-solid fa-check mr-1"></i> With Enphase IQ Battery</h4>
+                                <p class="text-xs text-gray-600 leading-relaxed">The battery bridges the 1.4 kW gap during intermittent solar production, keeping the charger fed with clean on-site energy. The Enphase IQ EV Charger 2 also phase-shifts between 1-phase and 3-phase charging to capture every available watt — whether it's a bright summer day or a cloudy winter afternoon.</p>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-500 italic">This is why Solenetec always designs solar + battery + EV charging as an integrated system, not three separate purchases.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ════════════════════════════════════════════════════════ -->
+        <!-- CTA                                                     -->
+        <!-- ════════════════════════════════════════════════════════ -->
+        <section class="mb-6">
+            <div class="bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl p-8 sm:p-12 text-center text-white shadow-xl">
+                <h2 class="text-2xl sm:text-3xl font-extrabold mb-3">Not Sure Which Program Fits You?</h2>
+                <p class="text-blue-100 text-sm sm:text-base max-w-xl mx-auto mb-7 leading-relaxed">Every homeowner's tax situation, liquidity, and long-term plans are different. A 30-minute conversation with a Solenetec advisor will map the right program to your specific situation — at no cost or obligation.</p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="#" onclick="openScheduleModal(event)" class="inline-flex items-center gap-2 bg-white text-blue-700 font-bold py-3 px-8 rounded-full hover:bg-gray-100 transition shadow-lg">
+                        <i class="fa-solid fa-calendar-check"></i> Schedule a Free Consultation
+                    </a>
+                    <a href="rebates.html#roi-calculator-section" class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-400 text-white font-bold py-3 px-8 rounded-full transition">
+                        <i class="fa-solid fa-chart-line"></i> Run the ROI Calculator
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Solen Chat Widget Button -->
+    <div id="chat-widget-btn" class="chat-widget-btn" onclick="toggleChat()" title="Chat with Solen">
+        <i class="fa-solid fa-robot" style="font-size:24px;"></i>
+        <div class="solen-badge"></div>
+    </div>
+
+    <!-- Solen Chat Window -->
+    <div id="chat-window" class="chat-window">
+        <div class="chat-header">
+            <div class="solen-avatar">&#x2600;&#xFE0F;</div>
+            <div class="solen-info">
+                <div class="solen-name">Solen</div>
+                <div class="solen-status">&#x25CF; Solenetec Energy Advisor</div>
+            </div>
+            <button class="chat-close-btn" onclick="toggleChat()"><i class="fa-solid fa-times"></i></button>
+        </div>
+        <div id="chat-messages" class="chat-messages"></div>
+        <div id="quick-replies" class="quick-replies" style="padding: 0 12px 8px; background: #f8fafc; flex-shrink:0;"></div>
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" class="chat-input" placeholder="Ask Solen anything..." data-i18n-placeholder="solen.placeholder"
+                onkeypress="solenHandleEnter(event)" autocomplete="off">
+            <button class="chat-send-btn" onclick="solenSend()">
+                <i class="fa-solid fa-paper-plane" style="font-size:14px;"></i>
+            </button>
+        </div>
+        <div class="chat-powered">Powered by Claude AI &bull; Solenetec</div>
+    </div>
+
+    <!-- Schedule Modal -->
+    <div id="schedule-modal" class="modal-overlay" onclick="if(event.target === this) closeScheduleModal()">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeScheduleModal()">&times;</button>
+            <h2 class="text-2xl font-bold mb-4 text-center" data-i18n="modal.h2">Schedule Your Consultation</h2>
+            <p class="text-gray-600 mb-6 text-center">Select a time that works for you to discuss your home electrification needs.</p>
+            <div class="calendly-inline-widget" data-url="YOUR_CALENDLY_URL" style="min-width:320px;height:630px;"></div>
+        </div>
+    </div>
+    <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+
+    <script>
+        // ── Nav dropdown logic ──
+        const CURRENT_PAGE = 'programs-dropdown-trigger';
+        const dropdowns = [
+            ['tech-dropdown-group',     'tech-dropdown-menu',     'tech-dropdown-trigger'],
+            ['rebate-dropdown-group',   'rebate-dropdown-menu',   'rebate-dropdown-trigger'],
+            ['programs-dropdown-group', 'programs-dropdown-menu', 'programs-dropdown-trigger'],
+            ['process-dropdown-group',  'process-dropdown-menu',  'process-dropdown-trigger'],
+        ];
+        let menuTimeout;
+
+        function openMenu(menu, trigger) {
+            if (!menu || !trigger) return;
+            dropdowns.forEach(([, mId, tId]) => {
+                const m = document.getElementById(mId), t = document.getElementById(tId);
+                if (m && m.id !== menu.id) { m.classList.remove('dropdown-visible'); m.classList.add('dropdown-hidden'); if (t && t.id !== CURRENT_PAGE) t.classList.remove('tab-active'); }
+            });
+            menu.classList.remove('dropdown-hidden'); menu.classList.add('dropdown-visible'); trigger.classList.add('tab-active');
+        }
+        function closeMenu(menu, trigger) {
+            if (!menu || !trigger) return;
+            menu.classList.remove('dropdown-visible'); menu.classList.add('dropdown-hidden');
+            if (trigger.id !== CURRENT_PAGE) trigger.classList.remove('tab-active');
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            dropdowns.forEach(([gId, mId, tId]) => {
+                const g = document.getElementById(gId), m = document.getElementById(mId), t = document.getElementById(tId);
+                if (!g) return;
+                g.addEventListener('mouseenter', () => { clearTimeout(menuTimeout); openMenu(m, t); });
+                g.addEventListener('mouseleave', () => { clearTimeout(menuTimeout); menuTimeout = setTimeout(() => closeMenu(m, t), 100); });
+                if (m) {
+                    m.addEventListener('mouseenter', () => clearTimeout(menuTimeout));
+                    m.addEventListener('mouseleave', () => { clearTimeout(menuTimeout); menuTimeout = setTimeout(() => closeMenu(m, t), 100); });
+                }
+            });
+            const pt = document.getElementById(CURRENT_PAGE);
+            const pm = document.getElementById('programs-dropdown-menu');
+            if (pt) pt.classList.add('tab-active');
+            if (pm) { pm.classList.add('dropdown-hidden'); pm.classList.remove('dropdown-visible'); }
+
+            // Mobile menu
+            const mobileBtn = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const closeBtn  = document.getElementById('close-mobile-menu-button');
+            if (mobileBtn) mobileBtn.addEventListener('click', () => mobileMenu.classList.remove('hidden'));
+            if (closeBtn)  closeBtn.addEventListener('click',  () => mobileMenu.classList.add('hidden'));
+        });
+
+        function openScheduleModal(e) {
+            if (e) e.preventDefault();
+            document.getElementById('schedule-modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeScheduleModal() {
+            document.getElementById('schedule-modal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // ── SOLEN AI CHAT AGENT ──────────────────────────────────
+        const WORKER_URL = 'YOUR_CLOUDFLARE_WORKER_URL';
+
+        const solenChatWindow = document.getElementById('chat-window');
+        const solenMessages  = document.getElementById('chat-messages');
+        const solenInput     = document.getElementById('chat-input');
+        const solenReplies   = document.getElementById('quick-replies');
+
+        // Conversation history sent to Claude on every turn
+        let solenHistory = [];
+        // Lead data collected during conversation
+        let solenLead = { name: '', email: '', phone: '', service: '', timeline: '', captured: false };
+        // Track if greeting already shown
+        let solenGreeted = false;
+        // Detect language
+        let solenLang = 'en';
+
+        const SOLEN_SYSTEM = `You are Solen, a friendly and knowledgeable home electrification advisor for Solenetec, a San Diego-based company. Your mission is to EDUCATE first — never push or pressure.
+
+PERSONALITY: Warm, honest, clear. Use plain language. Never be salesy. If someone asks something you don't know, say so honestly.
+
+LANGUAGE: Detect the user's language from their first message. Respond in the same language throughout. Support English and Spanish fluently.
+
+KNOWLEDGE AREAS:
+- Solar & Battery Storage (rooftop solar, battery backup, SGIP rebates, Powerwall, Enphase)
+- Heat Pump HVAC (heating/cooling efficiency, replacing gas furnace/AC, rebates)
+- HP Water Heaters (heat pump water heaters, 50%+ efficiency vs resistance heaters)
+- EV Charging (Level 2 home charging, ChargePoint, Tesla Wall Connector, smart charging)
+- Induction Cooking (safety, performance, electrification benefits)
+- Smart Electrical Panels (SPAN panel, circuit monitoring, load management)
+- Vehicle-to-Home / V2H / V2L (bidirectional EV charging, home backup)
+- IRA Programs & Tax Credits: Post-IRA landscape — 25D expired end of 2025. Third-party ownership (Prepaid PPAs) still captures 30% ITC at corporate level, domestic content bonus unlocks 40% ITC.
+- Business Models: Prepaid PPA (Propel program — 40% ITC), Energy-as-a-Service/EaaS (zero upfront, pay per kWh), Virtual Power Plants/VPP (earn $0.10/kWh discharging to grid)
+- Rebates: Federal (IRA), California (SGIP, TECH Clean CA, BayREN, SoCalREN), utility rebates from SDG&E, SCE, PG&E. Focus on what's available, not live rate data.
+- Solenetec pages: /technologies, /rebates, /programs, /process, /schedule
+
+CONVERSATION APPROACH:
+1. Greet warmly, ask what brings them in today
+2. Have a natural conversation — ask 2-3 qualifying questions naturally (what they're interested in, their timeline, if they own their home)
+3. Give genuinely useful, specific information based on their answers
+4. After delivering value, softly offer to send personalized info — ask for name and email. Frame it as helpful, not required.
+5. If they share name/email, respond with: LEAD_CAPTURED:{"name":"...","email":"..."} on a line by itself (this is internal — don't show to user), then continue conversation naturally.
+6. When they seem ready for a next step, offer to schedule a consultation. Respond with SHOW_BOOKING on a line by itself to trigger the booking widget.
+
+IMPORTANT RULES:
+- Never ask for phone number or address upfront
+- Never gate information behind contact details
+- Never say you can give a "quote" — say "personalized recommendation"
+- Always acknowledge uncertainty honestly ("rates change — check your latest bill")
+- Keep responses concise — 2-4 sentences max unless explaining a complex topic
+- Use bullet points sparingly — prefer conversational prose
+- Do NOT reproduce the LEAD_CAPTURED or SHOW_BOOKING tokens visibly in your response`;
+
+        const SOLEN_QUICK_REPLIES_EN = [
+            { text: '☀️ Solar & Battery', msg: 'Tell me about solar and battery storage' },
+            { text: '🌡️ Heat Pumps', msg: 'How do heat pumps work?' },
+            { text: '💰 Rebates', msg: 'What rebates are available in California?' },
+            { text: '🚗 EV Charging', msg: 'Tell me about EV charging at home' },
+        ];
+        const SOLEN_QUICK_REPLIES_ES = [
+            { text: '☀️ Solar y Batería', msg: 'Cuéntame sobre solar y almacenamiento de batería' },
+            { text: '🌡️ Bombas de Calor', msg: '¿Cómo funcionan las bombas de calor?' },
+            { text: '💰 Reembolsos', msg: '¿Qué reembolsos hay disponibles en California?' },
+            { text: '🚗 Carga EV', msg: 'Cuéntame sobre la carga de VE en casa' },
+        ];
+
+        function toggleChat() {
+            solenChatWindow.classList.toggle('open');
+            if (solenChatWindow.classList.contains('open')) {
+                solenInput.focus();
+                solenRenderQuickReplies();
+                if (!solenGreeted) {
+                    solenGreeted = true;
+                    solenShowTyping();
+                    setTimeout(() => {
+                        solenHideTyping();
+                        const greeting = (typeof currentLang !== 'undefined' && currentLang === 'es')
+                            ? '¡Hola! Soy Solen, la asesora de energía de Solenetec. Estoy aquí para ayudarle a entender sus opciones de electrificación del hogar — solar, bombas de calor, carga de VE, reembolsos y más. ¿En qué le puedo ayudar hoy?'
+                            : "Hi! I'm Solen, Solenetec's energy advisor. I'm here to help you understand your home electrification options — solar, heat pumps, EV charging, rebates, and more. What can I help you with today?";
+                        solenAddMessage(greeting, 'bot');
+                        solenLang = (typeof currentLang !== 'undefined') ? currentLang : 'en';
+                    }, 900);
+                }
+            }
+        }
+
+        function solenRenderQuickReplies() {
+            const replies = solenLang === 'es' ? SOLEN_QUICK_REPLIES_ES : SOLEN_QUICK_REPLIES_EN;
+            solenReplies.innerHTML = '';
+            replies.forEach(r => {
+                const btn = document.createElement('button');
+                btn.className = 'quick-reply-btn';
+                btn.textContent = r.text;
+                btn.onclick = () => { solenInput.value = r.msg; solenSend(); };
+                solenReplies.appendChild(btn);
+            });
+        }
+
+        function solenHandleEnter(e) { if (e.key === 'Enter') solenSend(); }
+
+        async function solenSend() {
+            const msg = solenInput.value.trim();
+            if (!msg) return;
+            solenInput.value = '';
+            solenReplies.innerHTML = '';
+
+            // Detect Spanish on first message
+            if (solenHistory.length === 0) {
+                const spanishWords = /\b(hola|qué|como|ayuda|información|solar|quiero|tengo|puedo|necesito)\b/i;
+                if (spanishWords.test(msg)) solenLang = 'es';
+            }
+
+            solenAddMessage(msg, 'user');
+            solenHistory.push({ role: 'user', content: msg });
+            solenShowTyping();
+            solenInput.disabled = true;
+
+            try {
+                const res = await fetch(WORKER_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        model: 'claude-sonnet-4-20250514',
+                        max_tokens: 500,
+                        system: SOLEN_SYSTEM,
+                        messages: solenHistory
+                    })
+                });
+                const data = await res.json();
+                const raw = data.content?.map(b => b.text || '').join('') || '';
+
+                // Process special tokens
+                let clean = raw;
+
+                // Handle LEAD_CAPTURED token
+                const leadMatch = clean.match(/LEAD_CAPTURED:\{[^}]+\}/);
+                if (leadMatch && !solenLead.captured) {
+                    try {
+                        const parsed = JSON.parse(leadMatch[0].replace('LEAD_CAPTURED:', ''));
+                        solenLead.name = parsed.name || '';
+                        solenLead.email = parsed.email || '';
+                        solenLead.captured = true;
+                        solenCreateHubSpotContact();
+                    } catch(e) {}
+                    clean = clean.replace(/LEAD_CAPTURED:\{[^}]+\}\n?/g, '');
+                }
+
+                // Handle SHOW_BOOKING token
+                if (clean.includes('SHOW_BOOKING')) {
+                    clean = clean.replace(/SHOW_BOOKING\n?/g, '');
+                    solenHideTyping();
+                    solenInput.disabled = false;
+                    if (clean.trim()) solenAddMessage(clean.trim(), 'bot');
+                    solenAddBookingButton();
+                    solenHistory.push({ role: 'assistant', content: raw });
+                    solenRenderQuickReplies();
+                    return;
+                }
+
+                solenHideTyping();
+                solenInput.disabled = false;
+                const display = clean.trim();
+                if (display) solenAddMessage(display, 'bot');
+                solenHistory.push({ role: 'assistant', content: raw });
+                solenRenderQuickReplies();
+
+            } catch (err) {
+                solenHideTyping();
+                solenInput.disabled = false;
+                solenAddMessage(solenLang === 'es'
+                    ? 'Lo siento, tuve un problema técnico. Por favor intenta de nuevo.'
+                    : 'Sorry, I had a technical hiccup. Please try again!', 'bot');
+            }
+        }
+
+        function solenAddMessage(text, sender) {
+            const div = document.createElement('div');
+            div.className = `message ${sender}`;
+            // Simple markdown: **bold**, line breaks
+            div.innerHTML = text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\n/g, '<br>');
+            solenMessages.appendChild(div);
+            solenMessages.scrollTop = solenMessages.scrollHeight;
+        }
+
+        function solenAddBookingButton() {
+            const div = document.createElement('div');
+            div.className = 'message bot';
+            const label = solenLang === 'es' ? '📅 Reservar una Consulta' : '📅 Book a Consultation';
+            div.innerHTML = `<button class="solen-book-btn" onclick="openScheduleModal(event)">${label}</button>`;
+            solenMessages.appendChild(div);
+            solenMessages.scrollTop = solenMessages.scrollHeight;
+        }
+
+        function solenShowTyping() {
+            const indicator = document.createElement('div');
+            indicator.id = 'solen-typing';
+            indicator.className = 'typing-indicator';
+            indicator.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+            solenMessages.appendChild(indicator);
+            solenMessages.scrollTop = solenMessages.scrollHeight;
+        }
+
+        function solenHideTyping() {
+            const el = document.getElementById('solen-typing');
+            if (el) el.remove();
+        }
+
+        async function solenCreateHubSpotContact() {
+            if (!solenLead.email) return;
+            try {
+                await fetch(WORKER_URL + 'hubspot', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'create_contact',
+                        firstname: solenLead.name.split(' ')[0] || solenLead.name,
+                        lastname: solenLead.name.split(' ').slice(1).join(' ') || '',
+                        email: solenLead.email,
+                        hs_lead_status: 'NEW',
+                        lead_source: 'Solen AI Chat',
+                        message: `Interested in: ${solenLead.service || 'Home Electrification'}. Timeline: ${solenLead.timeline || 'Not specified'}.`
+                    })
+                });
+            } catch(e) { console.log('HubSpot contact creation failed silently', e); }
+        }
+
+        // ── SOLENETEC i18n — Language Toggle ──────────────────
+        const SOLEN_TRANSLATIONS = {
+            en: {
+                'nav.why': 'Why Electrify?',
+                'nav.technologies': 'Technologies',
+                'nav.rebates': 'Rebates/ROI',
+                'nav.programs': 'New Programs',
+                'nav.process': 'Our Process',
+                'nav.getstarted': 'Get Started',
+                'hero.h1': null, // page-specific
+                'hero.p': null,
+                'hero.cta': null,
+                'modal.h2': 'Schedule Your Consultation',
+                'modal.p': 'Select a time that works for you to discuss your home electrification needs.',
+                'solen.placeholder': 'Ask Solen anything...',
+                'solen.greeting': "Hi! I'm Solen, Solenetec's energy advisor. I'm here to help you understand your home electrification options — solar, heat pumps, EV charging, rebates, and more. What can I help you with today?",
+                'solen.status': 'Solenetec Energy Advisor',
+                'solen.powered': 'Powered by Claude AI \u2022 Solenetec',
+                'solen.error': 'Sorry, I had a technical hiccup. Please try again!',
+                'solen.book': '\uD83D\uDCC5 Book a Consultation',
+                'solen.qr1': '\u2600\uFE0F Solar & Battery', 'solen.qr1msg': 'Tell me about solar and battery storage',
+                'solen.qr2': '\uD83C\uDF21\uFE0F Heat Pumps', 'solen.qr2msg': 'How do heat pumps work?',
+                'solen.qr3': '\uD83D\uDCB0 Rebates', 'solen.qr3msg': 'What rebates are available in California?',
+                'solen.qr4': '\uD83D\uDE97 EV Charging', 'solen.qr4msg': 'Tell me about EV charging at home',
+                'index.why.h2': 'The Modern Value Proposition',
+                'index.why.p': 'Home electrification is a strategic investment in efficiency, comfort, and financial predictability. This section highlights the core benefits and compelling reasons to transition now.',
+                'index.why.c1h': 'Maximum Financial Savings',
+                'index.why.c2h': 'Superior Comfort & Health',
+                'index.why.c3h': 'Energy Independence',
+                'index.tech.h2': 'Core Electrification Technologies',
+            },
+            es: {
+                'nav.why': '\u00BFPor qu\u00E9 Electrificar?',
+                'nav.technologies': 'Tecnolog\u00EDas',
+                'nav.rebates': 'Reembolsos/ROI',
+                'nav.programs': 'Nuevos Programas',
+                'nav.process': 'Nuestro Proceso',
+                'nav.getstarted': 'Comenzar',
+                'hero.h1': null,
+                'hero.p': null,
+                'hero.cta': null,
+                'modal.h2': 'Programe Su Consulta',
+                'modal.p': 'Seleccione un horario que le funcione para hablar sobre sus necesidades de electrificaci\u00F3n del hogar.',
+                'solen.placeholder': 'Preg\u00FAntele a Solen...',
+                'solen.greeting': '\u00A1Hola! Soy Solen, la asesora de energ\u00EDa de Solenetec. Estoy aqu\u00ED para ayudarle a entender sus opciones de electrificaci\u00F3n del hogar \u2014 solar, bombas de calor, carga de VE, reembolsos y m\u00E1s. \u00BFEn qu\u00E9 le puedo ayudar hoy?',
+                'solen.status': 'Asesora de Energ\u00EDa Solenetec',
+                'solen.powered': 'Desarrollado por Claude AI \u2022 Solenetec',
+                'solen.error': 'Lo siento, tuve un problema t\u00E9cnico. \u00A1Por favor intenta de nuevo!',
+                'solen.book': '\uD83D\uDCC5 Reservar una Consulta',
+                'solen.qr1': '\u2600\uFE0F Solar y Bater\u00EDa', 'solen.qr1msg': 'Cu\u00E9ntame sobre solar y almacenamiento de bater\u00EDa',
+                'solen.qr2': '\uD83C\uDF21\uFE0F Bombas de Calor', 'solen.qr2msg': '\u00BFC\u00F3mo funcionan las bombas de calor?',
+                'solen.qr3': '\uD83D\uDCB0 Reembolsos', 'solen.qr3msg': '\u00BFQu\u00E9 reembolsos hay disponibles en California?',
+                'solen.qr4': '\uD83D\uDE97 Carga EV', 'solen.qr4msg': 'Cu\u00E9ntame sobre la carga de VE en casa',
+                'index.why.h2': 'La Propuesta de Valor Moderna',
+                'index.why.p': 'La electrificaci\u00F3n del hogar es una inversi\u00F3n estrat\u00E9gica en eficiencia, comodidad y previsibilidad financiera. Esta secci\u00F3n destaca los beneficios principales y las razones convincentes para hacer la transici\u00F3n ahora.',
+                'index.why.c1h': 'M\u00E1ximo Ahorro Financiero',
+                'index.why.c2h': 'Confort y Salud Superiores',
+                'index.why.c3h': 'Independencia Energ\u00E9tica',
+                'index.tech.h2': 'Tecnolog\u00EDas Principales de Electrificaci\u00F3n',
+            }
+        };
+
+        // Page-specific hero translations (keyed by page)
+        const HERO_TRANSLATIONS = {
+            'index.html': {
+                en: { h1: 'Powering a Brighter, Greener Future', p: 'Solenetec is your trusted partner for sustainable energy solutions, from solar and battery storage to efficient heat pumps.', cta: 'Explore Our Solutions' },
+                es: { h1: 'Impulsando un Futuro M\u00E1s Brillante y Verde', p: 'Solenetec es su socio de confianza para soluciones de energ\u00EDa sostenible, desde solar y almacenamiento de bater\u00EDas hasta bombas de calor eficientes.', cta: 'Explorar Nuestras Soluciones' }
+            },
+            'technologies': {
+                en: { h1: 'Build the All-Electric Home', p: 'Discover the cutting-edge technologies that power modern, efficient, and sustainable homes.', cta: 'Calculate Your Savings' },
+                es: { h1: 'Construya el Hogar Totalmente El\u00E9ctrico', p: 'Descubra las tecnolog\u00EDas de vanguardia que impulsan hogares modernos, eficientes y sostenibles.', cta: 'Calcule Sus Ahorros' }
+            },
+            'rebates': {
+                en: { h1: 'Maximize Your Energy Savings', p: 'Calculate your personalized usage, ROI, and available rebates for home electrification upgrades.', cta: 'Learn Our Process' },
+                es: { h1: 'Maximice Sus Ahorros de Energ\u00EDa', p: 'Calcule su uso personalizado, ROI y reembolsos disponibles para mejoras de electrificaci\u00F3n del hogar.', cta: 'Conozca Nuestro Proceso' }
+            },
+            'programs': {
+                en: { h1: 'New Programs for a Post-IRA Solar Market', p: 'The 30% tax credit expired \u2014 but new programs unlock 40% credits, zero-upfront subscriptions, and batteries that pay you back.', cta: 'Find My Best Program' },
+                es: { h1: 'Nuevos Programas para el Mercado Solar Post-IRA', p: 'El cr\u00E9dito fiscal del 30% expir\u00F3 \u2014 pero los nuevos programas desbloquean cr\u00E9ditos del 40%, suscripciones sin costo inicial y bater\u00EDas que le devuelven dinero.', cta: 'Encontrar Mi Mejor Programa' }
+            },
+            'process': {
+                en: { h1: 'Achieve Energy Independence', p: 'A seamless, transparent process that makes home electrification simple and stress-free.', cta: 'Explore Technologies' },
+                es: { h1: 'Logre la Independencia Energ\u00E9tica', p: 'Un proceso fluido y transparente que hace que la electrificaci\u00F3n del hogar sea simple y sin estr\u00E9s.', cta: 'Explorar Tecnolog\u00EDas' }
+            },
+            'schedule': {
+                en: { h1: 'Book Your Free Consultation', p: 'Select a time that works for you to discuss your home electrification needs.', cta: 'View Our Process' },
+                es: { h1: 'Reserve Su Consulta Gratuita', p: 'Seleccione un horario que le funcione para hablar sobre sus necesidades de electrificaci\u00F3n del hogar.', cta: 'Ver Nuestro Proceso' }
+            }
+        };
+
+        let currentLang = localStorage.getItem('solenLang') || 'en';
+
+        function setLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('solenLang', lang);
+            applyTranslations(lang);
+            // Update Solen chat language
+            if (typeof solenLang !== 'undefined') solenLang = lang;
+        }
+
+        function applyTranslations(lang) {
+            const t = SOLEN_TRANSLATIONS[lang];
+            if (!t) return;
+
+            // Update active button state
+            ['lang-en','lang-es','lang-en-m','lang-es-m'].forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.classList.toggle('active-lang', (lang === 'en' && id.includes('en')) || (lang === 'es' && id.includes('es')));
+            });
+
+            // Translate all data-i18n elements
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[key]) el.textContent = t[key];
+            });
+
+            // Translate data-i18n-placeholder
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (t[key]) el.placeholder = t[key];
+            });
+
+            // Translate hero section
+            const page = window.location.pathname.split('/').pop().replace('.html','') || 'index.html';
+            const heroKey = page === '' || page === 'index' ? 'index.html' : page;
+            const hero = HERO_TRANSLATIONS[heroKey]?.[lang];
+            if (hero) {
+                const h1 = document.querySelector('[data-i18n-hero="h1"]');
+                const p  = document.querySelector('[data-i18n-hero="p"]');
+                const cta = document.querySelector('[data-i18n-hero="cta"]');
+                if (h1) h1.textContent = hero.h1;
+                if (p)  p.textContent  = hero.p;
+                if (cta) cta.textContent = hero.cta;
+            }
+
+            // Update Solen chat UI text
+            const solenStatusEl = document.querySelector('.solen-status');
+            if (solenStatusEl) solenStatusEl.textContent = '\u25CF ' + t['solen.status'];
+            const solenPoweredEl = document.querySelector('.chat-powered');
+            if (solenPoweredEl) solenPoweredEl.textContent = t['solen.powered'];
+            const solenInputEl = document.getElementById('chat-input');
+            if (solenInputEl) solenInputEl.placeholder = t['solen.placeholder'];
+
+            // Update html lang attribute
+            document.documentElement.lang = lang;
+        }
+
+        // Apply on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            applyTranslations(currentLang);
+        });
+
+    </script>
+
+</body>
+</html>

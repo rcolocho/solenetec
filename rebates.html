@@ -1,0 +1,2760 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solenetec | Rebates &amp; ROI</title>
+    <!-- MANDATORY: Load Tailwind CSS and Chart.js for visualization and styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Font Awesome CDN for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Ensures Inter font is used across the app -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-primary': '#2563eb',
+                        'brand-secondary': '#93c5fd',
+                        'icon-blue': '#2563eb',
+                        'icon-green': '#10b981',
+                        'icon-orange': '#f97316',
+                        'icon-purple': '#a855f7',
+                        'icon-yellow': '#facc15',
+                        'icon-teal': '#2dd4bf',
+                        'icon-red': '#ef4444',
+                        'icon-gray': '#6b7280',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* --- CORE THEME DEFINITIONS (Matching Reference Code & Medium Background) --- */
+
+        body {
+            /* Apply Inter font globally */
+            font-family: 'Inter', sans-serif;
+            /* Background matches the Oceanic Medium theme: #e0e7ee */
+            background-color: #e0e7ee;
+            /* Dark text color for readability */
+            color: #1f2937;
+        }
+
+        .card-bg {
+            /* Card background matches reference code: #fcfcfc */
+            background-color: #fcfcfc;
+            color: #1f2937;
+            /* Dark text for cards */
+            border-color: #e2e8f0;
+            /* Light border around cards */
+        }
+
+        /* Applied blue border to main cards */
+        .card-border-blue {
+            border: 1px solid #93c5fd;
+            /* Light blue border color (blue-300) */
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            background-color: #ffffff;
+            /* Keeping chart area white for cleanliness */
+            border-radius: 0.5rem;
+            padding: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+
+        /* Input and Toggle Adjustments */
+        input:checked+.slider {
+            background-color: #2563eb;
+            /* Tailwind blue-600 */
+        }
+
+        .dot {
+            transition: 0.4s;
+        }
+
+        input:checked~.dot {
+            transform: translateX(1.5rem);
+        }
+
+        .input-style {
+            background-color: #ffffff;
+            /* White input background */
+            border: 1px solid #d1d5db;
+            /* Gray-300 border */
+            color: #1f2937;
+            /* Dark text */
+        }
+
+        .input-style:focus {
+            border-color: #2563eb;
+            /* Blue-600 focus ring */
+        }
+
+        /* Spinner styles */
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+
+        #qa-loading-spinner,
+        #state-search-spinner {
+            border-top: 4px solid #2563eb;
+            /* Blue-600 */
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Modal specific styles */
+        .modal {
+            transition: opacity 0.3s ease-out;
+            visibility: hidden;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .modal.show {
+            visibility: visible;
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Mobile Menu Icon */
+        .menu-icon {
+            width: 28px;
+            height: 28px;
+        }
+
+        /* --- Custom Styles for Nav Dropdowns (Dark Header) --- */
+        .nav-link {
+            color: #d1d5db;
+            font-size: 1.125rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-link:hover {
+            background-color: #4b5563;
+            color: #ffffff;
+        }
+
+        .nav-link.active {
+            background-color: #2563eb;
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .icon-box {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px;
+            font-size: 1.5rem;
+            line-height: 1;
+            padding: 0.5rem;
+        }
+
+        .emoji-icon {
+            font-size: 1.3rem;
+            line-height: 1;
+        }
+
+        /* Active Link Styling (Blue-600) */
+        .tab-active {
+            background-color: #2563eb;
+            color: #ffffff;
+            border-radius: 0.5rem;
+        }
+
+        .mega-menu {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            opacity: 0;
+            pointer-events: none;
+            /* KEY FIX: Ensures hidden menu doesn't block clicks */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+
+            /* Responsive Positioning and Width */
+            width: 95vw;
+            /* Maximize space on small screens */
+            max-width: 600px;
+
+            left: 50%;
+            transform: translate(-50%, -10px);
+            overflow: hidden;
+            z-index: 100;
+            position: absolute;
+            top: 100%;
+        }
+        @media (min-width: 768px) {
+            .mega-menu {
+                /* Set desktop max width here */
+                max-width: 600px;
+            }
+
+            #rebate-dropdown-menu,
+            #process-dropdown-menu {
+                /* Ensure smaller menus don't stretch to full max-width */
+                max-width: 400px;
+            }
+        }
+
+        .dropdown-content-bg {
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+        }
+
+        .dropdown-visible {
+            opacity: 1;
+            transform: translate(-50%, 0);
+            pointer-events: auto;
+            display: block !important;
+        }
+
+        .dropdown-hidden {
+            display: none !important;
+        }
+
+        .nav-dropdown-item {
+            display: block;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            color: #4b5563;
+        }
+
+        .nav-dropdown-item:hover {
+            background-color: #eff6ff;
+            color: #2563eb;
+        }
+
+        /* Custom Font Awesome icon color classes */
+        .text-icon-blue {
+            color: #2563eb;
+        }
+
+        .bg-icon-blue {
+            background-color: #2563eb;
+        }
+
+        .text-icon-green {
+            color: #10b981;
+        }
+
+        .bg-icon-green {
+            background-color: #10b981;
+        }
+
+        .text-icon-orange {
+            color: #f97316;
+        }
+
+        .bg-icon-orange {
+            background-color: #f97316;
+        }
+
+        .text-icon-purple {
+            color: #a855f7;
+        }
+
+        .bg-icon-purple {
+            background-color: #a855f7;
+        }
+
+        .text-icon-yellow {
+            color: #facc15;
+        }
+
+        .bg-icon-yellow {
+            background-color: #facc15;
+        }
+
+        .text-icon-teal {
+            color: #2dd4bf;
+        }
+
+        .bg-icon-teal {
+            background-color: #2dd4bf;
+        }
+
+        .text-icon-red {
+            color: #ef4444;
+        }
+
+        .bg-icon-red {
+            background-color: #ef4444;
+        }
+
+        .text-icon-gray {
+            color: #6b7280;
+        }
+
+        .bg-icon-gray {
+            background-color: #6b7280;
+        }
+
+        /* AI Agent Modal Specific Styles */
+        .ai-modal {
+            background-color: rgba(31, 41, 55, 0.95);
+            /* Darker overlay */
+            pointer-events: none;
+            transition: opacity 0.3s ease-out;
+            opacity: 0;
+            visibility: hidden;
+            /* FIX 1: Use flexbox/grid for proper centering in viewport */
+            display: flex;
+            align-items: center;
+            /* Center vertically */
+            justify-content: center;
+            /* Center horizontally */
+            overflow-y: auto;
+            padding: 20px;
+            /* Padding for mobile safety */
+        }
+
+        .ai-modal.show {
+            visibility: visible;
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .ai-modal-content {
+            background-color: #fcfcfc;
+            /* Light card background */
+            color: #1f2937;
+            /* Allow content to scroll within the modal */
+            max-height: 90vh;
+            overflow-y: auto;
+            /* Responsive width */
+            max-width: 95%;
+        }
+
+        .ai-output-card {
+            background-color: #f3f4f6;
+            /* Light gray chat bubble */
+            color: #1f2937;
+        }
+
+        .ai-input-style {
+            background-color: #ffffff;
+            border: 1px solid #d1d5db;
+        }
+
+        .brand-teal {
+            color: #10b981;
+            /* Green accent color for the agent */
+        }
+
+        /* FIX: Styling for the modal header for visibility */
+        #close-agent-modal-btn {
+            color: #6b7280;
+            /* Gray-500 */
+        }
+
+        #close-agent-modal-btn:hover {
+            color: #ef4444;
+            /* Red-500 on hover */
+        }
+
+        /* Scheduling Modal Styles */
+        .modal-overlay {
+            pointer-events: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6b7280;
+        }
+
+        /* Pill Button Styles */
+        .btn-pill {
+            background-color: #2563eb;
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            transition: background-color 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-pill:hover {
+            background-color: #1d4ed8;
+            color: white;
+        }
+    /* ── Solen Chat Widget Styles ── */
+        .chat-widget-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(37,99,235,0.45);
+            z-index: 9999;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: none;
+        }
+        .chat-widget-btn:hover { transform: scale(1.08); box-shadow: 0 6px 20px rgba(37,99,235,0.55); }
+        .solen-badge {
+            position: absolute;
+            top: -4px; right: -4px;
+            background: #10b981;
+            width: 16px; height: 16px;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+        .chat-window {
+            position: fixed;
+            bottom: 100px;
+            right: 24px;
+            width: 370px;
+            height: 560px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+            display: flex;
+            flex-direction: column;
+            z-index: 9998;
+            transform: translateY(620px) scale(0.95);
+            opacity: 0;
+            transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), opacity 0.25s ease;
+            overflow: hidden;
+        }
+        @media (max-width: 420px) {
+            .chat-window { width: calc(100vw - 16px); right: 8px; bottom: 90px; height: 72vh; }
+        }
+        .chat-window.open { transform: translateY(0) scale(1); opacity: 1; }
+        .chat-header {
+            background: linear-gradient(135deg, #1e40af, #2563eb);
+            color: white;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+        .solen-avatar {
+            width: 38px; height: 38px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; flex-shrink: 0;
+        }
+        .solen-info { flex: 1; }
+        .solen-name { font-weight: 700; font-size: 15px; line-height: 1.2; }
+        .solen-status { font-size: 11px; opacity: 0.85; }
+        .chat-close-btn { background: none; border: none; color: white; cursor: pointer; padding: 4px; opacity: 0.8; font-size: 18px; }
+        .chat-close-btn:hover { opacity: 1; }
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 14px;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .message {
+            padding: 10px 13px;
+            border-radius: 14px;
+            max-width: 85%;
+            font-size: 14px;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+        .message.bot {
+            background: white;
+            color: #1f2937;
+            margin-right: auto;
+            border: 1px solid #e5e7eb;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        }
+        .message.user {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+        .message a { color: #2563eb; text-decoration: underline; }
+        .message.user a { color: #bfdbfe; }
+        .solen-book-btn {
+            display: inline-block;
+            margin-top: 8px;
+            background: #2563eb;
+            color: white !important;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 13px;
+            text-decoration: none !important;
+            cursor: pointer;
+            border: none;
+        }
+        .solen-book-btn:hover { background: #1d4ed8; }
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 10px 13px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            border-bottom-left-radius: 4px;
+            width: fit-content;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        }
+        .typing-dot {
+            width: 7px; height: 7px;
+            background: #9ca3af;
+            border-radius: 50%;
+            animation: solenTyping 1.4s infinite;
+        }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes solenTyping {
+            0%, 60%, 100% {
+                opacity: 0.3;
+            }
+
+            30% {
+                opacity: 1;
+            }
+        }
+
+        .quick-replies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 4px;
+        }
+        .quick-reply-btn {
+            padding: 6px 12px;
+            background: #eff6ff;
+            color: #2563eb;
+            border: 1px solid #bfdbfe;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background 0.15s;
+            white-space: nowrap;
+        }
+        .quick-reply-btn:hover { background: #dbeafe; }
+        .chat-input-area {
+            padding: 12px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            gap: 8px;
+            background: white;
+            flex-shrink: 0;
+        }
+        .chat-input {
+            flex: 1;
+            padding: 9px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 22px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.15s;
+        }
+        .chat-input:focus { border-color: #2563eb; }
+        .chat-send-btn {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            transition: transform 0.15s;
+        }
+        .chat-send-btn:hover { transform: scale(1.05); }
+        .chat-powered {
+            text-align: center;
+            font-size: 10px;
+            color: #9ca3af;
+            padding: 4px 0 8px;
+            background: white;
+            flex-shrink: 0;
+        }
+
+        
+        /* Language Toggle */
+        .lang-btn {
+            color: #9ca3af;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            border-radius: 6px;
+            padding: 3px 7px;
+            transition: all 0.15s;
+        }
+        .lang-btn:hover { color: #ffffff; background: rgba(255,255,255,0.15); }
+        .lang-btn.active-lang { color: #ffffff; background: rgba(255,255,255,0.2); font-weight: 700; }
+
+        </style>
+</head>
+
+<body class="text-gray-800">
+
+    <!-- Header / Sticky Navigation Bar (Dark Gray Theme - Matches Reference) -->
+    <header class="bg-gray-800 shadow-xl fixed top-0 w-full z-50">
+        <nav class="w-full px-4 sm:px-6 lg:px-8">
+            <div class="relative flex items-center h-20">
+                <div class="flex items-center flex-shrink-0">
+                    <a href="index.html" class="flex items-center space-x-3">
+                        <img src="logo.svg" alt="Solenetec Logo" class="h-12 w-12">
+                        <span class="text-3xl text-blue-400 hover:text-blue-300 font-extrabold">Solenetec</span>
+                    </a>
+                </div>
+
+                <!-- Desktop Nav Links -->
+                <div class="hidden md:flex items-center justify-evenly flex-1 px-4">
+                    <a href="index.html"
+                        class="nav-link px-3 py-2 rounded-lg transition duration-150" data-i18n="nav.why">Why
+                        Electrify?</a>
+
+                    <!-- Technologies Dropdown -->
+                    <div class="relative group" id="tech-dropdown-group">
+                        <a href="technologies.html" id="tech-dropdown-trigger"
+                            class="nav-link px-3 py-2 rounded-lg transition duration-150">
+                            <span data-i18n="nav.technologies">Technologies</span> <span class="ml-1 text-sm">&#9662;</span>
+                        </a>
+                        <div id="tech-dropdown-menu" class="mega-menu pt-4 dropdown-hidden">
+                            <div class="dropdown-content-bg rounded-xl shadow-2xl p-8 border border-gray-200 grid grid-cols-2 gap-6"
+                                style="max-width: 600px; width: 600px;">
+
+                                <a href="technologies.html#hp-water-heaters-section"
+                                    class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item">
+                                    <div class="icon-box w-10 h-10 bg-icon-blue text-white text-xl flex-shrink-0"><i
+                                            class="fa-solid fa-shower"></i></div>
+                                    <div><span class="font-bold text-gray-900">HP Water Heaters</span>
+                                        <p class="text-sm text-gray-500">The most efficient way to heat domestic water.
+                                        </p>
+                                    </div>
+                                </a>
+
+                                <a href="technologies.html#hp-hvac-section"
+                                    class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item">
+                                    <div class="icon-box w-10 h-10 bg-icon-green text-white text-xl flex-shrink-0"><i
+                                            class="fa-solid fa-fan"></i></div>
+                                    <div><span class="font-bold text-gray-900">Heat Pumps HVAC</span>
+                                        <p class="text-sm text-gray-500">All-in-one climate control and replacing your
+                                            furnace/AC.</p>
+                                    </div>
+                                </a>
+
+                                <a href="technologies.html#solar-battery-section"
+                                    class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item">
+                                    <div class="icon-box w-10 h-10 bg-icon-yellow text-gray-900 text-xl flex-shrink-0">
+                                        <i class="fa-solid fa-solar-panel"></i>
+                                    </div>
+                                    <div><span class="font-bold text-gray-900">Solar & Battery Storage</span>
+                                        <p class="text-sm text-gray-500">Ensures backup power and energy independence
+                                            for your home.</p>
+                                    </div>
+                                </a>
+
+                                <a href="technologies.html#induction-cooking-section"
+                                    class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item">
+                                    <div class="icon-box w-10 h-10 bg-icon-orange text-white text-xl flex-shrink-0"><i
+                                            class="fa-solid fa-kitchen-set"></i></div>
+                                    <div><span class="font-bold text-gray-900">Induction Cooking</span>
+                                        <p class="text-sm text-gray-500">Faster, safer, and cleaner cooking without
+                                            combustion gases.</p>
+                                    </div>
+                                </a>
+
+                                <a href="technologies.html#solar-inverters-section"
+                                    class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item">
+                                    <div class="icon-box w-10 h-10 bg-icon-purple text-white text-xl flex-shrink-0"><i
+                                            class="fa-solid fa-microchip"></i></div>
+                                    <div><span class="font-bold text-gray-900">Inverters</span>
+                                        <p class="text-sm text-gray-500">The critical component for converting DC to
+                                            usable AC power.</p>
+                                    </div>
+                                </a>
+
+                                <a href="technologies.html#ev-charging-section"
+                                    class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item">
+                                    <div class="icon-box w-10 h-10 bg-icon-teal text-white text-xl flex-shrink-0"><i
+                                            class="fa-solid fa-charging-station"></i></div>
+                                    <div><span class="font-bold text-gray-900">EV Charging</span>
+                                        <p class="text-sm text-gray-500">Dedicated high-speed home charging and energy
+                                            management.</p>
+                                    </div>
+                                </a>
+
+                                <a href="technologies.html#v2h-v2l-section"
+                                    class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item">
+                                    <div class="icon-box w-10 h-10 bg-icon-red text-white text-xl flex-shrink-0"><i
+                                            class="fa-solid fa-house-chimney-crack"></i></div>
+                                    <div><span class="font-bold text-gray-900">Vehicle-to-Home (V2H/V2L)</span>
+                                        <p class="text-sm text-gray-500">Use your EV's battery as a massive source of
+                                            home backup power.</p>
+                                    </div>
+                                </a>
+
+                                <a href="technologies.html#smart-panels-section"
+                                    class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item">
+                                    <div class="icon-box w-10 h-10 bg-icon-gray text-white text-xl flex-shrink-0"><i
+                                            class="fa-solid fa-plug-circle-bolt"></i></div>
+                                    <div><span class="font-bold text-gray-900">Smart Electrical Panels</span>
+                                        <p class="text-sm text-gray-500">The brain for real-time monitoring, load
+                                            control, and optimization.</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rebate Calculator Dropdown -->
+                    <div class="relative group" id="rebate-dropdown-group">
+                        <a id="rebate-dropdown-trigger" href="rebates.html"
+                            class="nav-link active font-bold px-3 py-2 rounded-lg transition duration-150 flex items-center"><span data-i18n="nav.rebates">Rebates/ROI</span> &#9662;</a>
+                        <div id="rebate-dropdown-menu" class="mega-menu pt-4 dropdown-hidden">
+                            <div class="dropdown-content-bg rounded-xl shadow-2xl p-6 border border-gray-200 space-y-2"
+                                style="max-width: 420px; width: 420px;">
+                                <h3 class="font-bold text-xl text-brand-primary mb-4 border-b pb-2 border-gray-200">
+                                    Rebates &amp; ROI</h3>
+
+                                <a href="rebates.html#bill-calculator-section"
+                                    class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item">
+                                    <div class="icon-box w-10 h-10 bg-icon-blue text-white text-xl flex-shrink-0">
+                                        <i class="fa-solid fa-bolt text-base"></i>
+                                    </div>
+                                    <div><span class="font-bold text-gray-900">Electricity Usage Calculator</span>
+                                        <p class="text-sm text-gray-500">Upload Green Button data or enter your bill to understand your current costs.</p>
+                                    </div>
+                                </a>
+
+                                <a href="rebates.html#roi-calculator-section"
+                                    class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item">
+                                    <div class="icon-box w-10 h-10 bg-icon-green text-white text-xl flex-shrink-0">
+                                        <i class="fa-solid fa-chart-line text-base"></i>
+                                    </div>
+                                    <div><span class="font-bold text-gray-900">Solar &amp; Battery ROI Calculator</span>
+                                        <p class="text-sm text-gray-500">See your payback period and 25-year savings projection.</p>
+                                    </div>
+                                </a>
+
+                                <a href="rebates.html#rebate-calculator-section"
+                                    class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item">
+                                    <div class="icon-box w-10 h-10 bg-icon-orange text-white text-xl flex-shrink-0">
+                                        <i class="fa-solid fa-hand-holding-dollar text-base"></i>
+                                    </div>
+                                    <div><span class="font-bold text-gray-900">Personalized Rebate &amp; Savings Estimator</span>
+                                        <p class="text-sm text-gray-500">Calculate state, local, and federal incentives based on your eligibility.</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- New Programs -->
+                    <div class="relative group" id="programs-dropdown-group">
+                        <a id="programs-dropdown-trigger" href="programs.html" class="nav-link px-3 py-2 rounded-lg transition duration-150 flex items-center">
+                            <span data-i18n="nav.programs">New Programs</span> <span class="ml-1 text-sm">&#9662;</span>
+                        </a>
+                        <div id="programs-dropdown-menu" class="mega-menu pt-4 dropdown-hidden">
+                            <div class="dropdown-content-bg rounded-xl shadow-2xl p-6 border border-gray-200 space-y-2" style="max-width:420px;width:420px;">
+                                <h3 class="font-bold text-xl text-brand-primary mb-4 border-b pb-2 border-gray-200">Post-IRA Programs</h3>
+                                <a href="programs.html#advisor-section" class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item"><div class="icon-box w-10 h-10 bg-icon-blue text-white text-xl flex-shrink-0"><i class="fa-solid fa-sparkles text-base"></i></div><div><span class="font-bold text-gray-900">Find My Best Program</span><p class="text-sm text-gray-500">AI advisor matches you to the right program in 60 sec.</p></div></a>
+                                <a href="programs.html#propel-section" class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item"><div class="icon-box w-10 h-10 bg-icon-blue text-white text-xl flex-shrink-0"><i class="fa-solid fa-rocket text-base"></i></div><div><span class="font-bold text-gray-900">Propel — Prepaid PPA</span><p class="text-sm text-gray-500">40% ITC via domestic content bonus.</p></div></a>
+                                <a href="programs.html#eaas-section" class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item"><div class="icon-box w-10 h-10 bg-icon-teal text-white text-xl flex-shrink-0"><i class="fa-solid fa-bolt text-base"></i></div><div><span class="font-bold text-gray-900">Energy-as-a-Service (EaaS)</span><p class="text-sm text-gray-500">Zero upfront — pay only for energy delivered.</p></div></a>
+                                <a href="programs.html#vpp-section" class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item"><div class="icon-box w-10 h-10 bg-icon-green text-white text-xl flex-shrink-0"><i class="fa-solid fa-network-wired text-base"></i></div><div><span class="font-bold text-gray-900">Virtual Power Plants (VPP)</span><p class="text-sm text-gray-500">Earn $0.10/kWh discharging to the grid.</p></div></a>
+                                <a href="programs.html#compare-section" class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item"><div class="icon-box w-10 h-10 bg-icon-orange text-white text-xl flex-shrink-0"><i class="fa-solid fa-scale-balanced text-base"></i></div><div><span class="font-bold text-gray-900">Compare All Models</span><p class="text-sm text-gray-500">Find the right fit for your situation.</p></div></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Process Dropdown -->
+                    <div class="relative group" id="process-dropdown-group">
+                        <a href="process.html" id="process-dropdown-trigger"
+                            class="nav-link px-3 py-2 rounded-lg transition duration-150 flex items-center">
+                            <span data-i18n="nav.process">Our Process</span> <span class="ml-1 text-sm">&#9662;</span>
+                        </a>
+                        <div id="process-dropdown-menu" class="mega-menu pt-4 dropdown-hidden">
+                            <div class="dropdown-content-bg rounded-xl shadow-2xl p-6 border border-gray-200 space-y-2"
+                                style="max-width: 400px; width: 400px;">
+                                <h3 class="font-bold text-xl text-brand-primary mb-4 border-b pb-2 border-gray-200">Our
+                                    4-Step Methodology</h3>
+
+                                <a href="process.html#process"
+                                    class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item">
+                                    <div class="icon-box w-10 h-10 bg-icon-blue text-white text-xl flex-shrink-0"><span
+                                            class="emoji-icon">&#x2318;</span></div>
+                                    <div><span class="font-bold text-gray-900">Discovery & Audit</span>
+                                        <p class="text-sm text-gray-500">Comprehensive assessment of your home and
+                                            energy needs.</p>
+                                    </div>
+                                </a>
+
+                                <a href="process.html#process"
+                                    class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item">
+                                    <div class="icon-box w-10 h-10 bg-icon-blue text-white text-xl flex-shrink-0"><span
+                                            class="emoji-icon">&#x1F4B0;</span></div>
+                                    <div><span class="font-bold text-gray-900">Incentive Maximize</span>
+                                        <p class="text-sm text-gray-500">Design and secure all available rebates and tax
+                                            credits.</p>
+                                    </div>
+                                </a>
+
+                                <a href="process.html#process"
+                                    class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item">
+                                    <div class="icon-box w-10 h-10 bg-icon-blue text-white text-xl flex-shrink-0"><span
+                                            class="emoji-icon">&#x2699;</span></div>
+                                    <div><span class="font-bold text-gray-900">Certified Installation</span>
+                                        <p class="text-sm text-gray-500">Expert, licensed installation with minimum
+                                            disruption.</p>
+                                    </div>
+                                </a>
+
+                                <a href="process.html#process"
+                                    class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item">
+                                    <div class="icon-box w-10 h-10 bg-icon-blue text-white text-xl flex-shrink-0"><span
+                                            class="emoji-icon">&#x1F4DD;</span></div>
+                                    <div><span class="font-bold text-gray-900">Final Handover & Filing</span>
+                                        <p class="text-sm text-gray-500">System commissioning and completion of all
+                                            official paperwork.</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <a href="#" onclick="openScheduleModal(event)" class="btn-pill hidden md:inline-block flex-shrink-0 ml-4" data-i18n="nav.getstarted">Get Started</a>
+
+                <div id="lang-toggle" class="hidden md:flex items-center gap-1 ml-2">
+                    <button onclick="setLang('en')" id="lang-en" class="lang-btn active-lang px-2 py-1 rounded text-sm font-semibold transition">🇺🇸 EN</button>
+                    <span class="text-gray-400 text-xs">|</span>
+                    <button onclick="setLang('es')" id="lang-es" class="lang-btn px-2 py-1 rounded text-sm font-semibold transition">🇲🇽 ES</button>
+                </div>
+                <div id="lang-toggle-mobile" class="md:hidden flex items-center gap-1 mr-2">
+                    <button onclick="setLang('en')" id="lang-en-m" class="lang-btn active-lang px-2 py-1 rounded text-xs font-semibold transition">🇺🇸</button>
+                    <button onclick="setLang('es')" id="lang-es-m" class="lang-btn px-2 py-1 rounded text-xs font-semibold transition">🇲🇽</button>
+                </div>
+
+                <div class="md:hidden ml-auto">
+                    <button id="mobile-menu-button" class="text-gray-300 hover:text-white focus:outline-none">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Mobile Menu (Hidden by default) -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg absolute top-0 left-0 w-full z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-end">
+                <button id="close-mobile-menu-button" class="text-gray-600 hover:text-blue-600 focus:outline-none">
+                    <i class="fa-solid fa-times text-xl"></i>
+                </button>
+            </div>
+            <nav class="flex flex-col space-y-4 mt-4">
+                <a href="index.html" class="nav-link text-gray-800 hover:text-blue-600 text-lg">Home</a>
+                <a href="technologies.html" class="nav-link text-gray-800 hover:text-blue-600 text-lg"><span data-i18n="nav.technologies">Technologies</span></a>
+                <a href="rebates.html" class="nav-link text-gray-800 hover:text-blue-600 text-lg"><span data-i18n="nav.rebates">Rebates/ROI</span></a>
+                <a href="programs.html" class="nav-link text-gray-800 hover:text-blue-600 text-lg"><span data-i18n="nav.programs">New Programs</span></a>
+                <a href="process.html" class="nav-link text-gray-800 hover:text-blue-600 text-lg">Process</a>
+                <a href="#" onclick="openScheduleModal(event)"
+                    class="nav-link text-blue-600 font-bold hover:text-blue-800 text-lg" data-i18n="nav.getstarted">Get Started</a>
+            </nav>
+        </div>
+    </div>
+
+    <main class="min-h-screen pt-20">
+        <!-- Hero Section with Background Image -->
+        <section class="relative bg-gradient-to-r from-blue-600 to-blue-800 text-white py-12 md:py-20 overflow-hidden">
+            <div class="absolute inset-0 z-0">
+                <img src="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+                    alt="Electric vehicle charging station" class="w-full h-full object-cover opacity-30">
+            </div>
+            <div class="container mx-auto px-4 relative z-10 text-center">
+                <h1 class="text-2xl sm:text-4xl md:text-6xl font-extrabold leading-tight mb-4 drop-shadow-lg" data-i18n-hero="h1">Maximize Your
+                    Energy Savings</h1>
+                <p class="text-lg md:text-xl mb-8 max-w-3xl mx-auto drop-shadow-md" data-i18n-hero="p">Calculate your personalized usage, ROI, and available rebates for home electrification upgrades.</p>
+                <a href="process.html"
+                    class="inline-block bg-white text-blue-700 font-bold py-3 px-8 rounded-full text-lg hover:bg-gray-100 transition duration-300 transform hover:scale-105 shadow-lg" data-i18n-hero="cta">Learn
+                    Our Process</a>
+            </div>
+        </section>
+
+        <section class="bg-white py-6">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                <!-- ══════════════════════════════════════════════════════ -->
+                <!-- ELECTRICITY & USAGE CALCULATOR -->
+                <!-- ══════════════════════════════════════════════════════ -->
+                <section id="bill-calculator-section" class="pb-6 mt-8">
+                    <div class="card-bg p-6 sm:p-8 rounded-xl shadow-xl card-border-blue">
+
+                        <!-- Header -->
+                        <div class="text-center bg-gray-800 p-6 rounded-xl mb-6">
+                            <h2 class="text-2xl sm:text-3xl font-extrabold text-blue-400 flex items-center justify-center">
+                                <i class="fa-solid fa-bolt mr-3"></i>
+                                Electricity Usage Calculator
+                            </h2>
+                            <p class="mt-2 text-gray-300 text-sm sm:text-base">
+                                Understand your current energy costs and see how much solar could save you.
+                            </p>
+                            <div class="mt-3 inline-flex items-center gap-2 bg-blue-500/20 border border-blue-400/40 text-blue-300 text-xs px-3 py-1.5 rounded-full">
+                                <i class="fa-solid fa-circle text-xs animate-pulse"></i>
+                                SDG&amp;E &middot; SCE &middot; PG&amp;E &middot; All CA Utilities Supported
+                            </div>
+                        </div>
+
+                        <!-- ── Tab Switcher ── -->
+                        <div class="flex rounded-xl border border-gray-200 bg-gray-100 p-1 mb-6 gap-1">
+                            <button id="tab-btn-green" onclick="ecSwitchTab('green')"
+                                class="flex-1 flex items-center justify-center gap-2 py-3 px-3 sm:px-5 rounded-lg text-sm font-semibold transition-all duration-200 bg-blue-600 text-white shadow-sm">
+                                <i class="fa-solid fa-plug-circle-bolt text-base"></i>
+                                <div class="text-left">
+                                    <div>Green Button</div>
+                                    <div class="text-blue-200 text-xs font-normal hidden sm:block">Upload or connect your data</div>
+                                </div>
+                            </button>
+                            <button id="tab-btn-manual" onclick="ecSwitchTab('manual')"
+                                class="flex-1 flex items-center justify-center gap-2 py-3 px-3 sm:px-5 rounded-lg text-sm font-semibold transition-all duration-200 text-gray-500 hover:bg-white hover:text-gray-800">
+                                <i class="fa-solid fa-pencil text-base"></i>
+                                <div class="text-left">
+                                    <div>Manual Entry</div>
+                                    <div class="text-gray-400 text-xs font-normal hidden sm:block">Enter your bill info directly</div>
+                                </div>
+                            </button>
+                        </div>
+
+                        <!-- ══════════════════════════════════════════════════════ -->
+                        <!-- TAB 1: GREEN BUTTON                                  -->
+                        <!-- ══════════════════════════════════════════════════════ -->
+                        <div id="tab-green">
+
+                            <!-- What is Green Button -->
+                            <div class="flex gap-4 items-start p-4 sm:p-5 bg-green-50 border border-green-200 rounded-xl mb-5">
+                                <div class="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fa-solid fa-leaf text-white text-lg"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-green-800 text-sm mb-1">What is Green Button?</h3>
+                                    <p class="text-sm text-green-700 leading-relaxed">
+                                        Green Button is a secure federal standard that lets you download or share up to 13 months of your actual electricity usage data directly from your utility. All three major California utilities — <strong>SDG&amp;E, SCE, and PG&amp;E</strong> — support it.
+                                        Using your real data gives you a far more accurate estimate than guessing.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Utility selector -->
+                            <div class="bg-gray-50 border border-gray-200 rounded-xl p-5 mb-4">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white text-sm font-bold flex-shrink-0">1</div>
+                                    <div>
+                                        <div class="font-semibold text-gray-800">Select Your Utility</div>
+                                        <div class="text-xs text-gray-500">We'll show you exactly where to find your Green Button data</div>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3" id="gb-utility-cards">
+                                    <button onclick="gbSelectUtility('sdge')" id="gb-card-sdge"
+                                        class="gb-util-card flex flex-col items-center gap-2 p-4 border-2 border-gray-200 rounded-xl bg-white hover:border-blue-400 hover:shadow-md transition-all text-center">
+                                        <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center">
+                                            <i class="fa-solid fa-sun text-orange-500 text-lg"></i>
+                                        </div>
+                                        <div class="font-semibold text-gray-800 text-sm">SDG&amp;E</div>
+                                        <div class="text-xs text-gray-500">San Diego Gas &amp; Electric</div>
+                                    </button>
+                                    <button onclick="gbSelectUtility('sce')" id="gb-card-sce"
+                                        class="gb-util-card flex flex-col items-center gap-2 p-4 border-2 border-gray-200 rounded-xl bg-white hover:border-blue-400 hover:shadow-md transition-all text-center">
+                                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                                            <i class="fa-solid fa-bolt text-blue-500 text-lg"></i>
+                                        </div>
+                                        <div class="font-semibold text-gray-800 text-sm">SCE</div>
+                                        <div class="text-xs text-gray-500">Southern California Edison</div>
+                                    </button>
+                                    <button onclick="gbSelectUtility('pge')" id="gb-card-pge"
+                                        class="gb-util-card flex flex-col items-center gap-2 p-4 border-2 border-gray-200 rounded-xl bg-white hover:border-blue-400 hover:shadow-md transition-all text-center">
+                                        <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center">
+                                            <i class="fa-solid fa-plug text-yellow-600 text-lg"></i>
+                                        </div>
+                                        <div class="font-semibold text-gray-800 text-sm">PG&amp;E</div>
+                                        <div class="text-xs text-gray-500">Pacific Gas &amp; Electric</div>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Step-by-step instructions (shown after utility selected) -->
+                            <div id="gb-instructions" class="hidden bg-gray-50 border border-gray-200 rounded-xl p-5 mb-4">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white text-sm font-bold flex-shrink-0">2</div>
+                                    <div>
+                                        <div class="font-semibold text-gray-800">How to Download Your Data</div>
+                                        <div class="text-xs text-gray-500" id="gb-instructions-subtitle"></div>
+                                    </div>
+                                </div>
+                                <ol id="gb-steps-list" class="space-y-2 mb-4 text-sm text-gray-700 list-none">
+                                    <!-- Steps injected by JS -->
+                                </ol>
+                                <a id="gb-portal-link" href="#" target="_blank"
+                                    class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-5 py-2.5 rounded-lg transition">
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                    <span id="gb-portal-link-text">Open My Account Portal</span>
+                                </a>
+                            </div>
+
+                            <!-- File Upload -->
+                            <div id="gb-upload-area" class="hidden bg-gray-50 border border-gray-200 rounded-xl p-5 mb-5">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white text-sm font-bold flex-shrink-0">3</div>
+                                    <div>
+                                        <div class="font-semibold text-gray-800">Upload Your Green Button File</div>
+                                        <div class="text-xs text-gray-500">XML or CSV accepted &middot; processed locally in your browser &middot; never uploaded to a server</div>
+                                    </div>
+                                </div>
+
+                                <!-- Drop zone -->
+                                <label for="gb-file-input"
+                                    class="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-blue-300 rounded-xl bg-blue-50 hover:bg-blue-100 cursor-pointer transition-colors mb-3"
+                                    id="gb-dropzone"
+                                    ondragover="event.preventDefault(); this.classList.add('border-blue-500', 'bg-blue-100')"
+                                    ondragleave="this.classList.remove('border-blue-500', 'bg-blue-100')"
+                                    ondrop="gbHandleDrop(event)">
+                                    <i class="fa-solid fa-cloud-arrow-up text-blue-400 text-3xl mb-2"></i>
+                                    <span class="text-sm font-semibold text-blue-700">Drop your file here, or click to browse</span>
+                                    <span class="text-xs text-blue-500 mt-1">Supports .xml, .csv, or .zip</span>
+                                    <input id="gb-file-input" type="file" accept=".xml,.csv,.zip" class="hidden" onchange="gbHandleFileSelect(event)">
+                                </label>
+
+                                <!-- File status -->
+                                <div id="gb-file-status" class="hidden flex items-center gap-3 p-3 bg-green-50 border border-green-200 rounded-lg text-sm text-green-800">
+                                    <i class="fa-solid fa-file-circle-check text-green-600 text-lg flex-shrink-0"></i>
+                                    <div>
+                                        <div class="font-semibold" id="gb-file-name"></div>
+                                        <div class="text-xs text-green-600" id="gb-file-summary"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Parse error -->
+                                <div id="gb-file-error" class="hidden flex items-center gap-3 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-800 mt-2">
+                                    <i class="fa-solid fa-circle-exclamation text-red-500 text-lg flex-shrink-0"></i>
+                                    <div id="gb-error-text"></div>
+                                </div>
+                            </div>
+
+                            <!-- Green Button Results -->
+                            <div id="gb-results" class="hidden">
+                                <div class="bg-gradient-to-r from-green-600 to-blue-700 rounded-xl p-6 text-white mb-4 shadow-lg">
+                                    <div class="flex items-center justify-between flex-wrap gap-4">
+                                        <div>
+                                            <div class="text-blue-100 text-xs uppercase tracking-wider font-semibold mb-1">Real Data &middot; 12-Month Average</div>
+                                            <div class="text-4xl sm:text-5xl font-extrabold tracking-tight" id="gb-monthly-kwh">0 kWh</div>
+                                            <div class="text-green-100 text-sm mt-1">per month</div>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="text-blue-100 text-xs uppercase tracking-wider font-semibold mb-1">Annual Usage</div>
+                                            <div class="text-2xl font-bold text-white" id="gb-annual-kwh"></div>
+                                            <div class="text-green-100 text-xs mt-1" id="gb-months-parsed"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4" id="gb-breakdown-cards"></div>
+                                <div class="flex gap-3 items-start p-4 bg-blue-50 border border-blue-200 rounded-xl text-sm text-blue-800 mb-4">
+                                    <i class="fa-solid fa-circle-check text-blue-500 text-lg flex-shrink-0 mt-0.5"></i>
+                                    <div>Your real usage data has been loaded. <strong>Scroll down</strong> to the Solar &amp; Battery ROI Calculator — your monthly bill has been pre-filled automatically.
+                                    <a href="#roi-calculator-section" class="underline ml-1 font-semibold">Jump to ROI Calculator ↓</a></div>
+                                </div>
+                            </div>
+
+                            <!-- Can't use Green Button? -->
+                            <div class="mt-4 text-center">
+                                <button onclick="ecSwitchTab('manual')" class="text-sm text-blue-600 hover:underline">
+                                    <i class="fa-solid fa-pencil mr-1"></i>Can't access Green Button? Enter your info manually instead →
+                                </button>
+                            </div>
+
+                        </div><!-- end tab-green -->
+
+                        <!-- ══════════════════════════════════════════════════════ -->
+                        <!-- TAB 2: MANUAL ENTRY                                  -->
+                        <!-- ══════════════════════════════════════════════════════ -->
+                        <div id="tab-manual" class="hidden">
+
+                            <div class="flex gap-3 items-start p-4 bg-blue-50 border border-blue-200 rounded-xl mb-5">
+                                <i class="fa-solid fa-circle-info text-blue-500 text-lg flex-shrink-0 mt-0.5"></i>
+                                <p class="text-sm text-blue-800">
+                                    Enter your utility and usage information below. We'll produce a rough savings estimate and a Solenetec advisor will follow up with a precise quote for your utility's actual rates.
+                                </p>
+                            </div>
+
+                            <!-- Step 1: Contact -->
+                            <div class="bg-gray-50 border border-gray-200 rounded-xl p-5 mb-4">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white text-sm font-bold flex-shrink-0">1</div>
+                                    <div>
+                                        <div class="font-semibold text-gray-800">Your Contact Info</div>
+                                        <div class="text-xs text-gray-500">So we can send you a personalized estimate</div>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">First &amp; Last Name</label>
+                                        <input type="text" id="mi-name" placeholder="Jane Smith"
+                                            class="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-800 text-sm focus:ring-2 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Email Address</label>
+                                        <input type="email" id="mi-email" placeholder="jane@example.com"
+                                            class="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-800 text-sm focus:ring-2 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Phone <span class="text-gray-400 font-normal normal-case">— optional</span></label>
+                                        <input type="tel" id="mi-phone" placeholder="(619) 555-0100"
+                                            class="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-800 text-sm focus:ring-2 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">City</label>
+                                        <input type="text" id="mi-city" placeholder="e.g. Los Angeles"
+                                            class="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-800 text-sm focus:ring-2 focus:ring-blue-500">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 2: Utility & Usage -->
+                            <div class="bg-gray-50 border border-gray-200 rounded-xl p-5 mb-4">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white text-sm font-bold flex-shrink-0">2</div>
+                                    <div>
+                                        <div class="font-semibold text-gray-800">Utility &amp; Usage</div>
+                                        <div class="text-xs text-gray-500">Found on your monthly electricity bill</div>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Utility Provider</label>
+                                        <select id="mi-utility" onchange="miUtilityChange()"
+                                            class="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-800 text-sm focus:ring-2 focus:ring-blue-500">
+                                            <option value="">— Select your utility —</option>
+                                            <option value="sce">Southern California Edison (SCE)</option>
+                                            <option value="pge">Pacific Gas &amp; Electric (PG&amp;E)</option>
+                                            <option value="ladwp">LADWP — Los Angeles Dept. of Water &amp; Power</option>
+                                            <option value="smud">SMUD — Sacramento Municipal Utility District</option>
+                                            <option value="sdge">SDG&amp;E — San Diego Gas &amp; Electric</option>
+                                            <option value="svce">Silicon Valley Clean Energy (SVCE)</option>
+                                            <option value="other">Other California Utility</option>
+                                        </select>
+                                    </div>
+                                    <div id="mi-utility-other-wrap" class="hidden">
+                                        <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Utility Name</label>
+                                        <input type="text" id="mi-utility-other" placeholder="Enter your utility name"
+                                            class="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-800 text-sm focus:ring-2 focus:ring-blue-500">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Average Monthly Bill ($)</label>
+                                        <input type="number" id="mi-monthly-bill" placeholder="e.g. 220" min="0" max="5000" step="5"
+                                            class="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-800 text-sm focus:ring-2 focus:ring-blue-500">
+                                        <p class="text-xs text-gray-400 mt-1">From your most recent electricity bill</p>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Monthly Usage (kWh) <span class="text-gray-400 font-normal normal-case">— optional</span></label>
+                                        <input type="number" id="mi-kwh" placeholder="e.g. 650" min="0" max="5000" step="10"
+                                            class="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-800 text-sm focus:ring-2 focus:ring-blue-500">
+                                        <p class="text-xs text-gray-400 mt-1">Also on your bill — improves accuracy</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 3: Home Profile -->
+                            <div class="bg-gray-50 border border-gray-200 rounded-xl p-5 mb-5">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white text-sm font-bold flex-shrink-0">3</div>
+                                    <div>
+                                        <div class="font-semibold text-gray-800">Your Home</div>
+                                        <div class="text-xs text-gray-500">Helps us size the right solar system for you</div>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Home Type</label>
+                                        <select id="mi-home-type" class="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-800 text-sm focus:ring-2 focus:ring-blue-500">
+                                            <option value="single">Single Family Home</option>
+                                            <option value="condo">Condo / Townhome</option>
+                                            <option value="mobile">Mobile / Manufactured Home</option>
+                                            <option value="multi">Multi-Family / Duplex</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Approx. Home Size</label>
+                                        <select id="mi-home-size" class="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-800 text-sm focus:ring-2 focus:ring-blue-500">
+                                            <option value="small">Under 1,000 sq ft</option>
+                                            <option value="medium" selected>1,000 – 2,000 sq ft</option>
+                                            <option value="large">2,000 – 3,500 sq ft</option>
+                                            <option value="xlarge">Over 3,500 sq ft</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Do you have solar?</label>
+                                        <div class="flex gap-4">
+                                            <label class="flex items-center gap-2 cursor-pointer text-sm text-gray-700"><input type="radio" name="mi-solar" value="no" checked class="accent-blue-600"> No</label>
+                                            <label class="flex items-center gap-2 cursor-pointer text-sm text-gray-700"><input type="radio" name="mi-solar" value="yes" class="accent-blue-600"> Yes</label>
+                                            <label class="flex items-center gap-2 cursor-pointer text-sm text-gray-700"><input type="radio" name="mi-solar" value="partial" class="accent-blue-600"> Partial</label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Do you have an EV?</label>
+                                        <div class="flex gap-4 flex-wrap">
+                                            <label class="flex items-center gap-2 cursor-pointer text-sm text-gray-700"><input type="radio" name="mi-ev" value="no" checked class="accent-blue-600"> No</label>
+                                            <label class="flex items-center gap-2 cursor-pointer text-sm text-gray-700"><input type="radio" name="mi-ev" value="yes" class="accent-blue-600"> Yes</label>
+                                            <label class="flex items-center gap-2 cursor-pointer text-sm text-gray-700"><input type="radio" name="mi-ev" value="soon" class="accent-blue-600"> Getting one soon</label>
+                                        </div>
+                                    </div>
+                                    <div class="sm:col-span-2">
+                                        <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Anything else? <span class="text-gray-400 font-normal normal-case">— optional</span></label>
+                                        <textarea id="mi-notes" rows="2" placeholder="e.g. interested in battery storage, have a pool, home AC runs all summer..."
+                                            class="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-800 text-sm focus:ring-2 focus:ring-blue-500 resize-none"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Submit -->
+                            <button onclick="miCalculate()"
+                                class="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg rounded-xl transition duration-200 transform hover:scale-[1.01] shadow-lg">
+                                <i class="fa-solid fa-chart-line mr-2"></i>Get My Rough Estimate
+                            </button>
+
+                            <!-- Manual Results -->
+                            <div id="mi-results" class="hidden mt-6">
+                                <div class="bg-gradient-to-r from-blue-600 to-blue-800 rounded-xl p-6 text-white mb-4 shadow-lg">
+                                    <div class="flex items-center justify-between flex-wrap gap-4">
+                                        <div>
+                                            <div class="text-4xl sm:text-5xl font-extrabold tracking-tight" id="mi-est-bill">$0</div>
+                                            <div class="text-blue-200 text-sm mt-1 uppercase tracking-wide font-medium">Est. Monthly Bill</div>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="text-2xl font-bold text-blue-100" id="mi-est-annual"></div>
+                                            <div class="text-blue-300 text-xs uppercase tracking-wide mt-1">Annualized</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4" id="mi-breakdown-cards"></div>
+                                <div class="flex gap-3 items-start p-4 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-800 mb-4">
+                                    <i class="fa-solid fa-triangle-exclamation text-amber-500 text-lg flex-shrink-0 mt-0.5"></i>
+                                    <div>
+                                        <strong>Rough estimate only.</strong> This uses a blended average rate for <span id="mi-utility-label" class="font-semibold">your utility</span>.
+                                        Actual bills vary by rate plan, time-of-use, and local fees.
+                                        A Solenetec advisor will follow up at <strong><span id="mi-followup-email"></span></strong> with a precise analysis.
+                                    </div>
+                                </div>
+                                <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 text-center">
+                                    <p class="text-sm text-blue-800 font-medium mb-3">Want a precise quote based on your actual utility rates?</p>
+                                    <button onclick="openScheduleModal(event)" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition text-sm">
+                                        <i class="fa-solid fa-calendar-check"></i>Schedule a Free Consultation
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Green Button nudge -->
+                            <div class="mt-5 text-center">
+                                <button onclick="ecSwitchTab('green')" class="text-sm text-blue-600 hover:underline">
+                                    <i class="fa-solid fa-plug-circle-bolt mr-1"></i>Have SDG&amp;E, SCE, or PG&amp;E? Use Green Button for more accurate results →
+                                </button>
+                            </div>
+
+                        </div><!-- end tab-manual -->
+
+                    </div>
+                </section>
+
+                <!-- Auto-feed connector -->
+                <div class="flex flex-col items-center py-2 my-2 select-none">
+                    <div class="flex items-center gap-3 bg-blue-50 border border-blue-200 rounded-full px-5 py-2.5 shadow-sm">
+                        <i class="fa-solid fa-circle-check text-green-500"></i>
+                        <span class="text-sm font-medium text-blue-800">Your monthly bill total is automatically sent to the ROI calculator below</span>
+                        <i class="fa-solid fa-arrow-down text-blue-500 animate-bounce"></i>
+                    </div>
+                </div>
+
+                <!-- ══════════════════════════════════════════════════════ -->
+                <!-- SOLAR + BATTERY ROI CALCULATOR -->
+                <!-- ══════════════════════════════════════════════════════ -->
+                <section id="roi-calculator-section" class="pb-6 mt-6">
+                    <div class="card-bg p-6 sm:p-8 rounded-xl shadow-xl card-border-blue">
+
+                        <!-- Header -->
+                        <div class="text-center bg-gray-800 p-6 rounded-xl mb-8">
+                            <h2 class="text-2xl sm:text-3xl font-extrabold text-blue-400 flex items-center justify-center">
+                                <i class="fa-solid fa-solar-panel mr-3"></i>
+                                Solar &amp; Battery ROI Calculator
+                            </h2>
+                            <p class="mt-2 text-gray-300 text-sm sm:text-base">
+                                See how much a solar + battery system could offset your bill and when it pays for itself.
+                            </p>
+                        </div>
+
+                        <!-- Inputs -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                            <div class="bg-gray-50 border border-gray-200 rounded-xl p-4">
+                                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
+                                    <i class="fa-solid fa-file-invoice-dollar text-blue-500 mr-1"></i>Current Monthly Bill ($)
+                                </label>
+                                <input type="number" id="roi-monthly-bill" value="250" min="0" max="2000" step="5"
+                                    class="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-800 text-sm focus:ring-2 focus:ring-blue-500"
+                                    placeholder="e.g. 250">
+                                <p class="text-xs text-gray-400 mt-1">Run the bill calculator above first, then enter your result here</p>
+                            </div>
+                            <div class="bg-gray-50 border border-gray-200 rounded-xl p-4">
+                                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
+                                    <i class="fa-solid fa-solar-panel text-yellow-500 mr-1"></i>System Size (kW)
+                                </label>
+                                <input type="number" id="roi-system-size" value="8" min="1" max="30" step="0.5"
+                                    class="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-800 text-sm focus:ring-2 focus:ring-blue-500">
+                                <p class="text-xs text-gray-400 mt-1">Typical San Diego home: 6–12 kW</p>
+                            </div>
+                            <div class="bg-gray-50 border border-gray-200 rounded-xl p-4">
+                                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
+                                    <i class="fa-solid fa-dollar-sign text-green-500 mr-1"></i>Total System Cost ($)
+                                </label>
+                                <input type="number" id="roi-system-cost" value="28000" min="5000" max="100000" step="500"
+                                    class="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-800 text-sm focus:ring-2 focus:ring-blue-500">
+                                <p class="text-xs text-gray-400 mt-1">Installed cost before any incentives</p>
+                            </div>
+                            <div class="bg-gray-50 border border-gray-200 rounded-xl p-4">
+                                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
+                                    <i class="fa-solid fa-tags text-purple-500 mr-1"></i>State Rebates / Incentives ($)
+                                </label>
+                                <input type="number" id="roi-rebates" value="0" min="0" max="50000" step="100"
+                                    class="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-800 text-sm focus:ring-2 focus:ring-blue-500">
+                                <p class="text-xs text-gray-400 mt-1">SGIP, TECH Clean CA, utility rebates, etc.</p>
+                            </div>
+                            <div class="bg-gray-50 border border-gray-200 rounded-xl p-4">
+                                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
+                                    <i class="fa-solid fa-percent text-orange-500 mr-1"></i>Bill Offset (%)
+                                </label>
+                                <div class="flex items-center gap-3">
+                                    <input type="range" id="roi-offset-slider" min="50" max="100" value="85" step="1"
+                                        oninput="document.getElementById('roi-offset-val').textContent = this.value + '%'"
+                                        class="flex-1 accent-blue-600">
+                                    <span id="roi-offset-val" class="font-bold text-blue-600 font-mono w-12 text-right">85%</span>
+                                </div>
+                                <p class="text-xs text-gray-400 mt-1">How much of your bill solar covers (typical SD: 80–95%)</p>
+                            </div>
+                            <div class="bg-gray-50 border border-gray-200 rounded-xl p-4">
+                                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
+                                    <i class="fa-solid fa-chart-line text-red-500 mr-1"></i>Annual Rate Escalation (%)
+                                </label>
+                                <div class="flex items-center gap-3">
+                                    <input type="range" id="roi-escalation-slider" min="0" max="10" value="4" step="0.5"
+                                        oninput="document.getElementById('roi-escalation-val').textContent = this.value + '%'"
+                                        class="flex-1 accent-blue-600">
+                                    <span id="roi-escalation-val" class="font-bold text-blue-600 font-mono w-12 text-right">4%</span>
+                                </div>
+                                <p class="text-xs text-gray-400 mt-1">SDG&amp;E historical average: ~4–6%/year</p>
+                            </div>
+                        </div>
+
+                        <!-- Calculate ROI Button -->
+                        <button onclick="roiCalculate()" class="w-full py-4 bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white font-bold text-lg rounded-xl transition duration-200 transform hover:scale-[1.01] shadow-lg mb-6">
+                            <i class="fa-solid fa-calculator mr-2"></i>Calculate My ROI
+                        </button>
+
+                        <!-- ROI Results -->
+                        <div id="roi-results" class="hidden">
+
+                            <!-- Key metrics row -->
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+                                <div class="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-xl p-4 text-center">
+                                    <div class="text-2xl font-extrabold text-green-600" id="roi-monthly-savings">$0</div>
+                                    <div class="text-xs text-gray-500 uppercase tracking-wide mt-1 font-semibold">Monthly Savings</div>
+                                </div>
+                                <div class="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-4 text-center">
+                                    <div class="text-2xl font-extrabold text-blue-600" id="roi-annual-savings">$0</div>
+                                    <div class="text-xs text-gray-500 uppercase tracking-wide mt-1 font-semibold">Year 1 Savings</div>
+                                </div>
+                                <div class="bg-gradient-to-br from-purple-50 to-violet-50 border border-purple-200 rounded-xl p-4 text-center">
+                                    <div class="text-2xl font-extrabold text-purple-600" id="roi-net-cost">$0</div>
+                                    <div class="text-xs text-gray-500 uppercase tracking-wide mt-1 font-semibold">Net System Cost</div>
+                                </div>
+                                <div class="bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 rounded-xl p-4 text-center">
+                                    <div class="text-2xl font-extrabold text-amber-600" id="roi-payback">0 yrs</div>
+                                    <div class="text-xs text-gray-500 uppercase tracking-wide mt-1 font-semibold">Payback Period</div>
+                                </div>
+                            </div>
+
+                            <!-- 25-year summary -->
+                            <div class="bg-gradient-to-r from-blue-600 to-blue-800 rounded-xl p-5 text-white mb-5 shadow-lg">
+                                <div class="flex items-center justify-between flex-wrap gap-3">
+                                    <div>
+                                        <div class="text-xs uppercase tracking-wider text-blue-200 font-semibold mb-1">25-Year Total Savings</div>
+                                        <div class="text-4xl font-extrabold" id="roi-lifetime-savings">$0</div>
+                                        <div class="text-blue-200 text-sm mt-1" id="roi-lifetime-sub"></div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-xs uppercase tracking-wider text-blue-200 font-semibold mb-1">Return on Investment</div>
+                                        <div class="text-3xl font-extrabold text-yellow-300" id="roi-percent">0%</div>
+                                        <div class="text-blue-200 text-xs mt-1">Over 25 years</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Year-by-year table -->
+                            <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-4">
+                                <div class="font-semibold text-gray-800 mb-3 text-sm flex items-center gap-2">
+                                    <i class="fa-solid fa-table text-blue-500"></i>Year-by-Year Savings Projection
+                                </div>
+                                <div class="overflow-x-auto">
+                                    <table class="w-full text-sm">
+                                        <thead>
+                                            <tr class="border-b border-gray-300">
+                                                <th class="text-left pb-2 text-xs text-gray-500 uppercase font-semibold tracking-wide">Year</th>
+                                                <th class="text-left pb-2 text-xs text-gray-500 uppercase font-semibold tracking-wide">Annual Savings</th>
+                                                <th class="text-left pb-2 text-xs text-gray-500 uppercase font-semibold tracking-wide">Cumulative</th>
+                                                <th class="text-left pb-2 text-xs text-gray-500 uppercase font-semibold tracking-wide">Net Position</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="roi-table-body" class="divide-y divide-gray-100 font-mono text-xs"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- SGIP note -->
+                            <div class="flex gap-3 items-start p-4 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-800">
+                                <i class="fa-solid fa-circle-info text-amber-500 text-lg flex-shrink-0 mt-0.5"></i>
+                                <div>
+                                    <strong>Available State Incentives:</strong> California's <strong>SGIP program</strong> offers battery storage rebates up to $1,000/kWh for income-qualified customers. <strong>TECH Clean CA</strong> provides rebates for heat pump systems that further reduce your energy costs. Enter these in the "State Rebates" field above to see their impact on your payback period.
+                                    <a href="#state-rebates-info" class="text-blue-600 hover:underline ml-1 font-semibold">See available CA rebates ↑</a>
+                                </div>
+                            </div>
+
+                            <p class="text-xs text-gray-400 mt-4 text-center">Projections assume system performance stays constant. Actual savings vary based on usage, rate changes, and system output. Consult with a Solenetec advisor for a precise quote.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TARGET SECTION: Title and Subtitle with Dark Background -->
+                <div class="text-center bg-gray-800 p-8 rounded-xl shadow-lg mb-8 min-h-[140px] flex flex-col justify-center">
+                    <!-- Page Title -->
+                    <h1 class="text-3xl font-extrabold text-blue-400">Personalized Rebate & Savings Estimator</h1>
+                    <p class="mt-2 text-base text-gray-300">
+                        Estimate your total incentives, combining Federal IRA programs with State rebates.
+                    </p>
+                    <div class="mt-4 inline-flex items-center gap-2 bg-amber-500/20 border border-amber-400/50 text-amber-300 text-sm px-4 py-2 rounded-lg">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <span><strong>Notice:</strong> Federal IRA tax credits (25C/25D) are currently suspended. HEEHRA rebates remain available but single family funds are fully reserved — <a href="https://techcleanca.com/incentives/heehrarebates/" target="_blank" class="underline hover:text-amber-100">join the waitlist</a>.</span>
+                    </div>
+                </div>
+
+                <section id="rebate-calculator-section">
+                    <div class="lg:grid lg:grid-cols-12 lg:gap-12">
+                        <!-- Your Profile & Upgrades Card -->
+                        <div class="lg:col-span-5 card-bg p-4 sm:p-6 rounded-xl shadow-xl card-border-blue h-full">
+                            <h3 class="2xl font-bold text-gray-800 mb-6 border-b pb-2 border-gray-200">Your Profile &
+                                Upgrades</h3>
+
+                            <!-- UPDATED SECTION 1: State Selection and Search (with Icon) -->
+                            <div class="space-y-4 pb-6 border-b border-gray-200">
+                                <h4 class="text-xl font-semibold text-blue-700 flex items-center">
+                                    <div
+                                        class="icon-box w-6 h-6 bg-blue-600 text-white text-lg mr-2 inline-flex flex-shrink-0">
+                                        &#x1F30E;</div>
+                                    1. Select Your State & Search Programs
+                                </h4>
+
+                                <!-- Input style kept light for ease of use --><select id="state-select"
+                                    class="w-full p-3 input-style rounded-lg focus:ring-blue-600 focus:border-blue-600">
+                                    <!-- NOTE: Only CA uses the hardcoded sample data in Step 2. -->
+                                    <option value="CA" selected>California (Sample Rebate Data)</option>
+                                    <option value="TX">Texas</option>
+                                    <option value="FL">Florida</option>
+                                    <option value="NY">New York</option>
+                                    <option value="MA">Massachusetts</option>
+                                    <option value="WA">Washington</option>
+                                </select>
+
+                                <!-- Search Button uses Gemini API with Search Grounding --><button
+                                    id="search-state-rebates-btn"
+                                    class="w-full flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition duration-150 disabled:bg-gray-400">
+                                    <span id="search-btn-text">Search Rebate Programs for CA</span>
+                                    <div id="state-search-spinner" class="loading-spinner hidden ml-2 w-4 h-4"></div>
+                                </button>
+
+                                <!-- REMOVED INLINE OUTPUT AND MOVED TO MODAL -->
+                                <p id="state-disclaimer" class="text-xs text-orange-600 mt-2 font-medium">Note: Only the
+                                    California example uses the fixed data in Step 2 for calculation. Other states
+                                    require
+                                    manual input.</p>
+                            </div>
+
+                            <!-- UPDATED SECTION 2: Upgrades (with Icon) -->
+                            <div class="space-y-4 pt-6 pb-6 border-b border-gray-200">
+                                <h4 class="text-xl font-semibold mb-4 text-blue-700 flex items-center">
+                                    <div
+                                        class="icon-box w-6 h-6 bg-blue-600 text-white text-lg mr-2 inline-flex flex-shrink-0">
+                                        &#x2699;</div>
+                                    2. Select Your Upgrades
+                                </h4>
+                                <div id="upgrade-options" class="space-y-4 text-gray-700">
+                                    <!-- Upgrades generated by initRebateSection() -->
+                                </div>
+                            </div>
+
+                            <!-- UPDATED SECTION 3: Income Status (with Icon) -->
+                            <div class="space-y-4 pt-6">
+                                <h4 class="text-xl font-semibold mb-4 text-blue-700 flex items-center">
+                                    <div
+                                        class="icon-box w-6 h-6 bg-blue-600 text-white text-lg mr-2 inline-flex flex-shrink-0">
+                                        &#x1F4B0;</div>
+                                    3. Household Income Status
+                                </h4>
+                                <p class="text-sm text-gray-600 mb-4">Higher rebates (like HEEHRA) are available for
+                                        low-to-moderate income households. <span class="text-amber-600 font-medium"><i class="fa-solid fa-circle-exclamation mr-1"></i>HEEHRA single family funds are fully reserved as of Feb 24, 2026 — waitlist only.</span></p>
+                                    low-to-moderate income (LMI) households (generally under 150% AMI).</p>
+                                <label for="income-toggle" class="flex items-center cursor-pointer">
+                                    <div class="relative">
+                                        <input type="checkbox" id="income-toggle" class="sr-only">
+                                        <div class="block bg-gray-300 w-14 h-8 rounded-full shadow-inner slider"></div>
+                                        <div
+                                            class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition transform shadow">
+                                        </div>
+                                    </div>
+                                    <div class="ml-4 text-gray-700 font-medium select-none">
+                                        Yes, I qualify for LMI incentives.
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="mt-10 lg:mt-0 lg:col-span-7">
+                            <!-- Total Estimated Incentives Card -->
+                            <div
+                                class="card-bg p-4 sm:p-6 rounded-xl shadow-xl h-full flex flex-col justify-between card-border-blue">
+                                <div>
+                                    <h3 class="text-2xl font-bold text-gray-800 text-center">Total Estimated Incentives
+                                    </h3>
+                                    <!-- New section for applied filter confirmation -->
+                                    <div id="applied-filter-status" class="text-center mt-3 mb-6">
+                                        <span id="applied-state-label"
+                                            class="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">Applied
+                                            State: California (Sample Data)</span>
+                                    </div>
+
+                                    <div class="text-center my-6">
+                                        <span class="text-3xl sm:text-5xl md:text-6xl font-extrabold text-blue-600 tracking-tight"
+                                            id="total-rebate-amount">$0</span>
+                                    </div>
+                                    <div class="chart-container">
+                                        <canvas id="rebateChart"></canvas>
+                                    </div>
+                                </div>
+                                <div class="mt-6">
+                                    <h4 class="text-lg font-semibold text-gray-800 mb-3 border-t pt-3 border-gray-200">
+                                        Breakdown of Estimated Savings:</h4>
+                                    <div id="rebate-breakdown" class="space-y-2 text-sm text-gray-700">
+                                        <p id="rebate-info" class="text-center italic">Select upgrades and your income
+                                            status to generate your personalized estimate.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+    </main>
+
+    <!-- State Rebate Modal Structure (Interstitial) -->
+    <div id="state-modal" class="modal fixed inset-0 z-50 overflow-y-auto bg-gray-900 bg-opacity-75" role="dialog"
+        aria-modal="true" aria-labelledby="modal-title">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="card-bg rounded-xl shadow-2xl w-full max-w-lg mx-auto transform transition-all p-6 sm:p-8">
+                <div class="flex justify-between items-start border-b pb-3 mb-4 border-gray-200">
+                    <h3 id="modal-title" class="text-2xl font-bold text-blue-700">Rebate Programs for <span
+                            id="modal-state-name"></span></h3>
+                    <button id="close-modal-btn-top" class="text-gray-400 hover:text-gray-700 transition duration-150"
+                        aria-label="Close modal">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <div id="modal-content-area" class="p-3 border border-gray-200 rounded-lg bg-gray-50 text-sm">
+                    <h5 class="font-semibold text-gray-800 mb-2">State Program Overview (High-Level Summary):</h5>
+                    <p id="state-search-result" class="text-gray-700 whitespace-pre-wrap mb-4">Loading...</p>
+                    <div id="state-api-error-search" class="mt-2 text-red-600 text-sm hidden"></div>
+                    <div id="state-citation-sources"
+                        class="text-xs text-gray-500 italic border-t pt-2 mt-4 border-gray-200"></div>
+                </div>
+
+                <button id="modal-close-button-bottom"
+                    class="mt-6 w-full py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition duration-150">
+                    Close & Continue
+                </button>
+            </div>
+        </div>
+    </div>
+    </section>
+    </main>
+    <!-- Footer (Dark Gray Theme - Matches Reference) -->
+    <footer class="bg-gray-800">
+        <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-3xl font-extrabold text-blue-400">Solenetec</p>
+            <p class="mt-3 text-gray-400">Phone: (213) 210-3005 &bull; Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="dc9db0b9a49cafb3b0b9b2b9a8b9bff2bfb3b1">[email&#160;protected]</a></p>
+            <p class="mt-4 text-gray-500 text-sm">&copy; 2025 Solenetec. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+
+        // ═══════════════════════════════════════════════════════════
+        // STATIC DATA
+        // ═══════════════════════════════════════════════════════════
+        const stateRebateDatabase = {
+            "CA": {
+                summary: "California offers aggressive rebates through TECH Clean California and SGIP.",
+                programs: [
+                    { name: "TECH Clean CA", description: "Statewide initiative providing rebates for heat pump HVAC and water heaters." },
+                    { name: "SGIP (Self-Generation Incentive Program)", description: "Significant rebates for battery storage systems to support grid resilience." },
+                    { name: "HEEHRA (LMI)", description: "Inflation Reduction Act funds for low-to-moderate income households. <strong>Note: Single family funds fully reserved as of Feb 24, 2026 — waitlist only. Multifamily applications temporarily paused.</strong>" },
+                    { name: "Golden State Rebates", description: "Instant rebates on energy-efficient products like smart thermostats." }
+                ],
+                rates: { hpwh: 3100, hvac: 1000, panel: 1000, induction: 250, battery: 25000 }
+            },
+            "NY": {
+                summary: "New York provides strong incentives via NYS Clean Heat and NYSERDA.",
+                programs: [
+                    { name: "NYS Clean Heat", description: "Rebates for heat pump technology from utility companies." },
+                    { name: "NYSERDA Comfort Home", description: "Incentives for seal and insulation packages." },
+                    { name: "EmPower+", description: "Efficiency solutions for low-to-moderate income households." }
+                ],
+                rates: { hpwh: 1000, hvac: 2000, panel: 0, induction: 0, battery: 0 }
+            },
+            "TX": {
+                summary: "Texas incentives are primarily utility-based (Oncor, CenterPoint).",
+                programs: [
+                    { name: "Utility Smart Thermostat Programs", description: "Rebates for installing smart thermostats." },
+                    { name: "Solar Buyback Plans", description: "Various retail electric providers offer buyback credits for solar export." }
+                ],
+                rates: { hpwh: 0, hvac: 500, panel: 0, induction: 0, battery: 0 }
+            },
+            "FL": {
+                summary: "Florida offers rebates through FPL and Duke Energy.",
+                programs: [
+                    { name: "FPL Ceiling Insulation", description: "Rebates for upgrading home insulation." },
+                    { name: "Duke Energy HVAC Rebate", description: "Incentives for high-efficiency heat pump systems." }
+                ],
+                rates: { hpwh: 0, hvac: 300, panel: 0, induction: 0, battery: 0 }
+            },
+            "MA": {
+                summary: "Massachusetts leads with Mass Save program incentives.",
+                programs: [
+                    { name: "Mass Save Heat Pump Rebate", description: "Substantial rebates for whole-home heat pump conversions." },
+                    { name: "Mass Save HEAT Loan", description: "0% interest financing for energy efficiency upgrades." }
+                ],
+                rates: { hpwh: 750, hvac: 10000, panel: 0, induction: 500, battery: 0 }
+            }
+        };
+
+        const maxTaxCredit = 3200;
+        const rebateData = {
+            hpwh:    { name: 'HP Water Heater',      cost: 6000,  state: { 'TECH Clean CA': 3100, 'HEEHRA (LMI)': 1750 }, federalTax: 2000 },
+            hvac:    { name: 'HP HVAC',              cost: 12000, state: { 'TECH Clean CA': 1000, 'HEEHRA (LMI)': 8000 }, federalTax: 2000 },
+            panel:   { name: 'Panel Upgrade',        cost: 4500,  state: { 'Energy Smart Homes': 1000, 'HEEHRA (LMI)': 4000 }, federalTax: 600 },
+            induction:{ name: 'Induction Cooking',   cost: 2500,  state: { 'Energy Smart Homes': 250, 'HEEHRA (LMI)': 840 }, federalTax: 600 },
+            battery: { name: 'Solar/Battery Storage', cost: 25000, state: { 'SGIP Equity': 25000 }, federalTax: 7500 }
+        };
+
+        const techData = [
+            { id: 'hpwh',        name: 'HP Water Heaters',         icon: '<i class="fa-solid fa-shower"></i>',           summary: 'The most efficient way to heat domestic water.' },
+            { id: 'hvac',        name: 'Heat Pump HVAC',           icon: '<i class="fa-solid fa-fan"></i>',              summary: 'All-in-one climate control and replacing your furnace/AC.' },
+            { id: 'solar_battery',name:'Solar & Battery Storage',  icon: '<i class="fa-solid fa-solar-panel"></i>',      summary: 'Ensures backup power and energy independence for your home.' },
+            { id: 'induction',   name: 'Induction Cooking',        icon: '<i class="fa-solid fa-kitchen-set"></i>',      summary: 'Faster, safer, and cleaner cooking without combustion gases.' },
+            { id: 'inverter',    name: 'Inverters',                icon: '<i class="fa-solid fa-microchip"></i>',        summary: 'The critical component for converting DC to usable AC power.' },
+            { id: 'evcharger',   name: 'EV Charging',              icon: '<i class="fa-solid fa-charging-station"></i>', summary: 'Dedicated high-speed home charging and energy management.' },
+            { id: 'v2h',         name: 'Vehicle-to-Home (V2H/V2L)',icon: '<i class="fa-solid fa-house-chimney-crack"></i>',summary: 'Use your EV\'s battery as a massive source of home backup power.' },
+            { id: 'smartpanel',  name: 'Smart Electrical Panels',  icon: '<i class="fa-solid fa-plug-circle-bolt"></i>', summary: 'The brain for real-time monitoring, load control, and optimization.' },
+        ];
+
+        const MI_UTILITY_RATES = {
+            sce:   { name: 'SCE',          rate: 31.5 },
+            pge:   { name: 'PG&E',         rate: 33.2 },
+            ladwp: { name: 'LADWP',        rate: 20.8 },
+            smud:  { name: 'SMUD',         rate: 17.4 },
+            sdge:  { name: 'SDG&E',        rate: 47.5 },
+            svce:  { name: 'SVCE',         rate: 28.9 },
+            other: { name: 'your utility', rate: 28.0 },
+        };
+
+        const GB_UTILITY_INFO = {
+            sdge: {
+                name: 'SDG&E', portal: 'https://myenergycenter.com',
+                portalLabel: 'Open My Energy Center',
+                subtitle: 'San Diego Gas & Electric · My Energy Center',
+                steps: [
+                    'Log in at <a href="https://myenergycenter.com" target="_blank" class="text-blue-600 underline font-medium">myenergycenter.com</a> using your SDG&E account number and ZIP code.',
+                    'Click the <strong>My Energy</strong> tab, then select <strong>My Energy Overview</strong>.',
+                    'From the View dropdown, choose <strong>My Energy Use</strong>.',
+                    'Scroll down and click the <strong class="text-green-700">Green Button — Download My Data</strong> icon.',
+                    'Select your meter, choose a date range of <strong>12 months</strong>, then pick <strong>CSV</strong> or <strong>XML</strong> format.',
+                    'Click <strong>Download</strong> — the file may arrive as a .zip. Extract it, then upload it below.'
+                ]
+            },
+            sce: {
+                name: 'SCE', portal: 'https://www.sce.com/mysce/home',
+                portalLabel: 'Open My SCE Account',
+                subtitle: 'Southern California Edison · My SCE',
+                steps: [
+                    'Log in at <a href="https://www.sce.com/mysce/home" target="_blank" class="text-blue-600 underline font-medium">sce.com</a> using your SCE credentials.',
+                    'On the homepage, click the <strong>My Account</strong> tab and look at the left-hand menu.',
+                    'Click <strong class="text-green-700">Green Button — Download My Data</strong>.',
+                    'Select your desired date range — choose <strong>12 months</strong> for best results.',
+                    'Select <strong>CSV</strong> or <strong>XML</strong> format, then click <strong>Download</strong>.',
+                    'The file may arrive as a .zip. Extract it, then upload it below.'
+                ]
+            },
+            pge: {
+                name: 'PG&E', portal: 'https://www.pge.com/en/account/energy-usage-details.html',
+                portalLabel: 'Open PG&E Energy Usage Details',
+                subtitle: 'Pacific Gas & Electric · My Account',
+                steps: [
+                    'Log in at <a href="https://www.pge.com" target="_blank" class="text-blue-600 underline font-medium">pge.com</a> and go to your account homepage.',
+                    'Under <strong>Usage, Rates & Savings</strong>, click <strong>Energy Usage Details</strong>.',
+                    'Scroll to the bottom of the page and find the <strong class="text-green-700">Green Button</strong> icon.',
+                    'Select your export type — choose <strong>All Bill Totals</strong> or a <strong>12-month</strong> custom range.',
+                    'Pick <strong>CSV</strong> format (recommended), then click <strong>Download</strong>.',
+                    'The file may arrive as a .zip. Extract it, then upload it below.'
+                ]
+            }
+        };
+
+        let gbSelectedUtility = null;
+        let rebateChartInstance;
+        let currentRebateState = { totalSavings: 0, isIncomeQualified: false, selectedUpgrades: [], breakdown: '' };
+
+        // ═══════════════════════════════════════════════════════════
+        // TAB SWITCHER — global so onclick can reach it
+        // ═══════════════════════════════════════════════════════════
+        function ecSwitchTab(tab) {
+            const greenPane  = document.getElementById('tab-green');
+            const manualPane = document.getElementById('tab-manual');
+            const greenBtn   = document.getElementById('tab-btn-green');
+            const manualBtn  = document.getElementById('tab-btn-manual');
+            if (!greenPane || !manualPane) return;
+            if (tab === 'green') {
+                greenPane.classList.remove('hidden');
+                manualPane.classList.add('hidden');
+                greenBtn.classList.add('bg-blue-600','text-white','shadow-sm');
+                greenBtn.classList.remove('text-gray-500');
+                manualBtn.classList.remove('bg-blue-600','text-white','shadow-sm');
+                manualBtn.classList.add('text-gray-500');
+            } else {
+                manualPane.classList.remove('hidden');
+                greenPane.classList.add('hidden');
+                manualBtn.classList.add('bg-blue-600','text-white','shadow-sm');
+                manualBtn.classList.remove('text-gray-500');
+                greenBtn.classList.remove('bg-blue-600','text-white','shadow-sm');
+                greenBtn.classList.add('text-gray-500');
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // GREEN BUTTON FUNCTIONS — global
+        // ═══════════════════════════════════════════════════════════
+        function gbSelectUtility(id) {
+            gbSelectedUtility = id;
+            document.querySelectorAll('.gb-util-card').forEach(c => {
+                c.classList.remove('border-blue-500','bg-blue-50','shadow-md');
+                c.classList.add('border-gray-200');
+            });
+            const card = document.getElementById('gb-card-' + id);
+            if (card) { card.classList.add('border-blue-500','bg-blue-50','shadow-md'); card.classList.remove('border-gray-200'); }
+            const info = GB_UTILITY_INFO[id];
+            document.getElementById('gb-instructions-subtitle').textContent = info.subtitle;
+            document.getElementById('gb-portal-link').href = info.portal;
+            document.getElementById('gb-portal-link-text').textContent = info.portalLabel;
+            const list = document.getElementById('gb-steps-list');
+            list.innerHTML = info.steps.map((s, i) => `
+                <li class="flex gap-3 items-start">
+                    <span class="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 text-blue-700 text-xs font-bold flex items-center justify-center mt-0.5">${i+1}</span>
+                    <span class="leading-relaxed">${s}</span>
+                </li>`).join('');
+            document.getElementById('gb-instructions').classList.remove('hidden');
+            document.getElementById('gb-upload-area').classList.remove('hidden');
+        }
+
+        function gbHandleDrop(e) {
+            e.preventDefault();
+            document.getElementById('gb-dropzone').classList.remove('border-blue-500','bg-blue-100');
+            const file = e.dataTransfer.files[0];
+            if (file) gbParseFile(file);
+        }
+
+        function gbHandleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) gbParseFile(file);
+        }
+
+        function gbParseFile(file) {
+            const statusEl = document.getElementById('gb-file-status');
+            const errorEl  = document.getElementById('gb-file-error');
+            statusEl.classList.add('hidden');
+            errorEl.classList.add('hidden');
+            document.getElementById('gb-results').classList.add('hidden');
+            const name = file.name.toLowerCase();
+            if (name.endsWith('.zip')) { gbShowError('ZIP files cannot be parsed in the browser. Please extract the .xml or .csv file inside, then upload that.'); return; }
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                try {
+                    let intervals = [];
+                    if (name.endsWith('.xml'))      intervals = gbParseXML(ev.target.result);
+                    else if (name.endsWith('.csv')) intervals = gbParseCSV(ev.target.result);
+                    else { gbShowError('Unsupported file type. Please upload a .xml or .csv Green Button file.'); return; }
+                    if (intervals.length === 0) { gbShowError('No usage data found. Make sure you downloaded interval data, not just a bill summary.'); return; }
+                    document.getElementById('gb-file-name').textContent = file.name;
+                    document.getElementById('gb-file-summary').textContent = intervals.length.toLocaleString() + ' intervals parsed';
+                    statusEl.classList.remove('hidden');
+                    gbDisplayResults(intervals);
+                } catch(err) {
+                    gbShowError('Could not parse file: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function gbParseXML(text) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(text, 'text/xml');
+            const intervals = [];
+            doc.querySelectorAll('IntervalReading').forEach(r => {
+                const duration = parseInt(r.querySelector('duration')?.textContent || 0);
+                const value    = parseInt(r.querySelector('value')?.textContent || 0);
+                if (value > 0 && duration > 0) intervals.push({ kwh: value / 1000, duration });
+            });
+            return intervals;
+        }
+
+        function gbParseCSV(text) {
+            const lines = text.split(/\r?\n/).filter(l => l.trim());
+            const intervals = [];
+            let headerIdx = -1, kwhCol = -1;
+            for (let i = 0; i < Math.min(10, lines.length); i++) {
+                const lower = lines[i].toLowerCase();
+                if (lower.includes('kwh') || lower.includes('usage') || lower.includes('consumption')) {
+                    headerIdx = i;
+                    const headers = lines[i].split(',').map(h => h.trim().toLowerCase());
+                    kwhCol = headers.findIndex(h => h.includes('kwh') || h.includes('usage') || h.includes('consumption'));
+                    break;
+                }
+            }
+            const start = headerIdx >= 0 ? headerIdx + 1 : 1;
+            for (let i = start; i < lines.length; i++) {
+                const cols = lines[i].split(',');
+                if (cols.length < 2) continue;
+                const raw = kwhCol >= 0 ? cols[kwhCol] : cols[cols.length - 1];
+                const kwh = parseFloat((raw || '').replace(/[^0-9.-]/g, ''));
+                if (!isNaN(kwh) && kwh >= 0) intervals.push({ kwh });
+            }
+            return intervals;
+        }
+
+        function gbDisplayResults(intervals) {
+            const totalKwh   = intervals.reduce((s, r) => s + r.kwh, 0);
+            const months     = Math.max(1, Math.round(intervals.length / (intervals.length > 500 ? 2880 : intervals.length > 250 ? 1440 : 720)));
+            const monthlyAvg = totalKwh / months;
+            const annualEst  = monthlyAvg * 12;
+            const peakKwh    = Math.round(monthlyAvg * 0.22);
+            const offPeakKwh = Math.round(monthlyAvg * 0.78);
+            const utilRate   = gbSelectedUtility ? ({ sdge:47.5, sce:31.5, pge:33.2 }[gbSelectedUtility] || 35) : 35;
+            const estBill    = monthlyAvg * utilRate / 100;
+
+            document.getElementById('gb-monthly-kwh').textContent      = Math.round(monthlyAvg).toLocaleString() + ' kWh';
+            document.getElementById('gb-annual-kwh').textContent        = Math.round(annualEst).toLocaleString() + ' kWh/yr';
+            document.getElementById('gb-months-parsed').textContent     = intervals.length.toLocaleString() + ' interval readings';
+            document.getElementById('gb-breakdown-cards').innerHTML = `
+                <div class="bg-white border border-gray-200 rounded-xl p-4 text-center shadow-sm">
+                    <div class="text-xs text-gray-400 uppercase font-semibold tracking-wide mb-1">Est. Peak Usage</div>
+                    <div class="text-2xl font-bold text-red-600">${peakKwh.toLocaleString()}</div>
+                    <div class="text-xs text-gray-500 mt-1">kWh/mo · 4–9 PM</div>
+                </div>
+                <div class="bg-white border border-gray-200 rounded-xl p-4 text-center shadow-sm">
+                    <div class="text-xs text-gray-400 uppercase font-semibold tracking-wide mb-1">Est. Off-Peak</div>
+                    <div class="text-2xl font-bold text-blue-600">${offPeakKwh.toLocaleString()}</div>
+                    <div class="text-xs text-gray-500 mt-1">kWh/mo · all other hours</div>
+                </div>
+                <div class="bg-white border border-gray-200 rounded-xl p-4 text-center shadow-sm">
+                    <div class="text-xs text-gray-400 uppercase font-semibold tracking-wide mb-1">Est. Monthly Bill</div>
+                    <div class="text-2xl font-bold text-green-600">$${estBill.toFixed(0)}</div>
+                    <div class="text-xs text-gray-500 mt-1">at blended ${utilRate}¢/kWh</div>
+                </div>`;
+            const roi = document.getElementById('roi-monthly-bill');
+            if (roi) { roi.value = estBill.toFixed(2); roi.classList.add('ring-2','ring-green-400','border-green-400','bg-green-50'); setTimeout(()=>roi.classList.remove('ring-2','ring-green-400','border-green-400','bg-green-50'),2500); }
+            document.getElementById('gb-results').classList.remove('hidden');
+            document.getElementById('gb-results').scrollIntoView({ behavior:'smooth', block:'nearest' });
+        }
+
+        function gbShowError(msg) {
+            const el = document.getElementById('gb-error-text');
+            if (el) el.textContent = msg;
+            document.getElementById('gb-file-error').classList.remove('hidden');
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // MANUAL ENTRY FUNCTIONS — global
+        // ═══════════════════════════════════════════════════════════
+        function miUtilityChange() {
+            const val = document.getElementById('mi-utility').value;
+            document.getElementById('mi-utility-other-wrap').classList.toggle('hidden', val !== 'other');
+        }
+
+        function miCalculate() {
+            const utilityId = document.getElementById('mi-utility').value;
+            const billInput = parseFloat(document.getElementById('mi-monthly-bill').value);
+            const kwhInput  = parseFloat(document.getElementById('mi-kwh').value);
+            const email     = document.getElementById('mi-email').value.trim();
+            const otherUtil = document.getElementById('mi-utility-other').value.trim();
+            if (!utilityId) { alert('Please select your utility provider.'); return; }
+            if (!billInput && !kwhInput) { alert('Please enter your monthly bill amount or kWh usage.'); return; }
+            const util        = MI_UTILITY_RATES[utilityId] || MI_UTILITY_RATES.other;
+            const utilityName = utilityId === 'other' ? (otherUtil || 'your utility') : util.name;
+            let monthlyBill, monthlyKwh;
+            if (billInput) { monthlyBill = billInput; monthlyKwh = kwhInput || Math.round(billInput / (util.rate / 100)); }
+            else           { monthlyKwh = kwhInput;  monthlyBill = +(kwhInput * util.rate / 100).toFixed(2); }
+            const annualBill  = monthlyBill * 12;
+            const blendedRate = (monthlyBill / monthlyKwh * 100).toFixed(1);
+            document.getElementById('mi-est-bill').textContent     = '$' + monthlyBill.toFixed(2);
+            document.getElementById('mi-est-annual').textContent   = '$' + Math.round(annualBill).toLocaleString() + '/yr';
+            document.getElementById('mi-utility-label').textContent = utilityName;
+            document.getElementById('mi-followup-email').textContent = email || 'you';
+            document.getElementById('mi-breakdown-cards').innerHTML = `
+                <div class="bg-white border border-gray-200 rounded-xl p-4 text-center shadow-sm">
+                    <div class="text-xs text-gray-400 uppercase font-semibold tracking-wide mb-1">Monthly Usage</div>
+                    <div class="text-2xl font-bold text-gray-800">${Math.round(monthlyKwh).toLocaleString()}</div>
+                    <div class="text-xs text-gray-500 mt-1">kWh estimated</div>
+                </div>
+                <div class="bg-white border border-gray-200 rounded-xl p-4 text-center shadow-sm">
+                    <div class="text-xs text-gray-400 uppercase font-semibold tracking-wide mb-1">Blended Rate</div>
+                    <div class="text-2xl font-bold text-gray-800">${blendedRate}¢</div>
+                    <div class="text-xs text-gray-500 mt-1">per kWh · ${utilityName}</div>
+                </div>
+                <div class="bg-white border border-gray-200 rounded-xl p-4 text-center shadow-sm">
+                    <div class="text-xs text-gray-400 uppercase font-semibold tracking-wide mb-1">Annual Spend</div>
+                    <div class="text-2xl font-bold text-gray-800">$${Math.round(annualBill).toLocaleString()}</div>
+                    <div class="text-xs text-gray-500 mt-1">at current rates</div>
+                </div>`;
+            const roi = document.getElementById('roi-monthly-bill');
+            if (roi) { roi.value = monthlyBill.toFixed(2); roi.classList.add('ring-2','ring-green-400','border-green-400','bg-green-50'); setTimeout(()=>roi.classList.remove('ring-2','ring-green-400','border-green-400','bg-green-50'),2500); }
+            document.getElementById('mi-results').classList.remove('hidden');
+            document.getElementById('mi-results').scrollIntoView({ behavior:'smooth', block:'nearest' });
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // ROI CALCULATOR — global
+        // ═══════════════════════════════════════════════════════════
+        function roiCalculate() {
+            const monthlyBill  = parseFloat(document.getElementById('roi-monthly-bill').value) || 250;
+            const systemCost   = parseFloat(document.getElementById('roi-system-cost').value)  || 28000;
+            const rebates      = parseFloat(document.getElementById('roi-rebates').value)       || 0;
+            const offsetPct    = parseFloat(document.getElementById('roi-offset-slider').value) / 100;
+            const escalation   = parseFloat(document.getElementById('roi-escalation-slider').value) / 100;
+            const netCost      = systemCost - rebates;
+            const monthlySavings = monthlyBill * offsetPct;
+            const year1Savings = monthlySavings * 12;
+            const paybackYears = netCost / year1Savings;
+            let cumulative = 0, currentAnnual = year1Savings;
+            const tableRows = [];
+            for (let yr = 1; yr <= 25; yr++) {
+                cumulative += currentAnnual;
+                const netPosition = cumulative - netCost;
+                tableRows.push({ yr, annual: currentAnnual, cumulative, netPosition, isPaid: netPosition >= 0 });
+                currentAnnual *= (1 + escalation);
+            }
+            const lifetimeSavings = cumulative;
+            const roi = ((lifetimeSavings - netCost) / netCost) * 100;
+            document.getElementById('roi-monthly-savings').textContent  = '$' + monthlySavings.toFixed(0);
+            document.getElementById('roi-annual-savings').textContent   = '$' + year1Savings.toFixed(0);
+            document.getElementById('roi-net-cost').textContent         = '$' + netCost.toLocaleString();
+            document.getElementById('roi-payback').textContent          = paybackYears < 25 ? paybackYears.toFixed(1) + ' yrs' : '25+ yrs';
+            document.getElementById('roi-lifetime-savings').textContent = '$' + Math.round(lifetimeSavings).toLocaleString();
+            document.getElementById('roi-lifetime-sub').textContent     = 'vs $' + netCost.toLocaleString() + ' net system cost';
+            document.getElementById('roi-percent').textContent          = Math.round(roi) + '%';
+            document.getElementById('roi-table-body').innerHTML = tableRows.map(r => `
+                <tr class="${r.isPaid ? 'bg-green-50' : 'hover:bg-gray-50'}">
+                    <td class="py-1.5 pr-3 font-semibold ${r.isPaid ? 'text-green-700' : 'text-gray-700'}">${r.isPaid && r.yr === Math.ceil(paybackYears) ? '✓ ' : ''}Year ${r.yr}</td>
+                    <td class="py-1.5 text-green-700">$${Math.round(r.annual).toLocaleString()}</td>
+                    <td class="py-1.5 text-blue-700">$${Math.round(r.cumulative).toLocaleString()}</td>
+                    <td class="py-1.5 font-semibold ${r.netPosition >= 0 ? 'text-green-600' : 'text-red-500'}">${r.netPosition >= 0 ? '+' : ''}$${Math.round(r.netPosition).toLocaleString()}</td>
+                </tr>`).join('');
+            const roiResults = document.getElementById('roi-results');
+            roiResults.classList.remove('hidden');
+            roiResults.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // REBATE CALCULATOR FUNCTIONS — global
+        // ═══════════════════════════════════════════════════════════
+        function updateRebates() {
+            const upgradeOptionsContainer = document.getElementById('upgrade-options');
+            const totalRebateAmountEl     = document.getElementById('total-rebate-amount');
+            const rebateBreakdownEl       = document.getElementById('rebate-breakdown');
+            const incomeToggle            = document.getElementById('income-toggle');
+            if (!upgradeOptionsContainer) return;
+            let totalSavings = 0, totalStateRebate = 0;
+            const isIncomeQualified = incomeToggle.checked;
+            const checkboxes = document.querySelectorAll('.upgrade-checkbox');
+            const selectedUpgrades = Array.from(checkboxes).filter(cb => cb.checked);
+            const chartLabels = [], stateData = [], taxData = [];
+            let breakdownHTML = '', nonSolarTaxCreditTotal = 0, finalTaxCreditSolar = 0;
+            selectedUpgrades.forEach(cb => {
+                const key = cb.dataset.key;
+                const item = rebateData[key];
+                let stateRebate = 0, taxCredit = 0;
+                if (key === 'battery') {
+                    if (isIncomeQualified) stateRebate = item.state['SGIP Equity'];
+                    taxCredit = item.cost * 0.30;
+                    finalTaxCreditSolar = taxCredit;
+                } else {
+                    stateRebate = isIncomeQualified
+                        ? (item.state['HEEHRA (LMI)'] || Math.max(item.state['TECH Clean CA'] || 0, item.state['Energy Smart Homes'] || 0))
+                        : Math.max(item.state['TECH Clean CA'] || 0, item.state['Energy Smart Homes'] || 0);
+                    taxCredit = item.federalTax;
+                    nonSolarTaxCreditTotal += taxCredit;
+                }
+                totalStateRebate += stateRebate;
+                chartLabels.push(item.name);
+                stateData.push(stateRebate);
+                taxData.push(taxCredit);
+                breakdownHTML += `<div class="flex justify-between items-center py-1 border-b border-gray-200"><span class="text-gray-700 font-medium">${item.name}:</span><div class="text-right"><span class="text-blue-600 font-bold">$${(stateRebate+taxCredit).toLocaleString()}</span><span class="text-xs text-gray-500 block">($${stateRebate.toLocaleString()} State + $${taxCredit.toLocaleString()} Federal)</span></div></div>`;
+            });
+            const finalNonSolarTax = Math.min(nonSolarTaxCreditTotal, maxTaxCredit);
+            const delta = nonSolarTaxCreditTotal - finalNonSolarTax;
+            const finalTaxData = taxData.map((tax, i) => chartLabels[i] === rebateData.battery.name ? tax : tax - (delta > 0 ? (tax / nonSolarTaxCreditTotal) * delta : 0));
+            totalSavings = totalStateRebate + finalNonSolarTax + finalTaxCreditSolar;
+            totalRebateAmountEl.textContent = '$' + totalSavings.toLocaleString();
+            rebateBreakdownEl.innerHTML = selectedUpgrades.length === 0
+                ? '<p class="text-center italic text-gray-600">Select upgrades and your income status to generate your personalized estimate.</p>'
+                : breakdownHTML + `<div class="flex justify-between items-center pt-3 border-t border-gray-200 mt-2 font-bold text-gray-800"><span>Total Estimated Savings:</span><span class="text-blue-600 text-lg">$${totalSavings.toLocaleString()}</span></div><p class="text-xs text-orange-600 mt-2">Disclaimer: Federal tax credits are subject to annual limits and your personal tax liability. This is an estimate only.</p>`;
+            if (rebateChartInstance) {
+                rebateChartInstance.data.labels = chartLabels;
+                rebateChartInstance.data.datasets[0].data = stateData;
+                rebateChartInstance.data.datasets[1].data = finalTaxData;
+                rebateChartInstance.update();
+            }
+            currentRebateState = { totalSavings, isIncomeQualified, selectedUpgrades: selectedUpgrades.map(cb => rebateData[cb.dataset.key].name), breakdown: '' };
+        }
+
+        function showModal(state) {
+            const modalStateName = document.getElementById('modal-state-name');
+            const stateModal     = document.getElementById('state-modal');
+            if (modalStateName) modalStateName.textContent = state;
+            if (stateModal) stateModal.classList.add('show');
+        }
+
+        function closeModal() {
+            const stateModal = document.getElementById('state-modal');
+            if (stateModal) stateModal.classList.remove('show');
+        }
+
+        function searchStateRebates() {
+            const stateSelect           = document.getElementById('state-select');
+            const searchStateRebatesBtn = document.getElementById('search-state-rebates-btn');
+            const searchBtnText         = document.getElementById('search-btn-text');
+            const stateSearchSpinner    = document.getElementById('state-search-spinner');
+            const stateSearchResultEl   = document.getElementById('state-search-result');
+            const stateCitationSourcesEl= document.getElementById('state-citation-sources');
+            const stateApiErrorSearchEl = document.getElementById('state-api-error-search');
+            const appliedStateLabel     = document.getElementById('applied-state-label');
+            const selectedState = stateSelect.value;
+            stateApiErrorSearchEl.classList.add('hidden');
+            stateSearchResultEl.textContent = '';
+            stateCitationSourcesEl.innerHTML = '';
+            searchStateRebatesBtn.disabled = true;
+            searchBtnText.textContent = 'Loading ' + selectedState + ' Data...';
+            stateSearchSpinner.classList.remove('hidden');
+            setTimeout(() => {
+                const data = stateRebateDatabase[selectedState];
+                if (data) {
+                    let html = '<p class="mb-4 font-medium">' + data.summary + '</p><ul class="list-disc pl-5 space-y-2">';
+                    data.programs.forEach(p => { html += '<li><strong>' + p.name + ':</strong> ' + p.description + '</li>'; });
+                    html += '</ul>';
+                    stateSearchResultEl.innerHTML = html;
+                    stateCitationSourcesEl.textContent = 'Source: Internal Database & State Energy Offices';
+                } else {
+                    stateSearchResultEl.innerHTML = '<p>Data for <strong>' + selectedState + '</strong> is currently being updated. Please check DSIREUSA.org for the latest incentives.</p>';
+                    stateCitationSourcesEl.textContent = 'Source: General Information';
+                }
+                showModal(selectedState);
+                appliedStateLabel.innerHTML = 'Applied State: ' + selectedState + (selectedState === 'CA' ? ' (Sample Data)' : '');
+                searchStateRebatesBtn.disabled = false;
+                searchBtnText.textContent = 'Search Rebate Programs for ' + selectedState;
+                stateSearchSpinner.classList.add('hidden');
+            }, 600);
+        }
+
+        function renderDropdownLinks() {
+            const dropdownTechLinks = document.getElementById('dropdown-tech-links');
+            if (!dropdownTechLinks) return;
+            dropdownTechLinks.innerHTML = '';
+            techData.forEach(tech => {
+                let iconColorClass = 'bg-icon-blue';
+                if (tech.id === 'hvac')         iconColorClass = 'bg-icon-green';
+                if (tech.id === 'solar_battery') iconColorClass = 'bg-icon-yellow text-gray-900';
+                if (tech.id === 'induction')     iconColorClass = 'bg-icon-orange';
+                if (tech.id === 'inverter')      iconColorClass = 'bg-icon-purple';
+                if (tech.id === 'evcharger')     iconColorClass = 'bg-icon-teal';
+                const textClass = tech.id === 'solar_battery' ? 'text-gray-900' : 'text-white';
+                const link = document.createElement('a');
+                link.href = 'technologies.html#tech-' + tech.id;
+                link.className = 'flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition duration-150 nav-dropdown-item';
+                link.innerHTML = `<div class="icon-box w-10 h-10 ${iconColorClass} ${textClass} text-xl flex-shrink-0">${tech.icon}</div><div><span class="font-bold text-gray-900">${tech.name}</span><p class="text-sm text-gray-500">${tech.summary}</p></div>`;
+                dropdownTechLinks.appendChild(link);
+            });
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // INITIALIZATION — only DOM queries and event wiring here
+        // ═══════════════════════════════════════════════════════════
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // Nav dropdowns
+            const CURRENT_PAGE_TRIGGER_ID = 'rebate-dropdown-trigger';
+            const techDropdownGroup    = document.getElementById('tech-dropdown-group');
+            const techDropdownMenu     = document.getElementById('tech-dropdown-menu');
+            const techDropdownTrigger  = document.getElementById('tech-dropdown-trigger');  // wrong id on this page but safe
+            const rebateDropdownGroup  = document.getElementById('rebate-dropdown-group');
+            const rebateDropdownMenu   = document.getElementById('rebate-dropdown-menu');
+            const rebateDropdownTrigger= document.getElementById('rebate-dropdown-trigger');
+            const processDropdownGroup = document.getElementById('process-dropdown-group');
+            const processDropdownMenu  = document.getElementById('process-dropdown-menu');
+            const processDropdownTrigger=document.getElementById('process-dropdown-trigger');
+
+            let menuTimeout;
+            function openMenu(menu, trigger) {
+                if (!menu || !trigger) return;
+                [techDropdownMenu, rebateDropdownMenu, processDropdownMenu].forEach((m, i) => {
+                    const t = [techDropdownTrigger, rebateDropdownTrigger, processDropdownTrigger][i];
+                    if (m && m !== menu) { m.classList.remove('dropdown-visible'); m.classList.add('dropdown-hidden'); if (t && t.id !== CURRENT_PAGE_TRIGGER_ID) t.classList.remove('tab-active'); }
+                });
+                menu.classList.remove('dropdown-hidden'); menu.classList.add('dropdown-visible'); trigger.classList.add('tab-active');
+            }
+            function closeMenu(menu, trigger) {
+                if (!menu || !trigger) return;
+                menu.classList.remove('dropdown-visible'); menu.classList.add('dropdown-hidden');
+                if (trigger.id !== CURRENT_PAGE_TRIGGER_ID) trigger.classList.remove('tab-active');
+            }
+            function wireDropdown(group, menu, trigger) {
+                if (!group) return;
+                group.addEventListener('mouseenter', () => { clearTimeout(menuTimeout); openMenu(menu, trigger); });
+                group.addEventListener('mouseleave', () => { clearTimeout(menuTimeout); menuTimeout = setTimeout(() => closeMenu(menu, trigger), 100); });
+                if (menu) {
+                    menu.addEventListener('mouseenter', () => clearTimeout(menuTimeout));
+                    menu.addEventListener('mouseleave', () => { clearTimeout(menuTimeout); menuTimeout = setTimeout(() => closeMenu(menu, trigger), 100); });
+                }
+            }
+            wireDropdown(techDropdownGroup, techDropdownMenu, techDropdownTrigger);
+            wireDropdown(rebateDropdownGroup, rebateDropdownMenu, rebateDropdownTrigger);
+            wireDropdown(processDropdownGroup, processDropdownMenu, processDropdownTrigger);
+            const programsDropdownGroup   = document.getElementById('programs-dropdown-group');
+            const programsDropdownMenu    = document.getElementById('programs-dropdown-menu');
+            const programsDropdownTrigger = document.getElementById('programs-dropdown-trigger');
+            wireDropdown(programsDropdownGroup, programsDropdownMenu, programsDropdownTrigger);
+            if (rebateDropdownTrigger) rebateDropdownTrigger.classList.add('tab-active');
+            if (rebateDropdownMenu)    { rebateDropdownMenu.classList.add('dropdown-hidden'); rebateDropdownMenu.classList.remove('dropdown-visible'); }
+
+            renderDropdownLinks();
+
+            // Rebate calculator init
+            const upgradeOptionsContainer = document.getElementById('upgrade-options');
+            const incomeToggle            = document.getElementById('income-toggle');
+            const stateSelect             = document.getElementById('state-select');
+            const searchStateRebatesBtn   = document.getElementById('search-state-rebates-btn');
+            const stateDisclaimerEl       = document.getElementById('state-disclaimer');
+            const closeModalTopBtn        = document.getElementById('close-modal-btn-top');
+            const closeModalBottomBtn     = document.getElementById('modal-close-button-bottom');
+            const stateModal              = document.getElementById('state-modal');
+
+            if (upgradeOptionsContainer) {
+                let html = '';
+                ['battery','hpwh','hvac','panel','induction'].forEach(key => {
+                    html += `<div class="flex items-center"><input id="upgrade-${key}" data-key="${key}" type="checkbox" class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 upgrade-checkbox"><label for="upgrade-${key}" class="ml-3 block text-md font-medium text-gray-700">${rebateData[key].name}</label></div>`;
+                });
+                upgradeOptionsContainer.innerHTML = html;
+                document.querySelectorAll('.upgrade-checkbox').forEach(cb => cb.addEventListener('change', updateRebates));
+            }
+
+            if (incomeToggle) incomeToggle.addEventListener('change', updateRebates);
+
+            const chartCtx = document.getElementById('rebateChart');
+            if (chartCtx) {
+                Chart.defaults.color = '#1f2937';
+                Chart.defaults.borderColor = '#d1d5db';
+                rebateChartInstance = new Chart(chartCtx.getContext('2d'), {
+                    type: 'bar',
+                    data: { labels: [], datasets: [
+                        { label: 'State/Local Rebates', data: [], backgroundColor: 'rgba(37,99,235,0.8)', borderColor: 'rgba(29,78,216,1)', borderWidth: 1 },
+                        { label: 'Federal Tax Credit',  data: [], backgroundColor: 'rgba(96,165,250,0.8)', borderColor: 'rgba(59,130,246,1)', borderWidth: 1 }
+                    ]},
+                    options: {
+                        responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+                        scales: {
+                            x: { stacked: true, beginAtZero: true, ticks: { callback: v => '$'+v.toLocaleString(), color:'#1f2937' }, grid:{color:'#d1d5db'} },
+                            y: { stacked: true, ticks: { autoSkip:false, callback(v){const l=this.getLabelForValue(v);return l.length>20?l.match(/.{1,16}/g):l;}, color:'#1f2937' }, grid:{color:'#d1d5db'} }
+                        },
+                        plugins: {
+                            legend: { display:true, position:'bottom', labels:{usePointStyle:true, color:'#1f2937'} },
+                            tooltip: { mode:'index', intersect:false, callbacks:{ label(ctx){ return (ctx.dataset.label||'')+': $'+ctx.parsed.x.toLocaleString(); } } }
+                        }
+                    }
+                });
+                updateRebates();
+            }
+
+            if (stateSelect) {
+                stateSelect.addEventListener('change', function() {
+                    const s = stateSelect.value;
+                    const btn = document.getElementById('search-btn-text');
+                    if (btn) btn.textContent = 'Search Rebate Programs for ' + s;
+                    if (stateDisclaimerEl) stateDisclaimerEl.textContent = s !== 'CA' ? 'Warning: Rebate data in Step 2 is an example fixed to CA programs.' : 'Note: Only California uses the fixed data in Step 2.';
+                });
+            }
+            if (searchStateRebatesBtn) searchStateRebatesBtn.addEventListener('click', searchStateRebates);
+            if (closeModalTopBtn)    closeModalTopBtn.addEventListener('click', closeModal);
+            if (closeModalBottomBtn) closeModalBottomBtn.addEventListener('click', closeModal);
+            if (stateModal) stateModal.addEventListener('click', e => { if (e.target === stateModal) closeModal(); });
+
+            // Initialize tabs
+            ecSwitchTab('green');
+        });
+
+</script>
+
+    <!-- Solen Chat Widget Button -->
+    <div id="chat-widget-btn" class="chat-widget-btn" onclick="toggleChat()" title="Chat with Solen">
+        <i class="fa-solid fa-robot" style="font-size:24px;"></i>
+        <div class="solen-badge"></div>
+    </div>
+
+    <!-- Solen Chat Window -->
+    <div id="chat-window" class="chat-window">
+        <div class="chat-header">
+            <div class="solen-avatar">&#x2600;&#xFE0F;</div>
+            <div class="solen-info">
+                <div class="solen-name">Solen</div>
+                <div class="solen-status">&#x25CF; Solenetec Energy Advisor</div>
+            </div>
+            <button class="chat-close-btn" onclick="toggleChat()"><i class="fa-solid fa-times"></i></button>
+        </div>
+        <div id="chat-messages" class="chat-messages"></div>
+        <div id="quick-replies" class="quick-replies" style="padding: 0 12px 8px; background: #f8fafc; flex-shrink:0;"></div>
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" class="chat-input" placeholder="Ask Solen anything..." data-i18n-placeholder="solen.placeholder"
+                onkeypress="solenHandleEnter(event)" autocomplete="off">
+            <button class="chat-send-btn" onclick="solenSend()">
+                <i class="fa-solid fa-paper-plane" style="font-size:14px;"></i>
+            </button>
+        </div>
+        <div class="chat-powered">Powered by Claude AI &bull; Solenetec</div>
+    </div>
+
+    <!-- Schedule Modal -->
+
+    <!-- Schedule Modal -->
+    <div id="schedule-modal" class="modal-overlay" onclick="if(event.target === this) closeScheduleModal()">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeScheduleModal()">&times;</button>
+            <h2 class="text-2xl font-bold mb-4 text-center" data-i18n="modal.h2">Schedule Your Consultation</h2>
+            <p class="text-gray-600 mb-6 text-center" data-i18n="modal.p">Select a time that works for you to discuss your home
+                electrification needs.</p>
+
+            <div class="calendly-inline-widget" data-url="YOUR_CALENDLY_URL"
+                style="min-width:320px;height:630px;"></div>
+
+    <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+        </div>
+    </div>
+    <script>
+        // Mobile Menu Logic
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const closeMobileMenuButton = document.getElementById('close-mobile-menu-button');
+
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        if (closeMobileMenuButton && mobileMenu) {
+            closeMobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        }
+
+        // ── SOLEN AI CHAT AGENT ──────────────────────────────────
+        const WORKER_URL = 'YOUR_CLOUDFLARE_WORKER_URL';
+
+        const solenChatWindow = document.getElementById('chat-window');
+        const solenMessages  = document.getElementById('chat-messages');
+        const solenInput     = document.getElementById('chat-input');
+        const solenReplies   = document.getElementById('quick-replies');
+
+        // Conversation history sent to Claude on every turn
+        let solenHistory = [];
+        // Lead data collected during conversation
+        let solenLead = { name: '', email: '', phone: '', service: '', timeline: '', captured: false };
+        // Track if greeting already shown
+        let solenGreeted = false;
+        // Detect language
+        let solenLang = 'en';
+
+        const SOLEN_SYSTEM = `You are Solen, a friendly and knowledgeable home electrification advisor for Solenetec, a San Diego-based company. Your mission is to EDUCATE first — never push or pressure.
+
+PERSONALITY: Warm, honest, clear. Use plain language. Never be salesy. If someone asks something you don't know, say so honestly.
+
+LANGUAGE: Detect the user's language from their first message. Respond in the same language throughout. Support English and Spanish fluently.
+
+KNOWLEDGE AREAS:
+- Solar & Battery Storage (rooftop solar, battery backup, SGIP rebates, Powerwall, Enphase)
+- Heat Pump HVAC (heating/cooling efficiency, replacing gas furnace/AC, rebates)
+- HP Water Heaters (heat pump water heaters, 50%+ efficiency vs resistance heaters)
+- EV Charging (Level 2 home charging, ChargePoint, Tesla Wall Connector, smart charging)
+- Induction Cooking (safety, performance, electrification benefits)
+- Smart Electrical Panels (SPAN panel, circuit monitoring, load management)
+- Vehicle-to-Home / V2H / V2L (bidirectional EV charging, home backup)
+- IRA Programs & Tax Credits: Post-IRA landscape — 25D expired end of 2025. Third-party ownership (Prepaid PPAs) still captures 30% ITC at corporate level, domestic content bonus unlocks 40% ITC.
+- Business Models: Prepaid PPA (Propel program — 40% ITC), Energy-as-a-Service/EaaS (zero upfront, pay per kWh), Virtual Power Plants/VPP (earn $0.10/kWh discharging to grid)
+- Rebates: Federal (IRA), California (SGIP, TECH Clean CA, BayREN, SoCalREN), utility rebates from SDG&E, SCE, PG&E. Focus on what's available, not live rate data.
+- Solenetec pages: /technologies, /rebates, /programs, /process, /schedule
+
+CONVERSATION APPROACH:
+1. Greet warmly, ask what brings them in today
+2. Have a natural conversation — ask 2-3 qualifying questions naturally (what they're interested in, their timeline, if they own their home)
+3. Give genuinely useful, specific information based on their answers
+4. After delivering value, softly offer to send personalized info — ask for name and email. Frame it as helpful, not required.
+5. If they share name/email, respond with: LEAD_CAPTURED:{"name":"...","email":"..."} on a line by itself (this is internal — don't show to user), then continue conversation naturally.
+6. When they seem ready for a next step, offer to schedule a consultation. Respond with SHOW_BOOKING on a line by itself to trigger the booking widget.
+
+IMPORTANT RULES:
+- Never ask for phone number or address upfront
+- Never gate information behind contact details
+- Never say you can give a "quote" — say "personalized recommendation"
+- Always acknowledge uncertainty honestly ("rates change — check your latest bill")
+- Keep responses concise — 2-4 sentences max unless explaining a complex topic
+- Use bullet points sparingly — prefer conversational prose
+- Do NOT reproduce the LEAD_CAPTURED or SHOW_BOOKING tokens visibly in your response`;
+
+        const SOLEN_QUICK_REPLIES_EN = [
+            { text: '☀️ Solar & Battery', msg: 'Tell me about solar and battery storage' },
+            { text: '🌡️ Heat Pumps', msg: 'How do heat pumps work?' },
+            { text: '💰 Rebates', msg: 'What rebates are available in California?' },
+            { text: '🚗 EV Charging', msg: 'Tell me about EV charging at home' },
+        ];
+        const SOLEN_QUICK_REPLIES_ES = [
+            { text: '☀️ Solar y Batería', msg: 'Cuéntame sobre solar y almacenamiento de batería' },
+            { text: '🌡️ Bombas de Calor', msg: '¿Cómo funcionan las bombas de calor?' },
+            { text: '💰 Reembolsos', msg: '¿Qué reembolsos hay disponibles en California?' },
+            { text: '🚗 Carga EV', msg: 'Cuéntame sobre la carga de VE en casa' },
+        ];
+
+        function toggleChat() {
+            solenChatWindow.classList.toggle('open');
+            if (solenChatWindow.classList.contains('open')) {
+                solenInput.focus();
+                solenRenderQuickReplies();
+                if (!solenGreeted) {
+                    solenGreeted = true;
+                    solenShowTyping();
+                    setTimeout(() => {
+                        solenHideTyping();
+                        const greeting = (typeof currentLang !== 'undefined' && currentLang === 'es')
+                            ? '¡Hola! Soy Solen, la asesora de energía de Solenetec. Estoy aquí para ayudarle a entender sus opciones de electrificación del hogar — solar, bombas de calor, carga de VE, reembolsos y más. ¿En qué le puedo ayudar hoy?'
+                            : "Hi! I'm Solen, Solenetec's energy advisor. I'm here to help you understand your home electrification options — solar, heat pumps, EV charging, rebates, and more. What can I help you with today?";
+                        solenAddMessage(greeting, 'bot');
+                        solenLang = (typeof currentLang !== 'undefined') ? currentLang : 'en';
+                    }, 900);
+                }
+            }
+        }
+
+        function solenRenderQuickReplies() {
+            const replies = solenLang === 'es' ? SOLEN_QUICK_REPLIES_ES : SOLEN_QUICK_REPLIES_EN;
+            solenReplies.innerHTML = '';
+            replies.forEach(r => {
+                const btn = document.createElement('button');
+                btn.className = 'quick-reply-btn';
+                btn.textContent = r.text;
+                btn.onclick = () => { solenInput.value = r.msg; solenSend(); };
+                solenReplies.appendChild(btn);
+            });
+        }
+
+        function solenHandleEnter(e) { if (e.key === 'Enter') solenSend(); }
+
+        async function solenSend() {
+            const msg = solenInput.value.trim();
+            if (!msg) return;
+            solenInput.value = '';
+            solenReplies.innerHTML = '';
+
+            // Detect Spanish on first message
+            if (solenHistory.length === 0) {
+                const spanishWords = /\b(hola|qué|como|ayuda|información|solar|quiero|tengo|puedo|necesito)\b/i;
+                if (spanishWords.test(msg)) solenLang = 'es';
+            }
+
+            solenAddMessage(msg, 'user');
+            solenHistory.push({ role: 'user', content: msg });
+            solenShowTyping();
+            solenInput.disabled = true;
+
+            try {
+                const res = await fetch(WORKER_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        model: 'claude-sonnet-4-20250514',
+                        max_tokens: 500,
+                        system: SOLEN_SYSTEM,
+                        messages: solenHistory
+                    })
+                });
+                const data = await res.json();
+                const raw = data.content?.map(b => b.text || '').join('') || '';
+
+                // Process special tokens
+                let clean = raw;
+
+                // Handle LEAD_CAPTURED token
+                const leadMatch = clean.match(/LEAD_CAPTURED:\{[^}]+\}/);
+                if (leadMatch && !solenLead.captured) {
+                    try {
+                        const parsed = JSON.parse(leadMatch[0].replace('LEAD_CAPTURED:', ''));
+                        solenLead.name = parsed.name || '';
+                        solenLead.email = parsed.email || '';
+                        solenLead.captured = true;
+                        solenCreateHubSpotContact();
+                    } catch(e) {}
+                    clean = clean.replace(/LEAD_CAPTURED:\{[^}]+\}\n?/g, '');
+                }
+
+                // Handle SHOW_BOOKING token
+                if (clean.includes('SHOW_BOOKING')) {
+                    clean = clean.replace(/SHOW_BOOKING\n?/g, '');
+                    solenHideTyping();
+                    solenInput.disabled = false;
+                    if (clean.trim()) solenAddMessage(clean.trim(), 'bot');
+                    solenAddBookingButton();
+                    solenHistory.push({ role: 'assistant', content: raw });
+                    solenRenderQuickReplies();
+                    return;
+                }
+
+                solenHideTyping();
+                solenInput.disabled = false;
+                const display = clean.trim();
+                if (display) solenAddMessage(display, 'bot');
+                solenHistory.push({ role: 'assistant', content: raw });
+                solenRenderQuickReplies();
+
+            } catch (err) {
+                solenHideTyping();
+                solenInput.disabled = false;
+                solenAddMessage(solenLang === 'es'
+                    ? 'Lo siento, tuve un problema técnico. Por favor intenta de nuevo.'
+                    : 'Sorry, I had a technical hiccup. Please try again!', 'bot');
+            }
+        }
+
+        function solenAddMessage(text, sender) {
+            const div = document.createElement('div');
+            div.className = `message ${sender}`;
+            // Simple markdown: **bold**, line breaks
+            div.innerHTML = text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\n/g, '<br>');
+            solenMessages.appendChild(div);
+            solenMessages.scrollTop = solenMessages.scrollHeight;
+        }
+
+        function solenAddBookingButton() {
+            const div = document.createElement('div');
+            div.className = 'message bot';
+            const label = solenLang === 'es' ? '📅 Reservar una Consulta' : '📅 Book a Consultation';
+            div.innerHTML = `<button class="solen-book-btn" onclick="openScheduleModal(event)">${label}</button>`;
+            solenMessages.appendChild(div);
+            solenMessages.scrollTop = solenMessages.scrollHeight;
+        }
+
+        function solenShowTyping() {
+            const indicator = document.createElement('div');
+            indicator.id = 'solen-typing';
+            indicator.className = 'typing-indicator';
+            indicator.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+            solenMessages.appendChild(indicator);
+            solenMessages.scrollTop = solenMessages.scrollHeight;
+        }
+
+        function solenHideTyping() {
+            const el = document.getElementById('solen-typing');
+            if (el) el.remove();
+        }
+
+        async function solenCreateHubSpotContact() {
+            if (!solenLead.email) return;
+            try {
+                await fetch(WORKER_URL + 'hubspot', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'create_contact',
+                        firstname: solenLead.name.split(' ')[0] || solenLead.name,
+                        lastname: solenLead.name.split(' ').slice(1).join(' ') || '',
+                        email: solenLead.email,
+                        hs_lead_status: 'NEW',
+                        lead_source: 'Solen AI Chat',
+                        message: `Interested in: ${solenLead.service || 'Home Electrification'}. Timeline: ${solenLead.timeline || 'Not specified'}.`
+                    })
+                });
+            } catch(e) { console.log('HubSpot contact creation failed silently', e); }
+        }
+
+        // ── SOLENETEC i18n — Language Toggle ──────────────────
+        const SOLEN_TRANSLATIONS = {
+            en: {
+                'nav.why': 'Why Electrify?',
+                'nav.technologies': 'Technologies',
+                'nav.rebates': 'Rebates/ROI',
+                'nav.programs': 'New Programs',
+                'nav.process': 'Our Process',
+                'nav.getstarted': 'Get Started',
+                'hero.h1': null, // page-specific
+                'hero.p': null,
+                'hero.cta': null,
+                'modal.h2': 'Schedule Your Consultation',
+                'modal.p': 'Select a time that works for you to discuss your home electrification needs.',
+                'solen.placeholder': 'Ask Solen anything...',
+                'solen.greeting': "Hi! I'm Solen, Solenetec's energy advisor. I'm here to help you understand your home electrification options — solar, heat pumps, EV charging, rebates, and more. What can I help you with today?",
+                'solen.status': 'Solenetec Energy Advisor',
+                'solen.powered': 'Powered by Claude AI \u2022 Solenetec',
+                'solen.error': 'Sorry, I had a technical hiccup. Please try again!',
+                'solen.book': '\uD83D\uDCC5 Book a Consultation',
+                'solen.qr1': '\u2600\uFE0F Solar & Battery', 'solen.qr1msg': 'Tell me about solar and battery storage',
+                'solen.qr2': '\uD83C\uDF21\uFE0F Heat Pumps', 'solen.qr2msg': 'How do heat pumps work?',
+                'solen.qr3': '\uD83D\uDCB0 Rebates', 'solen.qr3msg': 'What rebates are available in California?',
+                'solen.qr4': '\uD83D\uDE97 EV Charging', 'solen.qr4msg': 'Tell me about EV charging at home',
+                'index.why.h2': 'The Modern Value Proposition',
+                'index.why.p': 'Home electrification is a strategic investment in efficiency, comfort, and financial predictability. This section highlights the core benefits and compelling reasons to transition now.',
+                'index.why.c1h': 'Maximum Financial Savings',
+                'index.why.c2h': 'Superior Comfort & Health',
+                'index.why.c3h': 'Energy Independence',
+                'index.tech.h2': 'Core Electrification Technologies',
+            },
+            es: {
+                'nav.why': '\u00BFPor qu\u00E9 Electrificar?',
+                'nav.technologies': 'Tecnolog\u00EDas',
+                'nav.rebates': 'Reembolsos/ROI',
+                'nav.programs': 'Nuevos Programas',
+                'nav.process': 'Nuestro Proceso',
+                'nav.getstarted': 'Comenzar',
+                'hero.h1': null,
+                'hero.p': null,
+                'hero.cta': null,
+                'modal.h2': 'Programe Su Consulta',
+                'modal.p': 'Seleccione un horario que le funcione para hablar sobre sus necesidades de electrificaci\u00F3n del hogar.',
+                'solen.placeholder': 'Preg\u00FAntele a Solen...',
+                'solen.greeting': '\u00A1Hola! Soy Solen, la asesora de energ\u00EDa de Solenetec. Estoy aqu\u00ED para ayudarle a entender sus opciones de electrificaci\u00F3n del hogar \u2014 solar, bombas de calor, carga de VE, reembolsos y m\u00E1s. \u00BFEn qu\u00E9 le puedo ayudar hoy?',
+                'solen.status': 'Asesora de Energ\u00EDa Solenetec',
+                'solen.powered': 'Desarrollado por Claude AI \u2022 Solenetec',
+                'solen.error': 'Lo siento, tuve un problema t\u00E9cnico. \u00A1Por favor intenta de nuevo!',
+                'solen.book': '\uD83D\uDCC5 Reservar una Consulta',
+                'solen.qr1': '\u2600\uFE0F Solar y Bater\u00EDa', 'solen.qr1msg': 'Cu\u00E9ntame sobre solar y almacenamiento de bater\u00EDa',
+                'solen.qr2': '\uD83C\uDF21\uFE0F Bombas de Calor', 'solen.qr2msg': '\u00BFC\u00F3mo funcionan las bombas de calor?',
+                'solen.qr3': '\uD83D\uDCB0 Reembolsos', 'solen.qr3msg': '\u00BFQu\u00E9 reembolsos hay disponibles en California?',
+                'solen.qr4': '\uD83D\uDE97 Carga EV', 'solen.qr4msg': 'Cu\u00E9ntame sobre la carga de VE en casa',
+                'index.why.h2': 'La Propuesta de Valor Moderna',
+                'index.why.p': 'La electrificaci\u00F3n del hogar es una inversi\u00F3n estrat\u00E9gica en eficiencia, comodidad y previsibilidad financiera. Esta secci\u00F3n destaca los beneficios principales y las razones convincentes para hacer la transici\u00F3n ahora.',
+                'index.why.c1h': 'M\u00E1ximo Ahorro Financiero',
+                'index.why.c2h': 'Confort y Salud Superiores',
+                'index.why.c3h': 'Independencia Energ\u00E9tica',
+                'index.tech.h2': 'Tecnolog\u00EDas Principales de Electrificaci\u00F3n',
+            }
+        };
+
+        // Page-specific hero translations (keyed by page)
+        const HERO_TRANSLATIONS = {
+            'index.html': {
+                en: { h1: 'Powering a Brighter, Greener Future', p: 'Solenetec is your trusted partner for sustainable energy solutions, from solar and battery storage to efficient heat pumps.', cta: 'Explore Our Solutions' },
+                es: { h1: 'Impulsando un Futuro M\u00E1s Brillante y Verde', p: 'Solenetec es su socio de confianza para soluciones de energ\u00EDa sostenible, desde solar y almacenamiento de bater\u00EDas hasta bombas de calor eficientes.', cta: 'Explorar Nuestras Soluciones' }
+            },
+            'technologies': {
+                en: { h1: 'Build the All-Electric Home', p: 'Discover the cutting-edge technologies that power modern, efficient, and sustainable homes.', cta: 'Calculate Your Savings' },
+                es: { h1: 'Construya el Hogar Totalmente El\u00E9ctrico', p: 'Descubra las tecnolog\u00EDas de vanguardia que impulsan hogares modernos, eficientes y sostenibles.', cta: 'Calcule Sus Ahorros' }
+            },
+            'rebates': {
+                en: { h1: 'Maximize Your Energy Savings', p: 'Calculate your personalized usage, ROI, and available rebates for home electrification upgrades.', cta: 'Learn Our Process' },
+                es: { h1: 'Maximice Sus Ahorros de Energ\u00EDa', p: 'Calcule su uso personalizado, ROI y reembolsos disponibles para mejoras de electrificaci\u00F3n del hogar.', cta: 'Conozca Nuestro Proceso' }
+            },
+            'programs': {
+                en: { h1: 'New Programs for a Post-IRA Solar Market', p: 'The 30% tax credit expired \u2014 but new programs unlock 40% credits, zero-upfront subscriptions, and batteries that pay you back.', cta: 'Find My Best Program' },
+                es: { h1: 'Nuevos Programas para el Mercado Solar Post-IRA', p: 'El cr\u00E9dito fiscal del 30% expir\u00F3 \u2014 pero los nuevos programas desbloquean cr\u00E9ditos del 40%, suscripciones sin costo inicial y bater\u00EDas que le devuelven dinero.', cta: 'Encontrar Mi Mejor Programa' }
+            },
+            'process': {
+                en: { h1: 'Achieve Energy Independence', p: 'A seamless, transparent process that makes home electrification simple and stress-free.', cta: 'Explore Technologies' },
+                es: { h1: 'Logre la Independencia Energ\u00E9tica', p: 'Un proceso fluido y transparente que hace que la electrificaci\u00F3n del hogar sea simple y sin estr\u00E9s.', cta: 'Explorar Tecnolog\u00EDas' }
+            },
+            'schedule': {
+                en: { h1: 'Book Your Free Consultation', p: 'Select a time that works for you to discuss your home electrification needs.', cta: 'View Our Process' },
+                es: { h1: 'Reserve Su Consulta Gratuita', p: 'Seleccione un horario que le funcione para hablar sobre sus necesidades de electrificaci\u00F3n del hogar.', cta: 'Ver Nuestro Proceso' }
+            }
+        };
+
+        let currentLang = localStorage.getItem('solenLang') || 'en';
+
+        function setLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('solenLang', lang);
+            applyTranslations(lang);
+            // Update Solen chat language
+            if (typeof solenLang !== 'undefined') solenLang = lang;
+        }
+
+        function applyTranslations(lang) {
+            const t = SOLEN_TRANSLATIONS[lang];
+            if (!t) return;
+
+            // Update active button state
+            ['lang-en','lang-es','lang-en-m','lang-es-m'].forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.classList.toggle('active-lang', (lang === 'en' && id.includes('en')) || (lang === 'es' && id.includes('es')));
+            });
+
+            // Translate all data-i18n elements
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[key]) el.textContent = t[key];
+            });
+
+            // Translate data-i18n-placeholder
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (t[key]) el.placeholder = t[key];
+            });
+
+            // Translate hero section
+            const page = window.location.pathname.split('/').pop().replace('.html','') || 'index.html';
+            const heroKey = page === '' || page === 'index' ? 'index.html' : page;
+            const hero = HERO_TRANSLATIONS[heroKey]?.[lang];
+            if (hero) {
+                const h1 = document.querySelector('[data-i18n-hero="h1"]');
+                const p  = document.querySelector('[data-i18n-hero="p"]');
+                const cta = document.querySelector('[data-i18n-hero="cta"]');
+                if (h1) h1.textContent = hero.h1;
+                if (p)  p.textContent  = hero.p;
+                if (cta) cta.textContent = hero.cta;
+            }
+
+            // Update Solen chat UI text
+            const solenStatusEl = document.querySelector('.solen-status');
+            if (solenStatusEl) solenStatusEl.textContent = '\u25CF ' + t['solen.status'];
+            const solenPoweredEl = document.querySelector('.chat-powered');
+            if (solenPoweredEl) solenPoweredEl.textContent = t['solen.powered'];
+            const solenInputEl = document.getElementById('chat-input');
+            if (solenInputEl) solenInputEl.placeholder = t['solen.placeholder'];
+
+            // Update html lang attribute
+            document.documentElement.lang = lang;
+        }
+
+        // Apply on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            applyTranslations(currentLang);
+        });
+
+    </script>
+<script>
+
+        function openScheduleModal(e) {
+            if (e) e.preventDefault();
+            document.getElementById('schedule-modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeScheduleModal() {
+            document.getElementById('schedule-modal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+</script>
+</body>
+</html>

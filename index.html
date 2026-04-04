@@ -1,0 +1,1520 @@
+﻿<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solenetec - Home Electrification Solutions</title>
+    <!-- Tailwind CSS CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts for consistency -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+    <!-- MANDATORY: Font Awesome CDN for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <style>
+        /* --- TAILWIND CONFIGURATION FOR ICONS/COLORS --- */
+        /* Custom Colors matching the reference design */
+        .icon-blue {
+            color: #2563eb;
+        }
+
+        .icon-green {
+            color: #10b981;
+        }
+
+        .icon-orange {
+            color: #f97316;
+        }
+
+        .icon-purple {
+            color: #a855f7;
+        }
+
+        .icon-yellow {
+            color: #facc15;
+        }
+
+        .icon-teal {
+            color: #2dd4bf;
+        }
+
+        .icon-red {
+            color: #ef4444;
+        }
+
+        .icon-gray {
+            color: #6b7280;
+        }
+
+        /* --- GLOBAL & THEME STYLES --- */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #e0e7ee;
+            /* Light blue/gray background */
+            color: #1f2937;
+            /* Dark text color for readability */
+        }
+
+        .card-bg {
+            background-color: #fcfcfc;
+            /* Very light background for content cards */
+            color: #1f2937;
+        }
+
+        .card-border-blue {
+            border: 1px solid #93c5fd;
+            /* Light blue border color (blue-300) */
+        }
+
+        .icon-box {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px;
+            font-size: 1.5rem;
+            /* 24px */
+            line-height: 1;
+        }
+
+        .fa-icon-base {
+            font-size: 2rem;
+        }
+
+        /* --- NAVIGATION STYLES (Matching Reference) --- */
+        .nav-link {
+            color: #d1d5db;
+            /* text-gray-300 */
+            font-size: 1.125rem;
+            /* text-lg */
+            font-weight: 500;
+            /* font-medium */
+            display: flex;
+            align-items: center;
+            transition: background-color 0.15s, color 0.15s;
+        }
+
+        .nav-link:hover {
+            background-color: #4b5563;
+            /* gray-600 hover */
+            color: #ffffff;
+            /* white text */
+        }
+
+        .nav-link.active {
+            background-color: #2563eb;
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .tab-active {
+            background-color: #2563eb;
+            /* Blue-600 */
+            color: #ffffff;
+            border-radius: 0.5rem;
+            /* rounded-lg */
+            font-weight: 700;
+            /* font-bold */
+        }
+
+        .tab-inactive {
+            background-color: transparent;
+            color: #4b5563;
+        }
+
+        .tab-inactive:hover {
+            background-color: #e5e7eb;
+        }
+
+        /* Dropdown Styles */
+        .mega-menu {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            opacity: 0;
+            pointer-events: none;
+            /* KEY FIX: Ensures hidden menu doesn't block clicks */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+
+            /* Responsive Positioning and Width */
+            width: 95vw;
+            /* Maximize space on small screens */
+            max-width: 600px;
+
+            left: 50%;
+            transform: translate(-50%, -10px);
+            overflow: hidden;
+            z-index: 100;
+            position: absolute;
+            top: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .mega-menu {
+                /* Set desktop max width here */
+                max-width: 600px;
+            }
+
+            #rebate-dropdown-menu,
+            #process-dropdown-menu {
+                /* Ensure smaller menus don't stretch to full max-width */
+                max-width: 400px;
+            }
+        }
+
+        .dropdown-content-bg {
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+        }
+
+        .dropdown-visible {
+            opacity: 1;
+            transform: translate(-50%, 0);
+            pointer-events: auto;
+            /* KEY FIX: Allows interaction when visible */
+            display: block !important;
+        }
+
+        .dropdown-hidden {
+            display: none !important;
+        }
+
+        .nav-dropdown-item {
+            display: flex;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            color: #4b5563;
+            align-items: center;
+        }
+
+        .nav-dropdown-item:hover {
+            background-color: #eff6ff;
+            color: #2563eb;
+        }
+
+        .input-style {
+            background-color: #ffffff;
+            color: #1f2937;
+        }
+
+        .input-style:focus {
+            border-color: #2563eb;
+        }
+
+        /* FIX 1: Ensure Font Awesome icons are aligned correctly in dropdown lists */
+        .nav-dropdown-item .icon-box>i {
+            vertical-align: middle;
+            display: inline-block;
+        }
+
+        /* Scheduling Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6b7280;
+        }
+
+        /* Pill Button Styles */
+        .btn-pill {
+            background-color: #2563eb;
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            transition: background-color 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-pill:hover {
+            background-color: #1d4ed8;
+            color: white;
+        }
+
+        /* ── Solen Chat Widget Styles ── */
+        .chat-widget-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(37,99,235,0.45);
+            z-index: 9999;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: none;
+        }
+        .chat-widget-btn:hover { transform: scale(1.08); box-shadow: 0 6px 20px rgba(37,99,235,0.55); }
+        .solen-badge {
+            position: absolute;
+            top: -4px; right: -4px;
+            background: #10b981;
+            width: 16px; height: 16px;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+        .chat-window {
+            position: fixed;
+            bottom: 100px;
+            right: 24px;
+            width: 370px;
+            height: 560px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+            display: flex;
+            flex-direction: column;
+            z-index: 9998;
+            transform: translateY(620px) scale(0.95);
+            opacity: 0;
+            transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), opacity 0.25s ease;
+            overflow: hidden;
+        }
+        @media (max-width: 420px) {
+            .chat-window { width: calc(100vw - 16px); right: 8px; bottom: 90px; height: 72vh; }
+        }
+        .chat-window.open { transform: translateY(0) scale(1); opacity: 1; }
+        .chat-header {
+            background: linear-gradient(135deg, #1e40af, #2563eb);
+            color: white;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+        .solen-avatar {
+            width: 38px; height: 38px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; flex-shrink: 0;
+        }
+        .solen-info { flex: 1; }
+        .solen-name { font-weight: 700; font-size: 15px; line-height: 1.2; }
+        .solen-status { font-size: 11px; opacity: 0.85; }
+        .chat-close-btn { background: none; border: none; color: white; cursor: pointer; padding: 4px; opacity: 0.8; font-size: 18px; }
+        .chat-close-btn:hover { opacity: 1; }
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 14px;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .message {
+            padding: 10px 13px;
+            border-radius: 14px;
+            max-width: 85%;
+            font-size: 14px;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+        .message.bot {
+            background: white;
+            color: #1f2937;
+            margin-right: auto;
+            border: 1px solid #e5e7eb;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        }
+        .message.user {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+        .message a { color: #2563eb; text-decoration: underline; }
+        .message.user a { color: #bfdbfe; }
+        .solen-book-btn {
+            display: inline-block;
+            margin-top: 8px;
+            background: #2563eb;
+            color: white !important;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 13px;
+            text-decoration: none !important;
+            cursor: pointer;
+            border: none;
+        }
+        .solen-book-btn:hover { background: #1d4ed8; }
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 10px 13px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            border-bottom-left-radius: 4px;
+            width: fit-content;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        }
+        .typing-dot {
+            width: 7px; height: 7px;
+            background: #9ca3af;
+            border-radius: 50%;
+            animation: solenTyping 1.4s infinite;
+        }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes solenTyping {
+            0%, 60%, 100% {
+                opacity: 0.3;
+            }
+
+            30% {
+                opacity: 1;
+            }
+        }
+
+        .quick-replies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 4px;
+        }
+        .quick-reply-btn {
+            padding: 6px 12px;
+            background: #eff6ff;
+            color: #2563eb;
+            border: 1px solid #bfdbfe;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background 0.15s;
+            white-space: nowrap;
+        }
+        .quick-reply-btn:hover { background: #dbeafe; }
+        .chat-input-area {
+            padding: 12px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            gap: 8px;
+            background: white;
+            flex-shrink: 0;
+        }
+        .chat-input {
+            flex: 1;
+            padding: 9px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 22px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.15s;
+        }
+        .chat-input:focus { border-color: #2563eb; }
+        .chat-send-btn {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            transition: transform 0.15s;
+        }
+        .chat-send-btn:hover { transform: scale(1.05); }
+        .chat-powered {
+            text-align: center;
+            font-size: 10px;
+            color: #9ca3af;
+            padding: 4px 0 8px;
+            background: white;
+            flex-shrink: 0;
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .emoji-icon {
+            font-size: 1.25rem;
+        }
+
+        .bg-icon-blue {
+            background-color: #2563eb;
+        }
+
+        .bg-icon-green {
+            background-color: #10b981;
+        }
+
+        .bg-icon-orange {
+            background-color: #f97316;
+        }
+
+        .bg-icon-purple {
+            background-color: #a855f7;
+        }
+
+        .bg-icon-yellow {
+            background-color: #facc15;
+        }
+
+        .bg-icon-teal {
+            background-color: #2dd4bf;
+        }
+
+        .bg-icon-red {
+            background-color: #ef4444;
+        }
+
+        .bg-icon-gray {
+            background-color: #6b7280;
+        }
+    
+        /* Language Toggle */
+        .lang-btn {
+            color: #9ca3af;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            border-radius: 6px;
+            padding: 3px 7px;
+            transition: all 0.15s;
+        }
+        .lang-btn:hover { color: #ffffff; background: rgba(255,255,255,0.15); }
+        .lang-btn.active-lang { color: #ffffff; background: rgba(255,255,255,0.2); font-weight: 700; }
+
+        </style>
+
+    <!-- Tailwind Config for custom colors (necessary for utility class usage) -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-primary': '#2563eb',  /* Blue-600 */
+                        'brand-secondary': '#93c5fd', /* Blue-300 */
+                        'icon-blue': '#2563eb',
+                        'icon-green': '#10b981',
+                        'icon-orange': '#f97316',
+                        'icon-purple': '#a855f7',
+                        'icon-yellow': '#facc15',
+                        'icon-teal': '#2dd4bf',
+                        'icon-red': '#ef4444',
+                        'icon-gray': '#6b7280',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="text-gray-800">
+    <!-- Header / Sticky Navigation Bar (DARK Theme) -->
+    <header class="bg-gray-800 shadow-xl fixed top-0 w-full z-50">
+        <nav class="w-full px-4 sm:px-6 lg:px-8">
+            <div class="relative flex items-center h-20">
+                <div class="flex items-center flex-shrink-0">
+                    <a href="index.html" class="flex items-center space-x-3">
+                        <img src="logo.svg" alt="Solenetec Logo" class="h-12 w-12">
+                        <span class="text-3xl text-blue-400 hover:text-blue-300 font-extrabold">Solenetec</span>
+                    </a>
+                </div>
+
+                <!-- Desktop Nav Links -->
+                <div class="hidden md:flex items-center justify-evenly flex-1 px-4">
+                    <a href="index.html"
+                        class="nav-link active font-bold px-3 py-2 rounded-lg transition duration-150" data-i18n="nav.why">Why
+                        Electrify?</a>
+
+                    <!-- Technologies Dropdown -->
+                    <div class="relative group" id="tech-dropdown-group">
+                        <a href="technologies.html" id="tech-dropdown-trigger"
+                            class="nav-link px-3 py-2 rounded-lg transition duration-150">
+                            <span data-i18n="nav.technologies">Technologies</span> <span class="ml-1 text-sm">&#9662;</span>
+                        </a>
+                        <div id="tech-dropdown-menu" class="mega-menu pt-4 dropdown-hidden">
+                            <div class="dropdown-content-bg rounded-xl shadow-2xl p-8 border border-gray-200 grid grid-cols-2 gap-6"
+                                style="max-width: 600px; width: 600px;">
+
+                                <a href="technologies.html#hp-water-heaters-section"
+                                    class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item">
+                                    <div class="icon-box w-10 h-10 bg-icon-blue text-white text-xl flex-shrink-0"><i
+                                            class="fa-solid fa-shower"></i></div>
+                                    <div><span class="font-bold text-gray-900">HP Water Heaters</span>
+                                        <p class="text-sm text-gray-500">The most efficient way to heat domestic water.
+                                        </p>
+                                    </div>
+                                </a>
+
+                                <a href="technologies.html#hp-hvac-section"
+                                    class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item">
+                                    <div class="icon-box w-10 h-10 bg-icon-green text-white text-xl flex-shrink-0"><i
+                                            class="fa-solid fa-fan"></i></div>
+                                    <div><span class="font-bold text-gray-900">Heat Pumps HVAC</span>
+                                        <p class="text-sm text-gray-500">All-in-one climate control and replacing your
+                                            furnace/AC.</p>
+                                    </div>
+                                </a>
+
+                                <a href="technologies.html#solar-battery-section"
+                                    class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item">
+                                    <div class="icon-box w-10 h-10 bg-icon-yellow text-gray-900 text-xl flex-shrink-0">
+                                        <i class="fa-solid fa-solar-panel"></i>
+                                    </div>
+                                    <div><span class="font-bold text-gray-900">Solar & Battery Storage</span>
+                                        <p class="text-sm text-gray-500">Ensures backup power and energy independence
+                                            for your home.</p>
+                                    </div>
+                                </a>
+
+                                <a href="technologies.html#induction-cooking-section"
+                                    class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item">
+                                    <div class="icon-box w-10 h-10 bg-icon-orange text-white text-xl flex-shrink-0"><i
+                                            class="fa-solid fa-kitchen-set"></i></div>
+                                    <div><span class="font-bold text-gray-900">Induction Cooking</span>
+                                        <p class="text-sm text-gray-500">Faster, safer, and cleaner cooking without
+                                            combustion gases.</p>
+                                    </div>
+                                </a>
+
+                                <a href="technologies.html#solar-inverters-section"
+                                    class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item">
+                                    <div class="icon-box w-10 h-10 bg-icon-purple text-white text-xl flex-shrink-0"><i
+                                            class="fa-solid fa-microchip"></i></div>
+                                    <div><span class="font-bold text-gray-900">Inverters</span>
+                                        <p class="text-sm text-gray-500">The critical component for converting DC to
+                                            usable AC power.</p>
+                                    </div>
+                                </a>
+
+                                <a href="technologies.html#ev-charging-section"
+                                    class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item">
+                                    <div class="icon-box w-10 h-10 bg-icon-teal text-white text-xl flex-shrink-0"><i
+                                            class="fa-solid fa-charging-station"></i></div>
+                                    <div><span class="font-bold text-gray-900">EV Charging</span>
+                                        <p class="text-sm text-gray-500">Dedicated high-speed home charging and energy
+                                            management.</p>
+                                    </div>
+                                </a>
+
+                                <a href="technologies.html#v2h-v2l-section"
+                                    class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item">
+                                    <div class="icon-box w-10 h-10 bg-icon-red text-white text-xl flex-shrink-0"><i
+                                            class="fa-solid fa-house-chimney-crack"></i></div>
+                                    <div><span class="font-bold text-gray-900">Vehicle-to-Home (V2H/V2L)</span>
+                                        <p class="text-sm text-gray-500">Use your EV's battery as a massive source of
+                                            home backup power.</p>
+                                    </div>
+                                </a>
+
+                                <a href="technologies.html#smart-panels-section"
+                                    class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item">
+                                    <div class="icon-box w-10 h-10 bg-icon-gray text-white text-xl flex-shrink-0"><i
+                                            class="fa-solid fa-plug-circle-bolt"></i></div>
+                                    <div><span class="font-bold text-gray-900">Smart Electrical Panels</span>
+                                        <p class="text-sm text-gray-500">The brain for real-time monitoring, load
+                                            control, and optimization.</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rebate Calculator Dropdown -->
+                    <div class="relative group" id="rebate-dropdown-group">
+                        <a id="rebate-dropdown-trigger" href="rebates.html"
+                            class="nav-link px-3 py-2 rounded-lg transition duration-150 flex items-center"><span data-i18n="nav.rebates">Rebates/ROI</span> &#9662;</a>
+                                                <div id="rebate-dropdown-menu" class="mega-menu pt-4 dropdown-hidden">
+                            <div class="dropdown-content-bg rounded-xl shadow-2xl p-6 border border-gray-200 space-y-2"
+                                style="max-width: 420px; width: 420px;">
+                                <h3 class="font-bold text-xl text-brand-primary mb-4 border-b pb-2 border-gray-200">
+                                    Rebates &amp; ROI</h3>
+
+                                <a href="rebates.html#bill-calculator-section"
+                                    class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item">
+                                    <div class="icon-box w-10 h-10 bg-icon-blue text-white text-xl flex-shrink-0">
+                                        <i class="fa-solid fa-bolt text-base"></i>
+                                    </div>
+                                    <div><span class="font-bold text-gray-900">Electricity Usage Calculator</span>
+                                        <p class="text-sm text-gray-500">Upload Green Button data or enter your bill to understand your current costs.</p>
+                                    </div>
+                                </a>
+
+                                <a href="rebates.html#roi-calculator-section"
+                                    class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item">
+                                    <div class="icon-box w-10 h-10 bg-icon-green text-white text-xl flex-shrink-0">
+                                        <i class="fa-solid fa-chart-line text-base"></i>
+                                    </div>
+                                    <div><span class="font-bold text-gray-900">Solar &amp; Battery ROI Calculator</span>
+                                        <p class="text-sm text-gray-500">See your payback period and 25-year savings projection.</p>
+                                    </div>
+                                </a>
+
+                                <a href="rebates.html#rebate-calculator-section"
+                                    class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item">
+                                    <div class="icon-box w-10 h-10 bg-icon-orange text-white text-xl flex-shrink-0">
+                                        <i class="fa-solid fa-hand-holding-dollar text-base"></i>
+                                    </div>
+                                    <div><span class="font-bold text-gray-900">Personalized Rebate &amp; Savings Estimator</span>
+                                        <p class="text-sm text-gray-500">Calculate state, local, and federal incentives based on your eligibility.</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- New Programs -->
+                    <div class="relative group" id="programs-dropdown-group">
+                        <a id="programs-dropdown-trigger" href="programs.html" class="nav-link px-3 py-2 rounded-lg transition duration-150 flex items-center">
+                            <span data-i18n="nav.programs">New Programs</span> <span class="ml-1 text-sm">&#9662;</span>
+                        </a>
+                        <div id="programs-dropdown-menu" class="mega-menu pt-4 dropdown-hidden">
+                            <div class="dropdown-content-bg rounded-xl shadow-2xl p-6 border border-gray-200 space-y-2" style="max-width:420px;width:420px;">
+                                <h3 class="font-bold text-xl text-brand-primary mb-4 border-b pb-2 border-gray-200">Post-IRA Programs</h3>
+                                <a href="programs.html#advisor-section" class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item"><div class="icon-box w-10 h-10 bg-icon-blue text-white text-xl flex-shrink-0"><i class="fa-solid fa-sparkles text-base"></i></div><div><span class="font-bold text-gray-900">Find My Best Program</span><p class="text-sm text-gray-500">AI advisor matches you to the right program in 60 sec.</p></div></a>
+                                <a href="programs.html#propel-section" class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item"><div class="icon-box w-10 h-10 bg-icon-blue text-white text-xl flex-shrink-0"><i class="fa-solid fa-rocket text-base"></i></div><div><span class="font-bold text-gray-900">Propel — Prepaid PPA</span><p class="text-sm text-gray-500">40% ITC via domestic content bonus.</p></div></a>
+                                <a href="programs.html#eaas-section" class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item"><div class="icon-box w-10 h-10 bg-icon-teal text-white text-xl flex-shrink-0"><i class="fa-solid fa-bolt text-base"></i></div><div><span class="font-bold text-gray-900">Energy-as-a-Service (EaaS)</span><p class="text-sm text-gray-500">Zero upfront — pay only for energy delivered.</p></div></a>
+                                <a href="programs.html#vpp-section" class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item"><div class="icon-box w-10 h-10 bg-icon-green text-white text-xl flex-shrink-0"><i class="fa-solid fa-network-wired text-base"></i></div><div><span class="font-bold text-gray-900">Virtual Power Plants (VPP)</span><p class="text-sm text-gray-500">Earn $0.10/kWh discharging to the grid.</p></div></a>
+                                <a href="programs.html#compare-section" class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item"><div class="icon-box w-10 h-10 bg-icon-orange text-white text-xl flex-shrink-0"><i class="fa-solid fa-scale-balanced text-base"></i></div><div><span class="font-bold text-gray-900">Compare All Models</span><p class="text-sm text-gray-500">Find the right fit for your situation.</p></div></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Process Dropdown -->
+                    <div class="relative group" id="process-dropdown-group">
+                        <a href="process.html" id="process-dropdown-trigger"
+                            class="nav-link px-3 py-2 rounded-lg transition duration-150 flex items-center">
+                            <span data-i18n="nav.process">Our Process</span> <span class="ml-1 text-sm">&#9662;</span>
+                        </a>
+                        <div id="process-dropdown-menu" class="mega-menu pt-4 dropdown-hidden">
+                            <div class="dropdown-content-bg rounded-xl shadow-2xl p-6 border border-gray-200 space-y-2"
+                                style="max-width: 400px; width: 400px;">
+                                <h3 class="font-bold text-xl text-brand-primary mb-4 border-b pb-2 border-gray-200">Our
+                                    4-Step Methodology</h3>
+
+                                <a href="process.html#process"
+                                    class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item">
+                                    <div class="icon-box w-10 h-10 bg-icon-blue text-white text-xl flex-shrink-0"><span
+                                            class="emoji-icon">&#x2318;</span></div>
+                                    <div><span class="font-bold text-gray-900">Discovery & Audit</span>
+                                        <p class="text-sm text-gray-500">Comprehensive assessment of your home and
+                                            energy needs.</p>
+                                    </div>
+                                </a>
+
+                                <a href="process.html#process"
+                                    class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item">
+                                    <div class="icon-box w-10 h-10 bg-icon-blue text-white text-xl flex-shrink-0"><span
+                                            class="emoji-icon">&#x1F4B0;</span></div>
+                                    <div><span class="font-bold text-gray-900">Incentive Maximize</span>
+                                        <p class="text-sm text-gray-500">Design and secure all available rebates and tax
+                                            credits.</p>
+                                    </div>
+                                </a>
+
+                                <a href="process.html#process"
+                                    class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item">
+                                    <div class="icon-box w-10 h-10 bg-icon-blue text-white text-xl flex-shrink-0"><span
+                                            class="emoji-icon">&#x2699;</span></div>
+                                    <div><span class="font-bold text-gray-900">Certified Installation</span>
+                                        <p class="text-sm text-gray-500">Expert, licensed installation with minimum
+                                            disruption.</p>
+                                    </div>
+                                </a>
+
+                                <a href="process.html#process"
+                                    class="flex items-start space-x-3 p-2 rounded-lg hover:bg-blue-50 transition nav-dropdown-item">
+                                    <div class="icon-box w-10 h-10 bg-icon-blue text-white text-xl flex-shrink-0"><span
+                                            class="emoji-icon">&#x1F4DD;</span></div>
+                                    <div><span class="font-bold text-gray-900">Final Handover & Filing</span>
+                                        <p class="text-sm text-gray-500">System commissioning and completion of all
+                                            official paperwork.</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <a href="#" onclick="openScheduleModal(event)" class="btn-pill hidden md:inline-block flex-shrink-0 ml-4" data-i18n="nav.getstarted">Get Started</a>
+
+                <div id="lang-toggle" class="hidden md:flex items-center gap-1 ml-2">
+                    <button onclick="setLang('en')" id="lang-en" class="lang-btn active-lang px-2 py-1 rounded text-sm font-semibold transition">🇺🇸 EN</button>
+                    <span class="text-gray-400 text-xs">|</span>
+                    <button onclick="setLang('es')" id="lang-es" class="lang-btn px-2 py-1 rounded text-sm font-semibold transition">🇲🇽 ES</button>
+                </div>
+                <div id="lang-toggle-mobile" class="md:hidden flex items-center gap-1 mr-2">
+                    <button onclick="setLang('en')" id="lang-en-m" class="lang-btn active-lang px-2 py-1 rounded text-xs font-semibold transition">🇺🇸</button>
+                    <button onclick="setLang('es')" id="lang-es-m" class="lang-btn px-2 py-1 rounded text-xs font-semibold transition">🇲🇽</button>
+                </div>
+
+                <div class="md:hidden ml-auto">
+                    <button id="mobile-menu-button" class="text-gray-300 hover:text-white focus:outline-none">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg absolute top-0 left-0 w-full z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-end">
+                <button id="close-mobile-menu-button" class="text-gray-600 hover:text-blue-600 focus:outline-none">
+                    <i class="fa-solid fa-times text-xl"></i>
+                </button>
+            </div>
+            <nav class="flex flex-col space-y-4 mt-4">
+                <a href="index.html" class="nav-link text-gray-800 hover:text-blue-600 text-lg">Home</a>
+                <a href="technologies.html" class="nav-link text-gray-800 hover:text-blue-600 text-lg"><span data-i18n="nav.technologies">Technologies</span></a>
+                <a href="rebates.html" class="nav-link text-gray-800 hover:text-blue-600 text-lg"><span data-i18n="nav.rebates">Rebates/ROI</span></a>
+                <a href="programs.html" class="nav-link text-gray-800 hover:text-blue-600 text-lg"><span data-i18n="nav.programs">New Programs</span></a>
+                <a href="process.html" class="nav-link text-gray-800 hover:text-blue-600 text-lg">Process</a>
+                <a href="#" onclick="openScheduleModal(event)"
+                    class="nav-link text-blue-600 font-bold hover:text-blue-800 text-lg" data-i18n="nav.getstarted">Get Started</a>
+            </nav>
+        </div>
+    </div>
+
+    <main class="pt-20">
+        <!-- Hero Section -->
+        <section class="relative bg-gradient-to-r from-blue-600 to-blue-800 text-white py-12 md:py-20 overflow-hidden">
+            <div class="absolute inset-0 z-0">
+                <img src="https://images.unsplash.com/photo-1509391366360-2e959784a276?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+                    alt="Solar panels on a roof" class="w-full h-full object-cover opacity-30">
+            </div>
+            <div class="container mx-auto px-4 relative z-10 text-center">
+                <h1 class="text-2xl sm:text-4xl md:text-6xl font-extrabold leading-tight mb-4 drop-shadow-lg" data-i18n-hero="h1">Powering a Brighter,
+                    Greener Future</h1>
+                <p class="text-lg md:text-xl mb-8 max-w-3xl mx-auto drop-shadow-md" data-i18n-hero="p">Solenetec is your trusted partner
+                    for sustainable energy solutions, from solar and battery storage to efficient heat pumps.</p>
+                <a href="process.html"
+                    class="inline-block bg-white text-blue-700 font-bold py-3 px-8 rounded-full text-lg hover:bg-gray-100 transition duration-300 transform hover:scale-105 shadow-lg" data-i18n-hero="cta">Explore
+                    Our Solutions</a>
+            </div>
+        </section>
+
+        <!-- 1. WHY ELECTRIFY SECTION -->
+        <section id="why" class="py-6 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center bg-gray-800 p-8 rounded-xl shadow-lg mb-8 min-h-[140px] flex flex-col justify-center">
+                    <h2 class="text-3xl font-extrabold text-blue-400" data-i18n="index.why.h2">The Modern Value Proposition</h2>
+                    <p class="mt-2 text-base text-gray-300" data-i18n="index.why.p">Home electrification is a strategic investment in efficiency,
+                        comfort, and financial predictability. This section highlights the core benefits and compelling
+                        reasons to transition now.</p>
+                </div>
+                <div class="grid gap-10 md:grid-cols-3 lg:gap-12">
+                    <div class="p-8 bg-gray-50 rounded-xl shadow-md card-border-blue">
+                        <div class="icon-box mb-4 bg-blue-100 text-blue-600"><i
+                                class="fa-solid fa-sack-dollar fa-icon-base"></i></div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2" data-i18n="index.why.c1h">Maximum Financial Savings</h3>
+                        <p class="text-gray-600">Unlock a combination of state rebates, local incentives, and federal
+                            tax credits, drastically reducing upfront costs and lowering long-term energy bills.</p>
+                    </div>
+                    <div class="p-8 bg-gray-50 rounded-xl shadow-md card-border-blue">
+                        <div class="icon-box mb-4 bg-blue-100 text-blue-600"><i
+                                class="fa-solid fa-heart-circle-check fa-icon-base"></i></div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Superior Comfort & Health</h3>
+                        <p class="text-gray-600">Heat pumps provide precise climate control year-round. Eliminating gas
+                            combustion drastically improves indoor air quality and removes carbon monoxide risk.</p>
+                    </div>
+                    <div class="p-8 bg-gray-50 rounded-xl shadow-md card-border-blue">
+                        <div class="icon-box mb-4 bg-blue-100 text-blue-600"><i
+                                class="fa-solid fa-battery-half fa-icon-base"></i></div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2" data-i18n="index.why.c3h">Energy Independence</h3>
+                        <p class="text-gray-600">Pairing electrification with solar and battery backup ensures energy
+                            resilience during power outages and protects you from volatile future gas prices.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. TECHNOLOGY SECTION -->
+        <section id="tech" class="py-4 sm:py-6 bg-gray-50 border-t border-gray-100">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-2xl sm:text-4xl font-extrabold text-gray-900" data-i18n="index.tech.h2">Core Electrification Technologies</h2>
+                    <p class="mt-4 text-lg text-gray-600">Explore the modern appliances and systems that power your
+                        clean home. Click or swipe through the tabs to view detailed information on each technology,
+                        from climate control to energy resilience.</p>
+                </div>
+
+                <div class="mt-6">
+                    <div class="relative flex items-center justify-center border-b border-gray-200 overflow-x-auto">
+                        <button id="scroll-left" class="p-3 mr-3 bg-gray-200 text-gray-700 rounded-lg hidden md:block">
+                            &#9664;
+                        </button>
+
+                        <div id="tabs-scroll-wrapper"
+                            class="flex-grow overflow-x-scroll whitespace-nowrap scrollbar-hide"
+                            style="max-width: calc(100% - 100px);">
+                            <nav id="tech-tabs" class="flex flex-nowrap space-x-4 py-1" aria-label="Tabs">
+                            </nav>
+                        </div>
+
+                        <button id="scroll-right" class="p-3 ml-3 bg-gray-200 text-gray-700 rounded-lg hidden md:block">
+                            &#9654;
+                        </button>
+                    </div>
+                    <div id="tech-content" class="mt-8">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Solen Chat Widget Button -->
+    <div id="chat-widget-btn" class="chat-widget-btn" onclick="toggleChat()" title="Chat with Solen">
+        <i class="fa-solid fa-robot" style="font-size:24px;"></i>
+        <div class="solen-badge"></div>
+    </div>
+
+    <!-- Solen Chat Window -->
+    <div id="chat-window" class="chat-window">
+        <div class="chat-header">
+            <div class="solen-avatar">&#x2600;&#xFE0F;</div>
+            <div class="solen-info">
+                <div class="solen-name">Solen</div>
+                <div class="solen-status">&#x25CF; Solenetec Energy Advisor</div>
+            </div>
+            <button class="chat-close-btn" onclick="toggleChat()"><i class="fa-solid fa-times"></i></button>
+        </div>
+        <div id="chat-messages" class="chat-messages"></div>
+        <div id="quick-replies" class="quick-replies" style="padding: 0 12px 8px; background: #f8fafc; flex-shrink:0;"></div>
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" class="chat-input" placeholder="Ask Solen anything..." data-i18n-placeholder="solen.placeholder"
+                onkeypress="solenHandleEnter(event)" autocomplete="off">
+            <button class="chat-send-btn" onclick="solenSend()">
+                <i class="fa-solid fa-paper-plane" style="font-size:14px;"></i>
+            </button>
+        </div>
+        <div class="chat-powered">Powered by Claude AI &bull; Solenetec</div>
+    </div>
+
+    <!-- Schedule Modal -->
+    <div id="schedule-modal" class="modal-overlay" onclick="if(event.target === this) closeScheduleModal()">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeScheduleModal()">&times;</button>
+            <h2 class="text-2xl font-bold mb-4 text-center" data-i18n="modal.h2">Schedule Your Consultation</h2>
+            <p class="text-gray-600 mb-6 text-center" data-i18n="modal.p">Select a time that works for you to discuss your home
+                electrification needs.</p>
+
+            <div class="calendly-inline-widget" data-url="YOUR_CALENDLY_URL"
+                style="min-width:320px;height:630px;"></div>
+            <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+        </div>
+    </div>
+
+    <script>
+        // Tech Data
+        const techData = [
+            { id: 'hpwh', name: 'HP Water Heaters', icon: '<i class="fa-solid fa-shower"></i>', description: 'The most efficient way to heat water. It transfers heat from the air, using electricity primarily to run the compressor, cutting water heating energy consumption by more than half compared to traditional resistance heaters.', summary: 'Efficiency and Comfort: Reduces energy use by over 50% vs. traditional heating methods.', detail: 'Integrated systems from Rheem, AO Smith, and others meet high-efficiency standards.' },
+            { id: 'hvac', name: 'Heat Pump HVAC', icon: '<i class="fa-solid fa-fan"></i>', description: 'A single system for both heating and cooling. Modern variable-capacity heat pumps offer unparalleled efficiency and comfort, moving heat to heat or cool your home.', summary: 'All-in-One Climate Control: Provides superior heating and cooling with one highly efficient unit.', detail: 'Look for ENERGY STAR certified, variable-speed systems. Integrated systems like Harvest Thermal maximize efficiency for both space and water.' },
+            { id: 'battery', name: 'Solar & Battery', icon: '<i class="fa-solid fa-solar-panel"></i>', description: 'Provides energy self-sufficiency. Solar generates power, and battery storage provides backup during Public Safety Power Shutoffs (PSPS) or high-cost peak hours.', summary: 'Resilience and Independence: Ensures backup power and protection against grid instability.', detail: 'Battery systems (e.g., Powerwall, Enphase, FranklinWH) are often subsidized by programs like SGIP Equity Rebate.' },
+            { id: 'induction', name: 'Induction Cooking', icon: '<i class="fa-solid fa-kitchen-set"></i>', description: 'Instant, precise, and safe cooking. Induction heats the pot directly using electromagnetism, offering better performance than gas or coil electric without combustion byproducts.', summary: 'Safety and Performance: Faster, safer, and cleaner cooking without combustion gases.', detail: 'Many major appliance brands offer induction ranges and cooktops that qualify for incentives.' },
+            { id: 'inverter', name: 'Inverters', icon: '<i class="fa-solid fa-microchip"></i>', description: 'The critical bridge between solar panels and your home. Inverters convert DC power from the panels into usable AC power for your home and the grid. We recommend micro-inverters for panel-level optimization and reliability.', summary: 'System Brains: Converts solar DC power to usable home AC power. Micro-inverters highly recommended.', detail: 'Leading brands include SolarEdge, Enphase (Microinverters), and SMA, which often integrate smart monitoring capabilities.' },
+            { id: 'evcharger', name: 'EV Charging', icon: '<i class="fa-solid fa-charging-station"></i>', description: 'Dedicated high-speed charging stations installed at home (Level 2). Enables fast, convenient charging, often maximizing the use of inexpensive off-peak power or excess solar energy.', summary: 'Fast and Convenient Charging: Level 2 home charging maximizes the use of clean, low-cost power.', detail: 'Popular units are available from ChargePoint, Enphase, and Tesla (Wall Connector), offering integrated control for energy management.' },
+            { id: 'v2h', name: 'V2H/V2L', icon: '<i class="fa-solid fa-house-chimney-crack"></i>', description: 'Bi-directional charging technology (V2H) allows your EV battery to supply power back to your home during grid outages or peak demand events, essentially turning your car into a large, mobile battery storage system.', summary: 'Mobile Power Backup: EV acts as a massive battery for your home, providing crucial resilience.', detail: 'This is an emerging technology, with solutions being developed and deployed by manufacturers like Ford and specialized charger companies.' },
+            { id: 'smartpanel', name: 'Smart Electrical Panel', icon: '<i class="fa-solid fa-plug-circle-bolt"></i>', description: 'The intelligent brain of the electric home. It provides circuit-level energy monitoring, load shedding, and smart management to optimize power use and extend battery backup duration.', summary: 'Control & Optimization: Intelligent management of home circuits for safety and efficiency.', detail: 'Smart panels like SPAN replace the old electrical panel to allow for granular control and automated optimization of power usage.' }
+        ];
+
+        const techTabsContainerHome = document.getElementById('tech-tabs');
+        const techContentContainerHome = document.getElementById('tech-content');
+
+        function renderTechSection(tabsContainer, contentContainer) {
+            tabsContainer.innerHTML = '';
+            contentContainer.innerHTML = '';
+            const tabClass = 'tech-tab';
+
+            techData.forEach((tech, index) => {
+                const tabButton = document.createElement('button');
+                tabButton.innerHTML = `<div class="flex items-center space-x-2">${tech.icon}<span>${tech.name}</span></div>`;
+                tabButton.className = `${tabClass} whitespace-nowrap font-medium text-lg transition-colors duration-200 ${index === 0 ? 'tab-active' : 'tab-inactive'} px-4 py-2`;
+                tabButton.dataset.target = tech.id;
+                tabsContainer.appendChild(tabButton);
+
+                const contentDiv = document.createElement('div');
+                contentDiv.id = tech.id;
+                contentDiv.className = `tech-content-panel ${index === 0 ? '' : 'hidden'}`;
+                contentDiv.innerHTML = `
+                    <div class="bg-white p-6 sm:p-8 rounded-xl shadow-inner border border-blue-200">
+                        <h3 class="text-2xl font-bold text-blue-800 mb-4">${tech.name}</h3>
+                        <p class="text-gray-700 text-lg leading-relaxed">${tech.description}</p>
+                        <p class="mt-4 text-sm text-blue-800 italic font-medium border-t pt-3 border-gray-300">${tech.detail}</p>
+                    </div>
+                `;
+                contentContainer.appendChild(contentDiv);
+            });
+        }
+
+        function setupTabInteraction(tabsSelector) {
+            const tabs = document.querySelectorAll(tabsSelector);
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const targetTabsSelector = '#tech-tabs .tech-tab';
+                    const targetContentClass = '.tech-content-panel';
+
+                    document.querySelectorAll(targetTabsSelector).forEach(t => {
+                        t.classList.remove('tab-active');
+                        t.classList.add('tab-inactive');
+                    });
+                    tab.classList.remove('tab-inactive');
+                    tab.classList.add('tab-active');
+
+                    document.querySelectorAll(targetContentClass).forEach(panel => {
+                        panel.classList.add('hidden');
+                    });
+
+                    const targetId = tab.dataset.target;
+                    document.getElementById(targetId).classList.remove('hidden');
+                });
+            });
+        }
+
+        const techTabsWrapper = document.getElementById('tabs-scroll-wrapper');
+        const scrollLeftButton = document.getElementById('scroll-left');
+        const scrollRightButton = document.getElementById('scroll-right');
+        const scrollDistance = 200;
+
+        scrollRightButton.addEventListener('click', () => {
+            techTabsWrapper.scrollBy({ left: scrollDistance, behavior: 'smooth' });
+        });
+
+        scrollLeftButton.addEventListener('click', () => {
+            techTabsWrapper.scrollBy({ left: -scrollDistance, behavior: 'smooth' });
+        });
+
+        // Dropdown Management
+        const techDropdownGroup = document.getElementById('tech-dropdown-group');
+        const techDropdownMenu = document.getElementById('tech-dropdown-menu');
+        const techDropdownTrigger = document.getElementById('tech-dropdown-trigger');
+
+        const rebateDropdownGroup = document.getElementById('rebate-dropdown-group');
+        const rebateDropdownMenu = document.getElementById('rebate-dropdown-menu');
+        const rebateDropdownTrigger = document.getElementById('rebate-dropdown-trigger');
+
+        const processDropdownGroup = document.getElementById('process-dropdown-group');
+        const processDropdownMenu = document.getElementById('process-dropdown-menu');
+        const processDropdownTrigger = document.getElementById('process-dropdown-trigger');
+
+        const CURRENT_PAGE_TRIGGER_ID = 'home-trigger';
+        let menuTimeout;
+
+        function openMenu(menuElement, triggerElement) {
+            if (menuElement.classList.contains('dropdown-visible')) return;
+
+            [[techDropdownMenu, techDropdownTrigger], [rebateDropdownMenu, rebateDropdownTrigger], [processDropdownMenu, processDropdownTrigger]].forEach(([menu, trigger]) => {
+                if (menu && menu.id !== menuElement.id) {
+                    menu.classList.remove('dropdown-visible');
+                    menu.classList.add('dropdown-hidden');
+
+                    if (trigger && trigger.id !== CURRENT_PAGE_TRIGGER_ID) {
+                        trigger.classList.remove('active', 'font-bold');
+                    }
+                }
+            });
+
+            menuElement.classList.remove('dropdown-hidden');
+            menuElement.classList.add('dropdown-visible');
+            triggerElement.classList.add('active', 'font-bold');
+        }
+
+        function closeMenu(menuElement, triggerElement) {
+            menuElement.classList.remove('dropdown-visible');
+            menuElement.classList.add('dropdown-hidden');
+
+            if (triggerElement.id !== CURRENT_PAGE_TRIGGER_ID) {
+                if (triggerElement) {
+                    triggerElement.classList.remove('active', 'font-bold');
+                }
+            }
+        }
+
+        function setupCloseListener(groupElement, menuElement, triggerElement) {
+            if (!groupElement || !menuElement || !triggerElement) return;
+
+            groupElement.addEventListener('mouseenter', () => {
+                clearTimeout(menuTimeout);
+                openMenu(menuElement, triggerElement);
+            });
+            groupElement.addEventListener('mouseleave', () => {
+                clearTimeout(menuTimeout);
+                menuTimeout = setTimeout(() => closeMenu(menuElement, triggerElement), 100);
+            });
+            menuElement.addEventListener('mouseenter', () => {
+                clearTimeout(menuTimeout);
+            });
+            menuElement.addEventListener('mouseleave', () => {
+                clearTimeout(menuTimeout);
+                menuTimeout = setTimeout(() => closeMenu(menuElement, triggerElement), 100);
+            });
+        }
+
+        setupCloseListener(techDropdownGroup, techDropdownMenu, techDropdownTrigger);
+        setupCloseListener(rebateDropdownGroup, rebateDropdownMenu, rebateDropdownTrigger);
+        setupCloseListener(processDropdownGroup, processDropdownMenu, processDropdownTrigger);
+
+            const programsDropdownGroup   = document.getElementById('programs-dropdown-group');
+            const programsDropdownMenu    = document.getElementById('programs-dropdown-menu');
+            const programsDropdownTrigger = document.getElementById('programs-dropdown-trigger');
+            setupCloseListener(programsDropdownGroup, programsDropdownMenu, programsDropdownTrigger);
+
+        // Scheduling Modal Functions
+        function openScheduleModal(e) {
+            if (e) e.preventDefault();
+            document.getElementById('schedule-modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeScheduleModal() {
+            document.getElementById('schedule-modal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Mobile Menu Logic
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const closeMobileMenuButton = document.getElementById('close-mobile-menu-button');
+
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        if (closeMobileMenuButton && mobileMenu) {
+            closeMobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        }
+
+        // ── SOLEN AI CHAT AGENT ──────────────────────────────────
+        const WORKER_URL = 'YOUR_CLOUDFLARE_WORKER_URL';
+
+        const solenChatWindow = document.getElementById('chat-window');
+        const solenMessages  = document.getElementById('chat-messages');
+        const solenInput     = document.getElementById('chat-input');
+        const solenReplies   = document.getElementById('quick-replies');
+
+        // Conversation history sent to Claude on every turn
+        let solenHistory = [];
+        // Lead data collected during conversation
+        let solenLead = { name: '', email: '', phone: '', service: '', timeline: '', captured: false };
+        // Track if greeting already shown
+        let solenGreeted = false;
+        // Detect language
+        let solenLang = 'en';
+
+        const SOLEN_SYSTEM = `You are Solen, a friendly and knowledgeable home electrification advisor for Solenetec, a San Diego-based company. Your mission is to EDUCATE first — never push or pressure.
+
+PERSONALITY: Warm, honest, clear. Use plain language. Never be salesy. If someone asks something you don't know, say so honestly.
+
+LANGUAGE: Detect the user's language from their first message. Respond in the same language throughout. Support English and Spanish fluently.
+
+KNOWLEDGE AREAS:
+- Solar & Battery Storage (rooftop solar, battery backup, SGIP rebates, Powerwall, Enphase)
+- Heat Pump HVAC (heating/cooling efficiency, replacing gas furnace/AC, rebates)
+- HP Water Heaters (heat pump water heaters, 50%+ efficiency vs resistance heaters)
+- EV Charging (Level 2 home charging, ChargePoint, Tesla Wall Connector, smart charging)
+- Induction Cooking (safety, performance, electrification benefits)
+- Smart Electrical Panels (SPAN panel, circuit monitoring, load management)
+- Vehicle-to-Home / V2H / V2L (bidirectional EV charging, home backup)
+- IRA Programs & Tax Credits: Post-IRA landscape — 25D expired end of 2025. Third-party ownership (Prepaid PPAs) still captures 30% ITC at corporate level, domestic content bonus unlocks 40% ITC.
+- Business Models: Prepaid PPA (Propel program — 40% ITC), Energy-as-a-Service/EaaS (zero upfront, pay per kWh), Virtual Power Plants/VPP (earn $0.10/kWh discharging to grid)
+- Rebates: Federal (IRA), California (SGIP, TECH Clean CA, BayREN, SoCalREN), utility rebates from SDG&E, SCE, PG&E. Focus on what's available, not live rate data.
+- Solenetec pages: /technologies, /rebates, /programs, /process, /schedule
+
+CONVERSATION APPROACH:
+1. Greet warmly, ask what brings them in today
+2. Have a natural conversation — ask 2-3 qualifying questions naturally (what they're interested in, their timeline, if they own their home)
+3. Give genuinely useful, specific information based on their answers
+4. After delivering value, softly offer to send personalized info — ask for name and email. Frame it as helpful, not required.
+5. If they share name/email, respond with: LEAD_CAPTURED:{"name":"...","email":"..."} on a line by itself (this is internal — don't show to user), then continue conversation naturally.
+6. When they seem ready for a next step, offer to schedule a consultation. Respond with SHOW_BOOKING on a line by itself to trigger the booking widget.
+
+IMPORTANT RULES:
+- Never ask for phone number or address upfront
+- Never gate information behind contact details
+- Never say you can give a "quote" — say "personalized recommendation"
+- Always acknowledge uncertainty honestly ("rates change — check your latest bill")
+- Keep responses concise — 2-4 sentences max unless explaining a complex topic
+- Use bullet points sparingly — prefer conversational prose
+- Do NOT reproduce the LEAD_CAPTURED or SHOW_BOOKING tokens visibly in your response`;
+
+        const SOLEN_QUICK_REPLIES_EN = [
+            { text: '☀️ Solar & Battery', msg: 'Tell me about solar and battery storage' },
+            { text: '🌡️ Heat Pumps', msg: 'How do heat pumps work?' },
+            { text: '💰 Rebates', msg: 'What rebates are available in California?' },
+            { text: '🚗 EV Charging', msg: 'Tell me about EV charging at home' },
+        ];
+        const SOLEN_QUICK_REPLIES_ES = [
+            { text: '☀️ Solar y Batería', msg: 'Cuéntame sobre solar y almacenamiento de batería' },
+            { text: '🌡️ Bombas de Calor', msg: '¿Cómo funcionan las bombas de calor?' },
+            { text: '💰 Reembolsos', msg: '¿Qué reembolsos hay disponibles en California?' },
+            { text: '🚗 Carga EV', msg: 'Cuéntame sobre la carga de VE en casa' },
+        ];
+
+        function toggleChat() {
+            solenChatWindow.classList.toggle('open');
+            if (solenChatWindow.classList.contains('open')) {
+                solenInput.focus();
+                solenRenderQuickReplies();
+                if (!solenGreeted) {
+                    solenGreeted = true;
+                    solenShowTyping();
+                    setTimeout(() => {
+                        solenHideTyping();
+                        const greeting = (typeof currentLang !== 'undefined' && currentLang === 'es')
+                            ? '¡Hola! Soy Solen, la asesora de energía de Solenetec. Estoy aquí para ayudarle a entender sus opciones de electrificación del hogar — solar, bombas de calor, carga de VE, reembolsos y más. ¿En qué le puedo ayudar hoy?'
+                            : "Hi! I'm Solen, Solenetec's energy advisor. I'm here to help you understand your home electrification options — solar, heat pumps, EV charging, rebates, and more. What can I help you with today?";
+                        solenAddMessage(greeting, 'bot');
+                        solenLang = (typeof currentLang !== 'undefined') ? currentLang : 'en';
+                    }, 900);
+                }
+            }
+        }
+
+        function solenRenderQuickReplies() {
+            const replies = solenLang === 'es' ? SOLEN_QUICK_REPLIES_ES : SOLEN_QUICK_REPLIES_EN;
+            solenReplies.innerHTML = '';
+            replies.forEach(r => {
+                const btn = document.createElement('button');
+                btn.className = 'quick-reply-btn';
+                btn.textContent = r.text;
+                btn.onclick = () => { solenInput.value = r.msg; solenSend(); };
+                solenReplies.appendChild(btn);
+            });
+        }
+
+        function solenHandleEnter(e) { if (e.key === 'Enter') solenSend(); }
+
+        async function solenSend() {
+            const msg = solenInput.value.trim();
+            if (!msg) return;
+            solenInput.value = '';
+            solenReplies.innerHTML = '';
+
+            // Detect Spanish on first message
+            if (solenHistory.length === 0) {
+                const spanishWords = /\b(hola|qué|como|ayuda|información|solar|quiero|tengo|puedo|necesito)\b/i;
+                if (spanishWords.test(msg)) solenLang = 'es';
+            }
+
+            solenAddMessage(msg, 'user');
+            solenHistory.push({ role: 'user', content: msg });
+            solenShowTyping();
+            solenInput.disabled = true;
+
+            try {
+                const res = await fetch(WORKER_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        model: 'claude-sonnet-4-20250514',
+                        max_tokens: 500,
+                        system: SOLEN_SYSTEM,
+                        messages: solenHistory
+                    })
+                });
+                const data = await res.json();
+                const raw = data.content?.map(b => b.text || '').join('') || '';
+
+                // Process special tokens
+                let clean = raw;
+
+                // Handle LEAD_CAPTURED token
+                const leadMatch = clean.match(/LEAD_CAPTURED:\{[^}]+\}/);
+                if (leadMatch && !solenLead.captured) {
+                    try {
+                        const parsed = JSON.parse(leadMatch[0].replace('LEAD_CAPTURED:', ''));
+                        solenLead.name = parsed.name || '';
+                        solenLead.email = parsed.email || '';
+                        solenLead.captured = true;
+                        solenCreateHubSpotContact();
+                    } catch(e) {}
+                    clean = clean.replace(/LEAD_CAPTURED:\{[^}]+\}\n?/g, '');
+                }
+
+                // Handle SHOW_BOOKING token
+                if (clean.includes('SHOW_BOOKING')) {
+                    clean = clean.replace(/SHOW_BOOKING\n?/g, '');
+                    solenHideTyping();
+                    solenInput.disabled = false;
+                    if (clean.trim()) solenAddMessage(clean.trim(), 'bot');
+                    solenAddBookingButton();
+                    solenHistory.push({ role: 'assistant', content: raw });
+                    solenRenderQuickReplies();
+                    return;
+                }
+
+                solenHideTyping();
+                solenInput.disabled = false;
+                const display = clean.trim();
+                if (display) solenAddMessage(display, 'bot');
+                solenHistory.push({ role: 'assistant', content: raw });
+                solenRenderQuickReplies();
+
+            } catch (err) {
+                solenHideTyping();
+                solenInput.disabled = false;
+                solenAddMessage(solenLang === 'es'
+                    ? 'Lo siento, tuve un problema técnico. Por favor intenta de nuevo.'
+                    : 'Sorry, I had a technical hiccup. Please try again!', 'bot');
+            }
+        }
+
+        function solenAddMessage(text, sender) {
+            const div = document.createElement('div');
+            div.className = `message ${sender}`;
+            // Simple markdown: **bold**, line breaks
+            div.innerHTML = text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\n/g, '<br>');
+            solenMessages.appendChild(div);
+            solenMessages.scrollTop = solenMessages.scrollHeight;
+        }
+
+        function solenAddBookingButton() {
+            const div = document.createElement('div');
+            div.className = 'message bot';
+            const label = solenLang === 'es' ? '📅 Reservar una Consulta' : '📅 Book a Consultation';
+            div.innerHTML = `<button class="solen-book-btn" onclick="openScheduleModal(event)">${label}</button>`;
+            solenMessages.appendChild(div);
+            solenMessages.scrollTop = solenMessages.scrollHeight;
+        }
+
+        function solenShowTyping() {
+            const indicator = document.createElement('div');
+            indicator.id = 'solen-typing';
+            indicator.className = 'typing-indicator';
+            indicator.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+            solenMessages.appendChild(indicator);
+            solenMessages.scrollTop = solenMessages.scrollHeight;
+        }
+
+        function solenHideTyping() {
+            const el = document.getElementById('solen-typing');
+            if (el) el.remove();
+        }
+
+        async function solenCreateHubSpotContact() {
+            if (!solenLead.email) return;
+            try {
+                await fetch(WORKER_URL + 'hubspot', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'create_contact',
+                        firstname: solenLead.name.split(' ')[0] || solenLead.name,
+                        lastname: solenLead.name.split(' ').slice(1).join(' ') || '',
+                        email: solenLead.email,
+                        hs_lead_status: 'NEW',
+                        lead_source: 'Solen AI Chat',
+                        message: `Interested in: ${solenLead.service || 'Home Electrification'}. Timeline: ${solenLead.timeline || 'Not specified'}.`
+                    })
+                });
+            } catch(e) { console.log('HubSpot contact creation failed silently', e); }
+        }
+
+        // Initialize tech section on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTechSection(techTabsContainerHome, techContentContainerHome);
+            setupTabInteraction('#tech-tabs .tech-tab');
+        });
+
+        // ── SOLENETEC i18n — Language Toggle ──────────────────
+        const SOLEN_TRANSLATIONS = {
+            en: {
+                'nav.why': 'Why Electrify?',
+                'nav.technologies': 'Technologies',
+                'nav.rebates': 'Rebates/ROI',
+                'nav.programs': 'New Programs',
+                'nav.process': 'Our Process',
+                'nav.getstarted': 'Get Started',
+                'hero.h1': null, // page-specific
+                'hero.p': null,
+                'hero.cta': null,
+                'modal.h2': 'Schedule Your Consultation',
+                'modal.p': 'Select a time that works for you to discuss your home electrification needs.',
+                'solen.placeholder': 'Ask Solen anything...',
+                'solen.greeting': "Hi! I'm Solen, Solenetec's energy advisor. I'm here to help you understand your home electrification options — solar, heat pumps, EV charging, rebates, and more. What can I help you with today?",
+                'solen.status': 'Solenetec Energy Advisor',
+                'solen.powered': 'Powered by Claude AI \u2022 Solenetec',
+                'solen.error': 'Sorry, I had a technical hiccup. Please try again!',
+                'solen.book': '\uD83D\uDCC5 Book a Consultation',
+                'solen.qr1': '\u2600\uFE0F Solar & Battery', 'solen.qr1msg': 'Tell me about solar and battery storage',
+                'solen.qr2': '\uD83C\uDF21\uFE0F Heat Pumps', 'solen.qr2msg': 'How do heat pumps work?',
+                'solen.qr3': '\uD83D\uDCB0 Rebates', 'solen.qr3msg': 'What rebates are available in California?',
+                'solen.qr4': '\uD83D\uDE97 EV Charging', 'solen.qr4msg': 'Tell me about EV charging at home',
+            },
+            es: {
+                'nav.why': '\u00BFPor qu\u00E9 Electrificar?',
+                'nav.technologies': 'Tecnolog\u00EDas',
+                'nav.rebates': 'Reembolsos/ROI',
+                'nav.programs': 'Nuevos Programas',
+                'nav.process': 'Nuestro Proceso',
+                'nav.getstarted': 'Comenzar',
+                'hero.h1': null,
+                'hero.p': null,
+                'hero.cta': null,
+                'modal.h2': 'Programe Su Consulta',
+                'modal.p': 'Seleccione un horario que le funcione para hablar sobre sus necesidades de electrificaci\u00F3n del hogar.',
+                'solen.placeholder': 'Preg\u00FAntele a Solen...',
+                'solen.greeting': '\u00A1Hola! Soy Solen, la asesora de energ\u00EDa de Solenetec. Estoy aqu\u00ED para ayudarle a entender sus opciones de electrificaci\u00F3n del hogar \u2014 solar, bombas de calor, carga de VE, reembolsos y m\u00E1s. \u00BFEn qu\u00E9 le puedo ayudar hoy?',
+                'solen.status': 'Asesora de Energ\u00EDa Solenetec',
+                'solen.powered': 'Desarrollado por Claude AI \u2022 Solenetec',
+                'solen.error': 'Lo siento, tuve un problema t\u00E9cnico. \u00A1Por favor intenta de nuevo!',
+                'solen.book': '\uD83D\uDCC5 Reservar una Consulta',
+                'solen.qr1': '\u2600\uFE0F Solar y Bater\u00EDa', 'solen.qr1msg': 'Cu\u00E9ntame sobre solar y almacenamiento de bater\u00EDa',
+                'solen.qr2': '\uD83C\uDF21\uFE0F Bombas de Calor', 'solen.qr2msg': '\u00BFC\u00F3mo funcionan las bombas de calor?',
+                'solen.qr3': '\uD83D\uDCB0 Reembolsos', 'solen.qr3msg': '\u00BFQu\u00E9 reembolsos hay disponibles en California?',
+                'solen.qr4': '\uD83D\uDE97 Carga EV', 'solen.qr4msg': 'Cu\u00E9ntame sobre la carga de VE en casa',
+            }
+        };
+
+        // Page-specific hero translations (keyed by page)
+        const HERO_TRANSLATIONS = {
+            'index.html': {
+                en: { h1: 'Powering a Brighter, Greener Future', p: 'Solenetec is your trusted partner for sustainable energy solutions, from solar and battery storage to efficient heat pumps.', cta: 'Explore Our Solutions' },
+                es: { h1: 'Impulsando un Futuro M\u00E1s Brillante y Verde', p: 'Solenetec es su socio de confianza para soluciones de energ\u00EDa sostenible, desde solar y almacenamiento de bater\u00EDas hasta bombas de calor eficientes.', cta: 'Explorar Nuestras Soluciones' }
+            },
+            'technologies': {
+                en: { h1: 'Build the All-Electric Home', p: 'Discover the cutting-edge technologies that power modern, efficient, and sustainable homes.', cta: 'Calculate Your Savings' },
+                es: { h1: 'Construya el Hogar Totalmente El\u00E9ctrico', p: 'Descubra las tecnolog\u00EDas de vanguardia que impulsan hogares modernos, eficientes y sostenibles.', cta: 'Calcule Sus Ahorros' }
+            },
+            'rebates': {
+                en: { h1: 'Maximize Your Energy Savings', p: 'Calculate your personalized usage, ROI, and available rebates for home electrification upgrades.', cta: 'Learn Our Process' },
+                es: { h1: 'Maximice Sus Ahorros de Energ\u00EDa', p: 'Calcule su uso personalizado, ROI y reembolsos disponibles para mejoras de electrificaci\u00F3n del hogar.', cta: 'Conozca Nuestro Proceso' }
+            },
+            'programs': {
+                en: { h1: 'New Programs for a Post-IRA Solar Market', p: 'The 30% tax credit expired \u2014 but new programs unlock 40% credits, zero-upfront subscriptions, and batteries that pay you back.', cta: 'Find My Best Program' },
+                es: { h1: 'Nuevos Programas para el Mercado Solar Post-IRA', p: 'El cr\u00E9dito fiscal del 30% expir\u00F3 \u2014 pero los nuevos programas desbloquean cr\u00E9ditos del 40%, suscripciones sin costo inicial y bater\u00EDas que le devuelven dinero.', cta: 'Encontrar Mi Mejor Programa' }
+            },
+            'process': {
+                en: { h1: 'Achieve Energy Independence', p: 'A seamless, transparent process that makes home electrification simple and stress-free.', cta: 'Explore Technologies' },
+                es: { h1: 'Logre la Independencia Energ\u00E9tica', p: 'Un proceso fluido y transparente que hace que la electrificaci\u00F3n del hogar sea simple y sin estr\u00E9s.', cta: 'Explorar Tecnolog\u00EDas' }
+            },
+            'schedule': {
+                en: { h1: 'Book Your Free Consultation', p: 'Select a time that works for you to discuss your home electrification needs.', cta: 'View Our Process' },
+                es: { h1: 'Reserve Su Consulta Gratuita', p: 'Seleccione un horario que le funcione para hablar sobre sus necesidades de electrificaci\u00F3n del hogar.', cta: 'Ver Nuestro Proceso' }
+            }
+        };
+
+        let currentLang = localStorage.getItem('solenLang') || 'en';
+
+        function setLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('solenLang', lang);
+            applyTranslations(lang);
+            // Update Solen chat language
+            if (typeof solenLang !== 'undefined') solenLang = lang;
+        }
+
+        function applyTranslations(lang) {
+            const t = SOLEN_TRANSLATIONS[lang];
+            if (!t) return;
+
+            // Update active button state
+            ['lang-en','lang-es','lang-en-m','lang-es-m'].forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.classList.toggle('active-lang', (lang === 'en' && id.includes('en')) || (lang === 'es' && id.includes('es')));
+            });
+
+            // Translate all data-i18n elements
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[key]) el.textContent = t[key];
+            });
+
+            // Translate data-i18n-placeholder
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (t[key]) el.placeholder = t[key];
+            });
+
+            // Translate hero section
+            const page = window.location.pathname.split('/').pop().replace('.html','') || 'index.html';
+            const heroKey = page === '' || page === 'index' ? 'index.html' : page;
+            const hero = HERO_TRANSLATIONS[heroKey]?.[lang];
+            if (hero) {
+                const h1 = document.querySelector('[data-i18n-hero="h1"]');
+                const p  = document.querySelector('[data-i18n-hero="p"]');
+                const cta = document.querySelector('[data-i18n-hero="cta"]');
+                if (h1) h1.textContent = hero.h1;
+                if (p)  p.textContent  = hero.p;
+                if (cta) cta.textContent = hero.cta;
+            }
+
+            // Update Solen chat UI text
+            const solenStatusEl = document.querySelector('.solen-status');
+            if (solenStatusEl) solenStatusEl.textContent = '\u25CF ' + t['solen.status'];
+            const solenPoweredEl = document.querySelector('.chat-powered');
+            if (solenPoweredEl) solenPoweredEl.textContent = t['solen.powered'];
+            const solenInputEl = document.getElementById('chat-input');
+            if (solenInputEl) solenInputEl.placeholder = t['solen.placeholder'];
+
+            // Update html lang attribute
+            document.documentElement.lang = lang;
+        }
+
+        // Apply on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            applyTranslations(currentLang);
+        });
+
+    </script>
+</body>
+
+</html>
